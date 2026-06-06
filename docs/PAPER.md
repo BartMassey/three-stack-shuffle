@@ -96,8 +96,9 @@ for `k = 2, 3` its complexity is **[OPEN]** in the literature too.
 > `4(n−1)` for `n = 2..9` (`4, 8, …, 32`), which fits a linear law exactly and
 > twice tempted a linear-diameter conjecture (once early, once again during the
 > later heuristic work of I.4–I.5). It is a **small-`n` artifact**: the counting
-> bound is loose for small `n` (≈ 113 at `n = 52`) and only provably exceeds
-> `4(n−1)` near `n ≈ 213–690`. The diameter is `Θ(n log n)`, so the reversal is
+> bound is loose for small `n` (`≥ 143 = ⌈log₃ 52!⌉` at `n = 52`, below the
+> reversal's `204`) and only provably exceeds `4(n−1)` near `n ≈ 213–690`. The
+> diameter is `Θ(n log n)`, so the reversal is
 > **not** the asymptotic worst case. See I.5 for what *is* true about the
 > reversal, and Part III for the precise reconciliation.
 
@@ -112,14 +113,26 @@ down; the best construction sits near `1.75`.
 - **Natural merge sort [PROVEN].** Buffers `A`, `B` are the two input runs of a
   balanced two-way merge; `D` accumulates merged runs. Reversals are harmless
   (each run flips once out and once back). Cost exactly `2n⌈log₂ r⌉`, `r` =
-  ascending runs; `0` on sorted input; `≤ 624` at `n = 52`, `~520` typical.
-  **This is the recommended sorter for the machine as specified.**
+  ascending runs; `0` on sorted input; `≤ 624` worst at `n = 52`, `~520` typical.
+  The simplest sorter, recommended when implementation simplicity matters.
+- **Adaptive top-down merge [PROVEN/VERIFIED].** Worst case `600`, average `~487`
+  at `n = 52` — beats plain merge on both.
+- **Hu–Tucker optimal merge tree [PROVEN].** The cost identity `cost = 2·W(tree)`
+  plus the Hu–Tucker optimal alphabetic tree gives the **best no-reversal merge
+  sorter**: `W(T) ≤ 300` for *every* input, so `cost ≤ 600` for every input, with
+  `600` attained only by the descending deck; average `~484`. Since the optimal
+  cost never exceeds any sorter's, this **proves the diameter upper bound
+  `M(52) ≤ 600`** (not the plain merge's looser `624`).
 - **Bidirectional merge [VERIFIED].** Free reversal-by-pour turns descending runs
   ascending, so monotone (not just ascending) runs count. Big win on
   descending-structured input (reversed `624 → 156 = 3n`); **no typical-case
   win**, because monotone runs are only ~0.83× ascending runs — a constant factor
   that rarely crosses a power-of-two pass boundary. (`smart_sort` = best-of-both,
   never worse.) *Assumes the modified machine with a direct `A↔B` edge.*
+
+The merge family's worst case bottoms out at `600` (Hu–Tucker, provably optimal
+*among no-reversal merge sorters*). Beating `600` worst-case would require a
+non-merge construction — the open `~0.9`-constant direction below.
 
 **[DEAD END] Constructions that do not beat merge sort:**
 - *Recursive-thirds* (Felsner–Pergel `k = 3`): on the **star**, `A↔B` costs 2, so
@@ -235,10 +248,16 @@ finds exact optima.
 > for one family of inputs* and is solid. It coincides with the **diameter** only
 > for `n ≤ 9` (BFS) and is supported as the diameter through `n ≈ 11` by heuristic
 > search — but this is the small-`n` artifact of I.2, **not** an asymptotic fact.
-> At `n = 52` the diameter is known only to lie in `[204, 624]`: `≥ 204` because
-> the reversal needs exactly `204`, `≤ 624` by merge sort; the counting bound
-> (~113) is not yet binding, so `n = 52` alone cannot decide whether `204` is the
-> true maximum. **Do not state `M(n) = 4(n−1)` as the diameter.**
+> At `n = 52` the diameter `M(52)` is pinned to `[204, 600]`: the **lower bound
+> `204`** is the reversal's exact optimum (itself a strengthening of the counting
+> bound `≥ 143 = ⌈log₃ 52!⌉` — see I.2/SORTING-BOUNDS §4); the **upper bound
+> `600`** is the proven worst case of the Hu–Tucker sorter (I.3), since the
+> optimum never exceeds any constructive sorter. The gap is wide because our best
+> *constructive* sorter spends `600` on the reversal whose true optimum is only
+> `204` — the merge family's suboptimality on hard inputs (the I.3 constant gap).
+> A typical shuffled deck costs `~484` (Hu–Tucker). **Do not state
+> `M(n) = 4(n−1)` as the diameter, and do not cite `624` as the upper bound —
+> `600` is proven and tighter.**
 
 Full treatment: `sources/HEURISTIC-BOUNDS.md` §14.
 
@@ -337,13 +356,15 @@ Kept deliberately, clearly labeled, so they are not revisited.
 **Open.**
 - P vs NP-hard for both SPLIT-MERGE-OPS and the cycle problem.
 - The constant in `Θ(n log n)` and whether a sub-`1.75` constructive sorter exists.
-- Exact operation diameter at finite `n` (e.g. `n = 52`: in `[204, 624]`).
+- Exact operation diameter at finite `n` (e.g. `n = 52`: in `[204, 600]` —
+  lower bound the reversal's exact optimum, upper bound Hu–Tucker's worst case).
 - Asymptotic cycle diameter (`Θ(√n)` vs `Θ(log n)`).
 - Polynomial exact `OCT_pre` with pre-colouring (iterative compression at scale).
 
-**The one-line state.** We can sort a shuffled 52-card deck in ~520 moves and
-believe ~300 is achievable; the asymptotics are settled at `Θ(n log n)`; the
-difficulty throughout is that the machine has no random access.
+**The one-line state.** We can sort a shuffled 52-card deck in `~484` moves
+(Hu–Tucker; `≤ 600` worst case) and believe `~300` is achievable; the asymptotics
+are settled at `Θ(n log n)`; the difficulty throughout is that the machine has no
+random access.
 
 ---
 

@@ -22,8 +22,11 @@ moves. The headline target is `n = 52`.
   optimal move count (verified by full BFS for n <= 7). `h_joint` is the current
   best; in exact IDA* search it expands ~84% fewer nodes than `h_best` at n=10.
 - **Complexity** of optimal sorting (P vs NP-hard) is open, as is the exact
-  constant in Θ(n log n) and the exact diameter at finite n (n=52 lies in
-  [204, 624]).
+  constant in Θ(n log n) and the exact diameter at finite n. At n=52 the diameter
+  lies in **[204, 600]**: lower bound the reversed deck's exact optimum (204,
+  itself strengthened up from the counting bound ⌈log₃ 52!⌉ = 143); upper bound
+  the Hu–Tucker sorter's proven worst case (600). A typical shuffled deck costs
+  ~484 with that sorter.
 
 ## Layout
 
