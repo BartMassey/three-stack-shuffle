@@ -65,12 +65,19 @@ python -m experiments.benchmark_heuristics 10
 python -m experiments.conjecture_Mn 10
 ```
 
-## Known approximation point
+## The OCT computation
 
-`h_joint` reduces to an exact min-OCT (odd cycle transversal) computation on a
-small soft-conflict graph. For graphs larger than `OCT_BRUTE_FORCE_LIMIT`
-vertices (only the reversed-deck-style giant cliques hit this) it falls back to
-a polynomial *lower* bound, which stays admissible but loses tightness. The
-planned replacement is exact Reed-Smith-Vetta iterative compression (fast
-because the OCT is small) -- see HEURISTIC-BOUNDS.md sections 12 and 12b. This
-is the one place in the heuristic that is approximate by construction.
+`h_joint` reduces to an exact min-OCT (odd cycle transversal) with pre-coloured
+vertices on a small soft-conflict graph (`splitmerge/oct.py`). It is computed
+**exactly** by odd-cycle branch-and-bound: the soft graph is a comparability
+graph, so it is bipartite iff triangle-free, and the chain bound `clique - 2 <=
+OCT` prunes the clique case instantly (this is what avoids the `3^k` blowup).
+Validated against a brute-force oracle on all n <= 7 states (0 mismatches); the
+reversed-deck size-52 clique solves in ~0.2s.
+
+A search budget makes it fall back to the admissible chain lower bound on the
+rare large *far-from-clique* graph (e.g. an n >= ~30 scrambled start), so the
+heuristic stays admissible everywhere and never hangs, at the cost of tightness
+on those states. Removing the budget via a polynomial comparability-graph
+2-antichain (Greene-Kleitman) computation with pre-colouring is the open
+engineering step.

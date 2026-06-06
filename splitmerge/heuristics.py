@@ -18,15 +18,7 @@ from collections import deque
 from functools import lru_cache
 
 from .machine import base_len
-
-# Above this many vertices in the soft-conflict graph, the exact brute-force
-# OCT search is too expensive, so joint_bounce falls back to a polynomial
-# *lower* bound (soft-graph clique - 2 <= OCT_pre), which keeps h_joint
-# admissible but loses the pre-colouring refinement.  This is the single
-# approximation point in h_joint; replacing it with exact Reed-Smith-Vetta
-# iterative compression (fast because the OCT is small) is the planned next
-# step.  See HEURISTIC-BOUNDS.md, sections 12 and 12b.
-OCT_BRUTE_FORCE_LIMIT = 15
+from .oct import exact_oct
 
 
 def _lis_len(seq):
@@ -210,25 +202,20 @@ def _soft_conflict_graph(state):
 
 
 def _oct_pre(vals, adj, pre):
-    """Minimum vertices to delete so the graph 2-colours respecting ``pre``.
-
-    Exact when the graph is small (brute-force over deletion sets, smallest
-    first).  Above OCT_BRUTE_FORCE_LIMIT vertices, returns the polynomial
-    *lower* bound (longest soft-graph chain minus 2 <= true OCT), which keeps
-    the heuristic admissible.
+    """Minimum vertices to delete so the graph 2-colours respecting ``pre`` --
+    the exact constrained OCT (see ``oct.exact_oct``), via odd-cycle
+    branch-and-bound with the comparability chain bound (clique - 2 <= OCT)
+    pruning the clique case.  Exact within a search budget; on a large
+    far-from-clique graph it degrades gracefully to the admissible chain lower
+    bound.  Validated against ``_oct_pre_bruteforce`` on all n <= 7 states.
     """
-    if len(vals) > OCT_BRUTE_FORCE_LIMIT:
-        # soft-graph clique = longest chain (comparability graph); clique-2 <= OCT
-        chain = {}
-        longest = 0
-        for v in sorted(vals):
-            best = 1
-            for w in adj[v]:
-                if w < v and w in chain and chain[w] + 1 > best:
-                    best = chain[w] + 1
-            chain[v] = best
-            longest = max(longest, best)
-        return max(0, longest - 2)
+    value, _exact = exact_oct(vals, adj, pre)
+    return value
+
+
+def _oct_pre_bruteforce(vals, adj, pre):
+    """Reference OCT by exhaustive deletion search -- the test oracle.  Correct
+    but exponential; not used in production (see ``_oct_pre``)."""
     for d in range(len(vals) + 1):
         for drop in itertools.combinations(vals, d):
             dropped = set(drop)

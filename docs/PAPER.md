@@ -197,11 +197,24 @@ and cycle/duplicate detection rather than `g`-pruning.
 **Computing `OCT_pre`.** Exactly, this is Odd Cycle Transversal — NP-hard in
 general, but the founding problem of *iterative compression* and **fixed-
 parameter tractable in the deletion count `k`** (Reed–Smith–Vetta `O(3^k·mn)`;
-Hüffner's engineered solver). Our `k` is tiny, and the buffer pre-colouring only
-*prunes* the branching. The implementation currently does exact brute force on
-small soft-graphs and falls back to a polynomial lower bound (soft-graph
-clique − 2) on large cliques (only the reversal-style giant clique triggers it);
-replacing the fallback with exact iterative compression is the planned next step.
+Hüffner's engineered solver). The implementation (`splitmerge/oct.py`) computes
+it **exactly** by odd-cycle branch-and-bound: since the soft graph is a
+comparability graph (perfect), an induced subgraph is bipartite iff triangle-
+free, so the chain bound `clique − 2 ≤ OCT` prunes the otherwise-fatal clique
+case immediately (at a clique it equals the incumbent, certifying optimality on
+the first descent — this is what defeats the `3^k` blowup that killed the early
+attempts). Pre-colouring is encoded with two undeletable terminal vertices, which
+only *prunes* the branching. It is **validated against a brute-force oracle on
+all `n ≤ 7` states (0 mismatches)** and solves the reversal's size-52 clique in
+~0.2 s. A search budget makes it degrade gracefully to the admissible chain
+lower bound on the rare large *far-from-clique* graph (e.g. an `n ≥ ~30`
+scrambled start), so `h_joint` stays admissible everywhere and never hangs.
+
+> **Still open (engineering):** on those large far-from-clique graphs the budget
+> falls back rather than finishing exactly. The comparability structure should
+> give a genuinely *polynomial* exact `OCT_pre` — max union of two antichains
+> (Greene–Kleitman) with the buffer pre-colouring folded into a min-cut — which
+> would remove the budget entirely. Not yet implemented.
 
 > **[DEAD END] Greedy/Chaitin colouring for `OCT_pre`.** A prioritized graph-
 > colouring (Chaitin–Briggs, buffers as priority colours) finds *a* deletion set
@@ -269,8 +282,10 @@ Full treatment: `sources/HEURISTIC-BOUNDS.md` §14.
    constructive sorter below `1.75` (e.g. merging Dilworth chains, exploiting free
    interleaving), approaching the measured `~0.9` optimum? **[OPEN]**
 3. **Exact diameter at finite `n`** (e.g. is it `204` or larger at `n = 52`?). **[OPEN]**
-4. **Polynomial `OCT_pre` with pre-colouring** (exact iterative compression at
-   scale), to run `h_joint`-driven search at `n = 52`. **[OPEN, engineering]**
+4. **Polynomial `OCT_pre` with pre-colouring** — exact OCT is implemented
+   (odd-cycle branch-and-bound, exact within a budget); making it polynomial via
+   the comparability-graph 2-antichain (Greene–Kleitman) with pre-colouring would
+   remove the budget and run `h_joint` search at full `n = 52`. **[OPEN, engineering]**
 
 ---
 
@@ -359,7 +374,9 @@ Kept deliberately, clearly labeled, so they are not revisited.
 - Exact operation diameter at finite `n` (e.g. `n = 52`: in `[204, 600]` —
   lower bound the reversal's exact optimum, upper bound Hu–Tucker's worst case).
 - Asymptotic cycle diameter (`Θ(√n)` vs `Θ(log n)`).
-- Polynomial exact `OCT_pre` with pre-colouring (iterative compression at scale).
+- Polynomial exact `OCT_pre` with pre-colouring (the comparability 2-antichain),
+  to remove the budget fallback on large far-from-clique graphs. (Exact OCT is
+  implemented; it is exact within a budget and admissible beyond it.)
 
 **The one-line state.** We can sort a shuffled 52-card deck in `~484` moves
 (Hu–Tucker; `≤ 600` worst case) and believe `~300` is achievable; the asymptotics
@@ -374,7 +391,8 @@ random access.
 |------|-------|
 | `splitmerge/machine.py` | §0, I.1, `comb_solution` = the I.5 reversal witness |
 | `splitmerge/search.py` | `bfs_dist` (verification), `ida_star` (I.5) |
-| `splitmerge/heuristics.py` | `h0`, `h_best`, `h_joint` (I.4); OCT fallback noted |
+| `splitmerge/heuristics.py` | `h0`, `h_best`, `h_joint` (I.4) |
+| `splitmerge/oct.py` | exact constrained `OCT_pre` (I.4), branch-and-bound + budget |
 | `tests/` | admissibility (I.4), reversal exactness (I.5), comb (I.5), IDA*=BFS |
 | `experiments/` | `benchmark_heuristics` (I.5), `conjecture_Mn` (I.5/III) |
 
