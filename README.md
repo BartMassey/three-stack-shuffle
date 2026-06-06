@@ -8,16 +8,22 @@ moves. The headline target is `n = 52`.
 
 ## What's known
 
-- **Lower bound:** every deck needs at least `4(n-1)` moves in the worst case,
-  and the reversed deck achieves exactly `4(n-1)` (proven three ways: the
-  heuristic, the `comb_solution` construction, and IDA* search). For `n = 52`
-  that pins the worst case at **204**.
-- **Conjecture** `M(n) = 4(n-1)`: the reversed deck is the unique worst case.
-  Proven by full BFS for `n <= 8`; supported by exhaustive-enough search
-  through `n = 11`. The open piece is a matching universal upper bound.
-- **Heuristics:** `h0 <= h_best <= h_joint`, all admissible (verified by full
-  BFS for `n <= 7`). `h_joint` is the current best; in search it expands ~84%
-  fewer nodes than `h_best` at `n = 10`.
+- **Diameter is Θ(n log n)** (proven): a counting bound gives Ω(n log n), and a
+  natural merge sort gives O(n log n). No linear-operation sorter exists. The
+  machine is a 3-stack *star* (reusable hub), the k=3 regime in the
+  stack-sorting literature.
+- **The reversed deck needs exactly `4(n-1)` moves** (proven three ways: the
+  `comb_solution` construction, the `h_joint` lower bound, and IDA* search). For
+  n=52 that is **204**. This is the operation diameter for n ≤ 9 (BFS) and
+  through n ≈ 11 (search) — but that is a *small-n coincidence*: `4(n-1)` is
+  **not** the asymptotic diameter (it is linear; the diameter is Θ(n log n)).
+  An earlier "M(n) = 4(n-1)" conjecture is **retracted**; see `docs/PAPER.md`.
+- **Heuristics:** `h0 <= h_best <= h_joint`, all admissible lower bounds on the
+  optimal move count (verified by full BFS for n <= 7). `h_joint` is the current
+  best; in exact IDA* search it expands ~84% fewer nodes than `h_best` at n=10.
+- **Complexity** of optimal sorting (P vs NP-hard) is open, as is the exact
+  constant in Θ(n log n) and the exact diameter at finite n (n=52 lies in
+  [204, 624]).
 
 ## Layout
 
@@ -28,12 +34,17 @@ moves. The headline target is `n = 52`.
     tests/            admissibility (full BFS n<=7), dominance, reversal, IDA*==BFS
     experiments/      heuristic benchmark, M(n) conjecture search
     docs/
-      HEURISTIC-BOUNDS.md   the heuristic framework, proofs, search results
-      SORTING-BOUNDS.md     the merge-style algorithms and the counting bound
+      PAPER.md              the consolidated narrative / paper basis (start here)
+      sources/              the working write-ups PAPER.md synthesizes
+        operation-count-theory.md   structural theory + merge sorters + literature
+        SORTING-BOUNDS.md           merge-family algorithms and bounds
+        HEURISTIC-BOUNDS.md         the heuristic / IDA* program
+        cycle-model-theory.md       whole-cycle permutation distance
+        original-notes.md           the seed notes
 
-The code mirrors the docs: `h0` is HEURISTIC-BOUNDS section 3, the buried charge
-section 4, the LIS charge section 5, `h_best` (the "max") section 11, `h_joint`
-section 12, the consistency analysis section 13, IDA* section 14.
+`docs/PAPER.md` is the coherent account of the whole project (both cost models,
+all proven results, dead ends, and open problems); the `sources/` files hold the
+detailed proofs and tables it cites.
 
 ## Usage
 
