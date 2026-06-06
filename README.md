@@ -38,6 +38,7 @@ moves. The headline target is `n = 52`.
     experiments/      heuristic benchmark, M(n) conjecture search
     docs/
       PAPER.md              the consolidated narrative / paper basis (start here)
+      HANDOFF.md            continuation note for Claude Code (void results + plan)
       sources/              the working write-ups PAPER.md synthesizes
         operation-count-theory.md   structural theory + merge sorters + literature
         SORTING-BOUNDS.md           merge-family algorithms and bounds

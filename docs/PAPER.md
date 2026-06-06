@@ -3,7 +3,14 @@
 *A consolidated narrative and basis for a technical paper. This document is the
 entry point; it states results, sketches the key arguments, reconciles the
 threads, and labels every dead end and retraction. Full proofs and empirical
-tables live in the `sources/` documents, cited inline.*
+tables live in the `sources/` documents, cited inline. To continue the work
+(and for a proposed anytime local-search planner that is **not yet built**), see
+`docs/HANDOFF.md`.*
+
+> **Caveat.** An exploratory session reported `n = 52` local-search results that
+> were never actually run and are void (see `docs/HANDOFF.md` §2). Nothing about
+> that planner appears as a result here; it is listed only as a proposed
+> direction.
 
 **Status legend.** Every claim is tagged:
 **[PROVEN]** (complete argument), **[VERIFIED n ≤ N]** (exhaustive computation),
@@ -377,6 +384,10 @@ Kept deliberately, clearly labeled, so they are not revisited.
 - Polynomial exact `OCT_pre` with pre-colouring (the comparability 2-antichain),
   to remove the budget fallback on large far-from-clique graphs. (Exact OCT is
   implemented; it is exact within a budget and admissible beyond it.)
+- **Proposed, not yet built:** an anytime local-search *planner* on a tight
+  inadmissible estimate (greedy descent + restarts, returning the best complete
+  sort within a time budget), for practical sorting at `n = 52` without optimality
+  guarantees. Spec and measurement protocol in `docs/HANDOFF.md` §4.
 
 **The one-line state.** We can sort a shuffled 52-card deck in `~484` moves
 (Hu–Tucker; `≤ 600` worst case) and believe `~300` is achievable; the asymptotics
@@ -393,8 +404,9 @@ random access.
 | `splitmerge/search.py` | `bfs_dist` (verification), `ida_star` (I.5) |
 | `splitmerge/heuristics.py` | `h0`, `h_best`, `h_joint` (I.4) |
 | `splitmerge/oct.py` | exact constrained `OCT_pre` (I.4), branch-and-bound + budget |
-| `tests/` | admissibility (I.4), reversal exactness (I.5), comb (I.5), IDA*=BFS |
+| `tests/` | admissibility (I.4), reversal exactness (I.5), comb (I.5), IDA*=BFS, OCT oracle |
 | `experiments/` | `benchmark_heuristics` (I.5), `conjecture_Mn` (I.5/III) |
+| `docs/HANDOFF.md` | continuation note: void-results, the proposed planner spec, protocol |
 
 | source doc | model | role |
 |------------|-------|------|
