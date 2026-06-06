@@ -9,23 +9,31 @@ it can be implemented and measured locally.
 
 ## 1. What is real (verified, tested)
 
-Everything reachable from `pytest` (23 tests, all passing):
+Everything reachable from `pytest` (49 tests, all passing):
 
 - `splitmerge/machine.py` — the 3-stack machine, moves, `comb_solution` (the
   exact `4(n−1)` reversal witness).
 - `splitmerge/search.py` — exact `bfs_dist` (small `n`), `ida_star`.
 - `splitmerge/heuristics.py` — `h0`, `h_best`, `h_joint` (admissible; full-BFS
-  verified `n ≤ 7`).
+  verified `n ≤ 7` in tests, separately confirmed exhaustively at `n = 8`).
 - `splitmerge/oct.py` — exact constrained OCT for `h_joint` (odd-cycle
   branch-and-bound; validated vs brute force on all `n ≤ 7`; budget fallback to
   the admissible chain bound on large far-from-clique graphs).
+- `splitmerge/sorters.py` — constructive `natural` / `top-down` / `Hu-Tucker`
+  merge sorters; every emitted move stream replays to a sorted deck (all perms
+  `n ≤ 7`, random to `n = 400`), counts match the closed forms.
+- `splitmerge/cycle.py` — the whole-cycle model: one-cycle reachability, the
+  brute-force interleaving oracle, and the Cayley-graph BFS for `f` / `D(n)`.
 - `docs/PAPER.md` — the consolidated narrative; numbers there come from real
   BFS/IDA* runs (`n ≤ 11`) or proofs.
 
 The solid quantitative facts: diameter is `Θ(n log n)`; `opt(reversed deck) =
 4(n−1)` exactly (so `204` at `n = 52`); diameter window at `n = 52` is
-`[204, 600]`; `h_joint` mean residual gap at `n = 10` is ≈ 2.4 (measured this
-session, but **re-measure to confirm** — see §2).
+`[204, 600]`; `h_joint` mean residual gap (`cost − h_joint`) at `n = 10` is
+**≈ 1.1 on random start decks** (re-measured; robust across seeds). The earlier
+"≈ 2.4" figure was an unreliable carry-over and does not reproduce: the
+all-states mean at `n = 7` is `1.42` (matching `HEURISTIC-BOUNDS.md` §12),
+growing only slowly with `n`.
 
 ---
 
@@ -42,8 +50,16 @@ particular, disregard entirely:
 - any gap reported against the counting bound `143`.
 
 Treat the plan in §4 as **unimplemented**. Every number must be produced locally
-and reproducibly. (Also re-confirm the `n = 10` residual-gap figure in §1; it was
-quoted in the same session.)
+and reproducibly. (The `n = 10` residual-gap figure was re-confirmed: see §1.)
+
+**Now resolved (a separate matter).** The docs also described merge sorters and
+a whole-cycle model whose *code* was likewise never committed — but, unlike the
+planner, their reported results were real. That code has since been **restored
+and verified** (`splitmerge/sorters.py`, `splitmerge/cycle.py`, with
+`tests/test_sorters.py`, `tests/test_cycle.py`); the figures reproduce. The
+recursive-thirds and bidirectional-merge variants remain **NOT VERIFIED** (not
+implemented here; bidirectional needs a modified machine). Only the §4 planner
+is still genuinely unbuilt.
 
 ---
 

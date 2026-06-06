@@ -167,10 +167,15 @@ sorts the reversed deck in exactly `4(n−1)` moves for all `n` — per‑card p
 > at `n = 52`, **`M ≥ 204`** (vs. the counting bound `143`).
 
 Furthermore `max_s h*(s)` equals the goal eccentricity `4(n−1)` for `n = 6,7,8`,
-so `h*` is **tight at the diameter** and the reversed deck is a diameter witness.
-This makes `M(n) = 4(n−1)` the likely exact answer; the missing half is an
-algorithm sorting *every* deck in `≤ 4(n−1)` (the eccentricity guarantees
-per‑deck solutions exist at least for `n ≤ 8`).
+so `h*` is **tight at the diameter** and the reversed deck is a diameter witness
+*at these small `n`*.
+
+> **[RETRACTED]** The original text here read: "This makes `M(n) = 4(n−1)` the
+> likely exact answer; the missing half is an algorithm sorting *every* deck in
+> `≤ 4(n−1)`." This is **false**: the diameter is `Θ(n log n)` (counting lower
+> bound + merge-sort upper bound), so `4(n−1)` is a small-`n` artifact, **not**
+> the diameter. What survives is the *exact value* `opt(reversed deck) = 4(n−1)`
+> proven above. See `PAPER.md` Part III and `operation-count-theory.md` §7.
 
 ---
 
@@ -370,11 +375,16 @@ lower bound.
 (300 decks) plus adversarial hill‑climbing from reversal at `n = 8, 9, 10` finds
 **no deck exceeding `4(n−1)`**; the reversed deck remains the strict maximum.
 Random decks are markedly easier — e.g. at `n = 10`, random cost averages `26.7`
-and peaks at `32`, against `4(n−1) = 36` (reversal). Combined with the proven
-`M(n) ≥ 4(n−1)` and the exact BFS eccentricity `= 4(n−1)` for `n ≤ 8`, this is
-strong evidence that **`M(n) = 4(n−1)` and the reversed deck is the unique
-diameter witness**. The remaining gap is a proof that *every* deck is sortable in
-`≤ 4(n−1)` (a universal upper bound / eccentricity argument for general `n`).
+and peaks at `32`, against `4(n−1) = 36` (reversal).
+
+> **[RETRACTED] `M(n) = 4(n−1)` as the diameter.** The original text concluded
+> that this data was "strong evidence that `M(n) = 4(n−1)` and the reversed deck
+> is the unique diameter witness," needing only "a proof that *every* deck is
+> sortable in `≤ 4(n−1)`." That conjecture is **withdrawn**: the counting bound
+> (`Ω(n log n)`) provably exceeds `4(n−1)` for large `n`, so no such universal
+> upper bound exists. The small-`n` search agreement is the artifact the counting
+> argument predicts. The proven, surviving fact is `M(n) ≥ 4(n−1)` (the reversal
+> lower bound). See `PAPER.md` Part III.
 
 **Practical strength.** On reversal the heuristic is perfect (no search). On
 scrambled decks the cascading‑bounce gap (§11) shows up as search effort but

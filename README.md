@@ -18,9 +18,13 @@ moves. The headline target is `n = 52`.
   through n ≈ 11 (search) — but that is a *small-n coincidence*: `4(n-1)` is
   **not** the asymptotic diameter (it is linear; the diameter is Θ(n log n)).
   An earlier "M(n) = 4(n-1)" conjecture is **retracted**; see `docs/PAPER.md`.
+  (`4(n-1)` is the operation diameter for n <= 8 by full BFS in this repo; n=9
+  was reported from a larger BFS not committed here.)
 - **Heuristics:** `h0 <= h_best <= h_joint`, all admissible lower bounds on the
-  optimal move count (verified by full BFS for n <= 7). `h_joint` is the current
-  best; in exact IDA* search it expands ~84% fewer nodes than `h_best` at n=10.
+  optimal move count (the test suite asserts this by full BFS for n <= 7;
+  separately confirmed exhaustively at n = 8, 0 violations). `h_joint` is the
+  current best; in exact IDA* search it expands ~84% fewer nodes than `h_best`
+  at n=10.
 - **Complexity** of optimal sorting (P vs NP-hard) is open, as is the exact
   constant in Θ(n log n) and the exact diameter at finite n. At n=52 the diameter
   lies in **[204, 600]**: lower bound the reversed deck's exact optimum (204,
@@ -85,9 +89,11 @@ OCT` prunes the clique case instantly (this is what avoids the `3^k` blowup).
 Validated against a brute-force oracle on all n <= 7 states (0 mismatches); the
 reversed-deck size-52 clique solves in ~0.2s.
 
-A search budget makes it fall back to the admissible chain lower bound on the
-rare large *far-from-clique* graph (e.g. an n >= ~30 scrambled start), so the
-heuristic stays admissible everywhere and never hangs, at the cost of tightness
-on those states. Removing the budget via a polynomial comparability-graph
-2-antichain (Greene-Kleitman) computation with pre-colouring is the open
-engineering step.
+A search budget makes it fall back to the admissible chain lower bound on large
+*far-from-clique* graphs — in practice essentially **every** scrambled `n >= ~30`
+start (measured: 20/20 such starts at n=30,40,52 fall back; the reversed deck is
+a clique and is always solved exactly, so the n=52 → 204 result is unaffected).
+The heuristic stays admissible everywhere and never hangs, but on a *scrambled*
+large deck its tightness degrades to roughly `h_best`. Removing the budget via a
+polynomial comparability-graph 2-antichain (Greene-Kleitman) computation with
+pre-colouring is the open engineering step.

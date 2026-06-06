@@ -1,5 +1,10 @@
 # Split-Merge Permuter — Working Notes
 
+> **Provenance note.** These are superseded cycle-model seed notes. The
+> whole-cycle model is now implemented in `splitmerge/cycle.py` and verified by
+> `tests/test_cycle.py` (reproduced for `n ≤ 8`); the canonical write-up is
+> `cycle-model-theory.md`. Read this only for history.
+
 **Status:** handoff document for a fresh start. Everything below is marked
 either **[PROVEN]**, **[VERIFIED]** (exhaustive computation, small n),
 **[CONJECTURE]**, or **[OPEN]**. Earlier discussion produced several claims for

@@ -1,5 +1,18 @@
 # Split‑Merge Sorting — Three No‑Reversal Algorithms and Their Bounds
 
+> **Provenance note.** The three sorters here (`natural_sort`, the adaptive
+> top-down tree, the Hu–Tucker DP) are now implemented in
+> `splitmerge/sorters.py` and verified by replay on the machine in
+> `tests/test_sorters.py`: every emitted move stream sorts the deck with empty
+> buffers and uses exactly the closed-form count, for **all permutations
+> `n ≤ 7`** and random decks to **`n = 400`**; the worst cases (`624`/`600`) and
+> averages (`~520`/`~487`/`~484`, see `experiments/benchmark_sorters.py`)
+> reproduce. Earlier drafts cited test files (`tests.py`, `test_bimerge.py`,
+> `test_recthirds.py`) and check-counts ("137,872", "3208 realizations") that
+> were **never committed**; those are superseded by the real suite. The
+> bidirectional and recursive-thirds variants are **[NOT VERIFIED]** — see
+> `operation-count-theory.md` §9–§10.
+
 This note records exactly what is currently established for sorting on the
 three‑stack split‑merge machine **without any run‑reversal trick** (runs are
 merged in place; descending runs are *not* flipped). It gives three algorithms
@@ -53,11 +66,11 @@ counts** (`|R|` from `A`, `|L|` from `B`, smaller top first). Per node:
 count rather than by empty‑stack test is essential — otherwise the merge dips
 into the inert parked block beneath it.
 
-Verified by emitting and replaying the move stream: **3208 realizations**
-(`n = 6,12,20,52` plus structured decks, both tree algorithms below) all sort
-correctly, leave `A`/`B` empty, and use exactly `2·W` moves. The standing test
-suite (`tests.py`, `test_bimerge.py`, `test_recthirds.py`, 137,872 checks)
-passes.
+Verified by emitting and replaying the move stream (`tests/test_sorters.py`):
+every stream produced by `natural_sort`, `topdown_sort`, and `hutucker_sort` —
+for all permutations `n ≤ 7` and random decks to `n = 400` — sorts correctly,
+leaves `A`/`B` empty, and uses exactly `2·W` moves (`2n⌈log₂ r⌉` for the flat
+multi-pass schedule).
 
 So Algorithms 2 and 3 reduce to **building a good merge tree over the runs**;
 their cost is `2·W` of that tree. Algorithm 1 uses a flat schedule with a

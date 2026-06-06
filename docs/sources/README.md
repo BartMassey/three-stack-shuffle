@@ -14,3 +14,11 @@ current entry point**; where a source disagrees with it, `PAPER.md` wins.
 
 Two distinct cost models of the same machine appear here — operation count vs
 whole cycles — and their numbers are on different scales. Do not mix them.
+
+**Provenance.** Earlier drafts cited implementing code and "*N* checks pass"
+counts that were never committed. The core of that code is now restored and
+verified: the merge sorters (`splitmerge/sorters.py`, `tests/test_sorters.py`)
+and the whole-cycle model (`splitmerge/cycle.py`, `tests/test_cycle.py`); each
+document's head note states what is reproducible. **Still `[NOT VERIFIED]`:** the
+recursive-thirds and bidirectional-merge variants (`operation-count-theory.md`
+§9–§10) — tried, never implemented here (bidirectional needs a modified machine).

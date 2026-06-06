@@ -1,5 +1,17 @@
 # The Split–Merge Machine (Operation-Count Model) and an `O(n log n)` Sorter
 
+> **Provenance note.** `natural_sort` (§4) is implemented in
+> `splitmerge/sorters.py` (with the top-down and Hu–Tucker tree sorters) and
+> verified by replay in `tests/test_sorters.py`; the merge-constant table of §6
+> and the mean-optimum table of §7 reproduce. Earlier drafts cited test/bench
+> files (`tests.py`, `benches.py`, `recthirds.py`, `bimerge.py`,
+> `test_recthirds.py`, `test_bimerge.py`) and check-counts ("45,911 / 19,799 /
+> 72,162") that were **never committed**; those are superseded by the real
+> suite, and the figures below are stated against what is reproducible.
+> **Recursive-thirds (§9) and bidirectional merge (§10) are `[NOT VERIFIED]`** —
+> we tried them; neither is implemented here (bidirectional needs a *modified*
+> machine), and their benchmark numbers came from absent code.
+
 **Scope.** This document covers the *generalized* split–merge machine, where the
 four operations may be interleaved freely and **cost is the number of
 operations** (no notion of "passes"). It defines the machine and the decision
@@ -55,8 +67,9 @@ reversed/inverted move list.
 
 ## 3. Structural facts
 
-Established by exhaustive BFS over full configurations for `n ≤ 7` (and `n ≤ 9`
-for the diameter):
+Established by exhaustive BFS over full configurations for `n ≤ 7` (and `n ≤ 8`
+for the diameter, reproducible here; the `n = 9` diameter was reported from a
+larger BFS not committed to this repo):
 
 - **Undirected metric [PROVEN].** Reversibility makes `g` a genuine distance.
 - **Costs are even [PROVEN].** Each operation changes the number of cards held in
@@ -74,7 +87,8 @@ for the diameter):
   The merge sort of §4 gives the matching `O(n log n)` upper bound. **There is no
   linear-operation sorter** — the cardinality of `Sₙ` forbids it.
 - **`4(n−1)` was a small-`n` artifact [RETRACTED].** Exhaustive BFS gave
-  `D(n) = 4, 8, 12, 16, 20, 24, 28, 32` for `n = 2..9`, which fit `4(n−1)` exactly
+  `D(n) = 4, 8, 12, 16, 20, 24, 28` for `n = 2..8` (reproducible here; `n = 9 →
+  32` was reported from a larger BFS not committed), which fit `4(n−1)` exactly
   and led to a (now-withdrawn) linear-diameter conjecture. The counting bound above
   is loose at small `n` (e.g. `⌈log₂(9!)/2⌉ ≈ 9` vs the true `32`), so the two are
   indistinguishable there; but `log₂(n!)/2` overtakes `4(n−1)` near `n ≈ 690`
@@ -211,12 +225,13 @@ the same number of operations. ∎
 
 ---
 
-## 6. Empirical results (from `tests.py`, `benches.py`)
+## 6. Empirical results (from `tests/test_sorters.py`, `experiments/benchmark_sorters.py`)
 
-Correctness: `45,911` checks pass — all permutations for `n ≤ 7`, plus randomized
-decks up to `n = 20000`, each verified by replaying the emitted moves on a fresh
-machine and confirming a sorted deck with empty buffers (and the exact identity
-`ops = 2n⌈log₂ r⌉`).
+Correctness: `natural_sort` is checked on **all permutations `n ≤ 7`** and random
+decks to **`n = 400`**, each verified by replaying the emitted moves on a fresh
+machine and confirming a sorted deck with empty buffers and the exact identity
+`ops = 2n⌈log₂ r⌉`. (The `2n⌈log₂ r⌉` cost is *proven* for all `n` in §5; the
+replay just confirms the realization.)
 
 Operation counts (uniform random permutations):
 
@@ -239,8 +254,9 @@ versus 280k for a uniform deck — the payoff of seeding with natural runs.
 **Settled (this supersedes the earlier `4(n−1)` conjecture).** The counting
 argument of §3 proves `max_π g(π) = Ω(n log n)`, and the merge sort proves
 `O(n log n)`. So the diameter is `Θ(n log n)`: **no linear-operation sorter
-exists.** The `4(n−1)` pattern (verified `n ≤ 9`) was a small-`n` artifact — the
-counting bound is loose there and only provably exceeds `4(n−1)` near `n ≈ 213–690`.
+exists.** The `4(n−1)` pattern (verified `n ≤ 8` here; `n = 9` per uncommitted
+BFS) was a small-`n` artifact — the counting bound is loose there and only
+provably exceeds `4(n−1)` near `n ≈ 213–690`.
 
 **The riffle / Greene–Dilworth picture.** One pass partitions the cards into two
 order-preserving subsequences and re-interleaves them — a generalized riffle,
@@ -335,8 +351,9 @@ working stack; with leaves `A`, `B` the network is a star on three stacks.
   sorts in `O(n log_{k−1} n)` moves, tight up to the log base. For `k = 3` this is
   `O(n log n)` — exactly the merge sort of §4. Combined with the counting lower
   bound of §3 (`Ω(n log n)`), the diameter of our machine is `Θ(n log n)`. This is
-  **proven and verified by construction** (the §4 sorter, 45,911 checks to
-  `n = 20000`, always `2n⌈log₂ r⌉`).
+  **proven and verified by construction** (the §4 sorter in
+  `splitmerge/sorters.py`; `tests/test_sorters.py` replays it on all perms
+  `n ≤ 7` and random decks to `n = 400`, always `2n⌈log₂ r⌉`).
 - **`k = 2` (NOT our regime): `Ω(n²)`.** With only two working stacks and a
   *non-reusable* source/sink, Felsner & Pergel show inputs requiring `Ω(n^{2−ε})`,
   and Mihalák & Pont (ATMOS 2019) prove a clean `Ω(n²)` lower bound under the
@@ -420,36 +437,25 @@ question for our topology, settled by building and measuring it (§ companion co
   is intractable and that our merge-family algorithms (which exploit the reusable
   hub as a third stack) are the right regime.
 
-**Plan.** Implement `sort(B)` on the real star machine (hub `D`, leaves `A`, `B`),
-verify with the existing test harness, and benchmark its op count against the
-merge sort at `n = 52` to read off the actual constant on our topology.
+**Status [NOT VERIFIED].** We considered implementing `sort(B)` on the real star
+machine and benchmarking it, but **it was never built or committed**. The earlier
+"[DONE]" result — a `recthirds.py` / `bench_recthirds.py` with a `2.37 / 2.25 /
+2.17` constant table and "19,799 checks" — came from code that is **not in this
+repo and has not been reproduced**; treat those numbers as untrusted.
 
-**Result [DONE; negative].** Implemented as `recthirds.py` (validated by
-`test_recthirds.py`: 19,799 checks, all permutations `n ≤ 7` plus random to
-`n = 20000`, every emitted sequence replayed legal and sorted). Benchmarked by
-`bench_recthirds.py` against `natural_sort`:
-
-| n | recthirds / (n log₂ n) | merge / (n log₂ n) | recthirds / merge |
-|---|---|---|---|
-| 52 | 2.37 | 1.75 | 1.35 |
-| 256 | 2.25 | 1.88 | 1.20 |
-| 5000 | 2.17 | 1.95 | 1.11 |
-
-**The recursive-thirds sorter is *worse* than merge sort on our machine** — about
-`1.1–1.35×` more moves (704 vs 520 at `n = 52`), and non-adaptive (it costs 704
-even on the identity, where merge sort costs 0). The reason is exactly the star
-topology: Felsner-Pergel's `k = 3` advantage (`log₂ → log_{k−1}`) comes entirely
-from *direct* `Sᵢ→Sⱼ` edges, which let an item move between two sibling stacks in
-one move. Our `A` and `B` are **not** sibling-connected — they reach each other
-only through the hub `D` at cost 2 — so our three stacks give a third *storage*
-area but not a third *merge stream*. The machine is structurally a **binary**
-merge device, and merge sort's `~1.8 · n log₂ n` is essentially the floor for the
+The *reasoning* for why it loses is sound and independent of any measurement:
+Felsner-Pergel's `k = 3` advantage (`log₂ → log_{k−1}`) comes entirely from
+*direct* `Sᵢ→Sⱼ` edges, which move an item between two sibling stacks in one move.
+Our `A` and `B` are **not** sibling-connected — they reach each other only
+through the hub `D` at cost 2 — so the three stacks give a third *storage* area
+but not a third *merge stream*. The machine is structurally a **binary** merge
+device, and merge sort's `~1.75 · n log₂ n` is essentially the floor for the
 merge family. Beating it would require either a genuinely non-merge construction
 (the `~0.9` optimum of §7, whose constructive form remains open) or a different
 machine (a `D`↔`A`↔`B` triangle with a direct `A↔B` edge would admit the true
-`k = 3` algorithm and its `~1` constant). For the physical machine as specified,
-**the natural merge sort is the recommended sorter**: `≤ 624` worst / `~520`
-typical ops for `n = 52` (~52–62 s at 10 ops/s).
+`k = 3` algorithm and its `~1` constant). For the machine as specified, **the
+natural merge sort is the recommended sorter**: `≤ 624` worst / `~520` typical
+ops for `n = 52` (~52–62 s at 10 ops/s).
 
 ---
 
@@ -469,36 +475,20 @@ during a move we are making anyway — the machine analogue of Timsort reversing
 descending runs, but (nearly) free. (A queue would not do this; Felsner-Pergel's
 `S2` substructure uses a queue precisely because it *preserves* order.)
 
-**Experiment (this section assumes the modified machine where the direct
-buffer-to-buffer transfer `A↔B` costs 1 — the complete 3-stack network).**
-Implemented in `bimerge.py` (validated by `test_bimerge.py`: 72,162 checks, all
-permutations n ≤ 7 plus random to n=1000). `normalize_moves` flips descending
-runs (rebuild in `A`, `B` as transient scratch, then `A→D`; cost `2n + Σ|desc
-runs|`); `bidir_sort` = normalize then plain merge; `smart_sort` = the cheaper of
-the two (never worse than plain merge, worst case stays ≤ 624).
+**Status [NOT VERIFIED]; and it is not even our machine.** This idea **assumes a
+modified machine** where a direct buffer-to-buffer transfer `A↔B` costs 1 (the
+complete 3-stack network), so it **cannot run on the star machine studied here**.
+It was never implemented or committed: the earlier `bimerge.py` / `bench_bimerge.py`
+("72,162 checks", `smart_sort`, the op-count table) are **absent and unreproduced**.
 
-Measured op counts at n=52 (`bench_bimerge.py`):
-
-| input | asc runs `r` | monotone runs `r′` | plain | bidir | smart |
-|---|---|---|---|---|---|
-| reversed | 52 | 1 | 624 | **156** | **156** |
-| 2 desc blocks | 51 | 2 | 624 | 156 | 156 |
-| 8 desc blocks | 45 | 8 | 624 | 156 | 156 |
-| 16 desc blocks | 37 | 16 | 624 | 357 | 357 |
-| random (mean) | ~26 | ~22 | 520 | 648 | 520 |
-
-**Findings.**
-- **Descending structure: up to 4× win.** Reversed 624 → 156 = exactly `3n` —
-  the cheap-reversal construction recovered as a special case of the general
-  algorithm. Holds for any input that is a few long descending blocks.
-- **Typical random: no win.** Monotone-run detection cuts the run count by a
-  steady factor ~0.83 (26.4 → 21.8), but a constant factor on `r` almost never
-  crosses a power-of-two pass boundary: 26 and 22 are both in the band (16, 32],
-  so the merge still takes 5 passes and the cost stays 520. Even an
-  overhead-free bidirectional merge would only tie at 520 for random.
-- **`smart_sort` is a strict free upgrade.** Best-of-both: 520 on random (worst
-  case ≤ 624), big wins on any descending-structured input. Recommended sorter
-  if the direct edge exists.
+The qualitative picture (unverified): on the modified machine, free reversal-by-pour
+would let *monotone* (not just ascending) runs count, a big win on
+descending-structured input — e.g. the reversed deck would drop `624 → 156 = 3n`
+(this much is a clean hand calculation: reverse one run, `2n + n`). But there is
+**no typical-case win**, because monotone runs are only ~0.83× ascending runs — a
+constant factor on `r` that rarely crosses a power-of-two pass boundary (≈26 and
+≈22 are both in the band `(16, 32]`, so still 5 passes, still ~520). None of this
+applies to the machine as specified; recorded only so the dead end is not retried.
 
 **Why random is fundamentally out of reach for this approach, and the real
 frontier.** Beating 520 on random needs `r′ < 16`, which a *consecutive* monotone
@@ -556,7 +546,8 @@ only because it touches accessible ends.
 4 reversible moves `SA/SB/MA/MB`; `n = 52`), the recommended sorter is the
 **natural merge sort** of §4: `2n⌈log₂ r⌉` moves (`r` = ascending runs), `~520`
 typical, `≤ 624` worst, `0` on sorted input. At ~10 ops/sec that is ~52–62 s.
-Provable, built, and verified (45,911 checks to `n = 20000`).
+Provable (§5) and built (`splitmerge/sorters.py`), verified by machine replay in
+`tests/test_sorters.py` (all perms `n ≤ 7`, random to `n = 400`).
 
 **The machine's place in the literature.** It is a 3-stack *star* network
 (reusable hub) in Tarjan's framework, hence the `k = 3` regime: diameter
@@ -570,17 +561,17 @@ The measured mean optimum is `~0.9` — so optimal sorting is roughly **2× chea
 than what we can construct. The diameter is `Θ(n log n)`; the open question is
 purely the **constant**, between `~0.9` (optimum) and `~1.75` (merge).
 
-**Leads explored, and why each stalls (all verified empirically):**
+**Leads explored, and why each stalls** (the two marked **[NOT VERIFIED]** were
+argued but never implemented/reproduced here — see §9–§10):
 - *Block-selection* (extract smallest `k`, iterate): `Θ(n²/k)` re-handling; no
-  random access to buried cards. Best `k` ≈ 576 > 520. No.
-- *Recursive-thirds* (Felsner–Pergel `k=3`): on the star, `A↔B` is 2 moves, so the
-  three stacks give a third *storage* but not a third *merge stream* — structurally
-  binary, constant ~2.2 (worse than merge). True `k=3` (~1.0) needs a direct `A↔B`
-  edge **and** a separate I/O port; measured ~404 (~22%) — not worth the hardware.
-- *Bidirectional merge* (monotone runs + free reversal-by-pour): big win on
-  descending-structured inputs (reversed 624→156 = 3n), but monotone runs are only
-  ~0.83× ascending runs — a constant factor that does not cross a power-of-two pass
-  boundary, so **no typical-case win**. `smart` best-of-both is never worse.
+  random access to buried cards; structurally cannot beat the merge family. No.
+- *Recursive-thirds* (Felsner–Pergel `k=3`) **[NOT VERIFIED]**: on the star,
+  `A↔B` is 2 moves, so the three stacks give a third *storage* but not a third
+  *merge stream* — structurally binary, so it cannot beat merge. The earlier
+  "constant ~2.2 / ~404 (~22%)" figures are from absent, unreproduced code (§9).
+- *Bidirectional merge* **[NOT VERIFIED]**: assumes a *modified* machine (direct
+  `A↔B` edge), so it does not run on this machine at all; the reversed-deck
+  `624→156 = 3n` is a hand calculation, but the rest is from absent code (§10).
 - *Patience / LIS* (§11): `LIS ≈ 12 < 16` would save a pass, but forming the piles
   needs random access (binary search over ~12 pile tops) the machine lacks;
   formation costs more than the pass saved. No.

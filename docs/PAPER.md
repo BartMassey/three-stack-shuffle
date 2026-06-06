@@ -7,10 +7,22 @@ tables live in the `sources/` documents, cited inline. To continue the work
 (and for a proposed anytime local-search planner that is **not yet built**), see
 `docs/HANDOFF.md`.*
 
-> **Caveat.** An exploratory session reported `n = 52` local-search results that
-> were never actually run and are void (see `docs/HANDOFF.md` §2). Nothing about
-> that planner appears as a result here; it is listed only as a proposed
-> direction.
+> **Caveat (void local-search results).** An exploratory session reported
+> `n = 52` local-search results that were never actually run and are void (see
+> `docs/HANDOFF.md` §2). Nothing about that planner appears as a result here; it
+> is listed only as a proposed direction.
+>
+> **Provenance (resolved).** Earlier drafts of this document and the `sources/`
+> notes cited implementing code and inflated "*N* checks pass" counts for the
+> merge sorters and the whole-cycle model that had **never been committed**.
+> That code is now in the repo and verified by the test suite
+> (`splitmerge/sorters.py`, `splitmerge/cycle.py`; `tests/test_sorters.py`,
+> `tests/test_cycle.py`); the worst cases (`624`/`600`), averages
+> (`~520`/`~487`/`~484`), and cycle diameters (`1,1,2,2,2,3`) all reproduce, and
+> the bogus check-counts have been replaced with what the tests actually verify.
+> **Two constructions remain `[NOT VERIFIED]`:** recursive-thirds (tried; a
+> measured dead-end, never implemented here) and bidirectional merge (needs a
+> *modified* machine with a direct `A↔B` edge, so it cannot run on this machine).
 
 **Status legend.** Every claim is tagged:
 **[PROVEN]** (complete argument), **[VERIFIED n ≤ N]** (exhaustive computation),
@@ -87,7 +99,7 @@ This is the headline structural result, and it settles the asymptotics.
 - **Counting lower bound [PROVEN].** Out-degree is ≤ 4, so the ball of radius `L`
   holds < `4^{L+1}` configurations. Reaching all `n!` permutations needs
   `4^{L+1} ≥ n!`, hence `max_π g(π) ≥ ½ log₂(n!) − O(1) = Ω(n log n)`.
-- **Matching upper bound [PROVEN, VERIFIED to n = 20000].** The natural merge
+- **Matching upper bound [PROVEN; replay-verified to n = 400].** The natural merge
   sort (I.3) sorts any deck in `2n⌈log₂ r⌉ ≤ 2n⌈log₂ n⌉ = O(n log n)` operations.
 - **Therefore the diameter is `Θ(n log n)`.** No linear-operation sorter exists.
 
@@ -100,7 +112,8 @@ The exact optimum is NP-hard for general `k ≥ 4` networks (König & Lübbecke)
 for `k = 2, 3` its complexity is **[OPEN]** in the literature too.
 
 > **[RETRACTED] `4(n−1)` is not the diameter.** Exhaustive BFS gives diameter
-> `4(n−1)` for `n = 2..9` (`4, 8, …, 32`), which fits a linear law exactly and
+> `4(n−1)` for `n = 2..8` (`4, 8, …, 28`; reproducible here — `n = 9 → 32` was
+> reported from an uncommitted larger BFS), which fits a linear law exactly and
 > twice tempted a linear-diameter conjecture (once early, once again during the
 > later heuristic work of I.4–I.5). It is a **small-`n` artifact**: the counting
 > bound is loose for small `n` (`≥ 143 = ⌈log₃ 52!⌉` at `n = 52`, below the
@@ -114,8 +127,10 @@ Full treatment: `sources/operation-count-theory.md` §3, §7, §8.
 ## I.3 Constructive sorters and the constant
 
 The asymptotics are settled, so the live constructive question is the **constant**
-in `c · n log₂ n`. Measured optimum (exhaustive BFS) is `c ≈ 0.9` and drifting
-down; the best construction sits near `1.75`.
+in `c · n log₂ n`. The measured **mean** optimum over start decks (exhaustive
+BFS) is `c ≈ 0.9` and drifting down (`1.01, 0.91, 0.85` at `n = 4, 6, 8`); the
+best construction sits near `1.75`. (The *diameter* constant is higher — `≈ 1.1`
+at the largest BFS-computed `n` — and is a separate quantity.)
 
 - **Natural merge sort [PROVEN].** Buffers `A`, `B` are the two input runs of a
   balanced two-way merge; `D` accumulates merged runs. Reversals are harmless
@@ -130,22 +145,29 @@ down; the best construction sits near `1.75`.
   `600` attained only by the descending deck; average `~484`. Since the optimal
   cost never exceeds any sorter's, this **proves the diameter upper bound
   `M(52) ≤ 600`** (not the plain merge's looser `624`).
-- **Bidirectional merge [VERIFIED].** Free reversal-by-pour turns descending runs
-  ascending, so monotone (not just ascending) runs count. Big win on
-  descending-structured input (reversed `624 → 156 = 3n`); **no typical-case
-  win**, because monotone runs are only ~0.83× ascending runs — a constant factor
-  that rarely crosses a power-of-two pass boundary. (`smart_sort` = best-of-both,
-  never worse.) *Assumes the modified machine with a direct `A↔B` edge.*
+
+  *(All three above are implemented in `splitmerge/sorters.py` and verified by
+  replay on the machine in `tests/test_sorters.py` — every emitted move stream
+  sorts the deck, and counts match the closed forms.)*
+- **Bidirectional merge [NOT VERIFIED].** The idea: free reversal-by-pour turns
+  descending runs ascending, so monotone (not just ascending) runs would count —
+  a big win on descending-structured input (reversed `624 → 156 = 3n`) but **no
+  typical-case win** (monotone runs are only ~0.83× ascending runs). This
+  **assumes a modified machine with a direct `A↔B` edge**, so it cannot run on
+  the machine studied here; it is **not implemented or verified** in this repo,
+  and its quoted figures (incl. `smart_sort`) are from absent code.
 
 The merge family's worst case bottoms out at `600` (Hu–Tucker, provably optimal
 *among no-reversal merge sorters*). Beating `600` worst-case would require a
 non-merge construction — the open `~0.9`-constant direction below.
 
 **[DEAD END] Constructions that do not beat merge sort:**
-- *Recursive-thirds* (Felsner–Pergel `k = 3`): on the **star**, `A↔B` costs 2, so
-  the three stacks give a third *storage* area but not a third *merge stream* —
-  structurally binary; measured constant ~2.2, *worse* than merge, and
-  non-adaptive. The `~1.0` constant needs a true triangle (direct `A↔B`).
+- *Recursive-thirds* (Felsner–Pergel `k = 3`) **[NOT VERIFIED]**: on the **star**,
+  `A↔B` costs 2, so the three stacks give a third *storage* area but not a third
+  *merge stream* — structurally binary, so it cannot beat the binary merge family
+  and the `~1.0` constant needs a true triangle (direct `A↔B`). We tried it; the
+  earlier "measured constant ~2.2 (worse than merge)" came from code that is
+  **not in this repo and was not reproduced** — treat as an untested dead end.
 - *Patience / LIS sorting*: `LIS ≈ 12 < 16` at `n = 52` would save a pass, but
   forming the ~12 non-contiguous piles needs random access (binary search over
   pile tops) the machine lacks; formation costs more than the pass saved.
@@ -266,8 +288,9 @@ finds exact optima.
 
 > **Reconciliation (read with I.2).** `opt(reversal) = 4(n−1)` is an *exact value
 > for one family of inputs* and is solid. It coincides with the **diameter** only
-> for `n ≤ 9` (BFS) and is supported as the diameter through `n ≈ 11` by heuristic
-> search — but this is the small-`n` artifact of I.2, **not** an asymptotic fact.
+> for `n ≤ 8` (full BFS reproducible here; `n = 9` reported from an uncommitted
+> BFS) and is supported as the diameter through `n ≈ 11` by heuristic search — but
+> this is the small-`n` artifact of I.2, **not** an asymptotic fact.
 > At `n = 52` the diameter `M(52)` is pinned to `[204, 600]`: the **lower bound
 > `204`** is the reversal's exact optimum (itself a strengthening of the counting
 > bound `≥ 143 = ⌈log₃ 52!⌉` — see I.2/SORTING-BOUNDS §4); the **upper bound
@@ -318,11 +341,12 @@ The project's origin: measure cost in whole drain-and-refill **cycles**.
   anywhere in exactly two cycles, so `f(π) ≤ 2(n−1) = O(n)`; a YES-certificate is
   a short list of decks, each consecutive pair `LIS`-checkable. So the decision
   problem is in **NP**.
-- **Diameter data [VERIFIED n ≤ 9].** `D(n) = 1, 1, 2, 2, 2, 3, 3, 3` for
-  `n = 2..9`. **[CONJECTURE]** triangular `D(n) = (least c with c(c+1)/2 ≥ n) − 1`
-  (≈ `√(2n)`); `D(9) = 3` refutes a `⌈log₂ n⌉` law. The asymptotic growth
-  (`Θ(√n)` vs `Θ(log n)`) is **[OPEN]** — `n ≤ 9` cannot separate them; `D(10)`,
-  `D(11)` would.
+- **Diameter data [VERIFIED n ≤ 8; `n = 9` per uncommitted BFS].** `D(n) = 1, 1,
+  2, 2, 2, 3, 3` for `n = 2..8` (reproduced here); `D(9) = 3` was computed by an
+  uncommitted compiled BFS. **[CONJECTURE]** triangular `D(n) = (least c with
+  c(c+1)/2 ≥ n) − 1` (≈ `√(2n)`); the reported `D(9) = 3` refutes a `⌈log₂ n⌉`
+  law. The asymptotic growth (`Θ(√n)` vs `Θ(log n)`) is **[OPEN]** — `n ≤ 9`
+  cannot separate them; `D(10)`, `D(11)` would.
 - **`f` is not a function of `LIS` [VERIFIED n ≤ 8].** `LIS ∈ {3, 4}` occurs at
   both distance 2 and 3; a genuine second-order correction lives there.
 
@@ -338,8 +362,8 @@ Full treatment: `sources/cycle-model-theory.md`; `sources/original-notes.md`.
 
 Kept deliberately, clearly labeled, so they are not revisited.
 
-- **[RETRACTED] `4(n−1)` as the operation diameter.** Linear fit to BFS `n ≤ 9`;
-  refuted by the counting bound (I.2). Conjectured twice (early; and again in the
+- **[RETRACTED] `4(n−1)` as the operation diameter.** Linear fit to BFS `n ≤ 8`
+  (`n = 9` per uncommitted BFS); refuted by the counting bound (I.2). Conjectured twice (early; and again in the
   recent heuristic work as "`M(n) = 4(n−1)`, missing only a universal upper
   bound"). What survives is the *exact value* `opt(reversal) = 4(n−1)` (I.5).
 - **[DEAD END] Greedy/Chaitin colouring for `OCT_pre`** — upper bound, wrong
@@ -366,14 +390,18 @@ Kept deliberately, clearly labeled, so they are not revisited.
 - Reversibility ⇒ undirected metric `g`; sorting ≡ producing; costs even. **[PROVEN]**
 - Diameter of the operation model is `Θ(n log n)` (counting LB + merge sort UB;
   `k = 3` star). **[PROVEN]**
-- Natural merge sort: `2n⌈log₂ r⌉` ops, verified to `n = 20000`. **[PROVEN/VERIFIED]**
-- `h₀`, `h_best`, `h_joint` admissible; `h_joint` dominates `h_best`. **[PROVEN; VERIFIED n ≤ 7]**
+- Natural merge sort: `2n⌈log₂ r⌉` ops (closed form proven for all `n`; verified
+  by machine replay to `n = 400` in `tests/`). **[PROVEN/VERIFIED]**
+- `h₀`, `h_best`, `h_joint` admissible; `h_joint` dominates `h_best`. **[PROVEN;
+  VERIFIED n ≤ 7 in tests, n = 8 separately]**
 - `opt(reversed deck) = 4(n−1)` exactly, all `n`. **[PROVEN]**
 - IDA* exact-search, `h_joint` ~84 % fewer nodes than `h_best`. **[VERIFIED n ≤ 11]**
 - Cycle model: one cycle = two reversed subsequences interleaved; reachable iff
   `LIS(d⁻¹e) ≤ 2`; `f ≤ 2(n−1)`; decision ∈ NP. **[PROVEN]**
-- Operation diameter `= 4(n−1)` for `n ≤ 9`; cycle diameter `1,1,2,2,2,3,3,3` for
-  `n ≤ 9`. **[VERIFIED]**
+- Operation diameter `= 4(n−1)` for `n ≤ 8` (full BFS reproducible in this repo;
+  `n = 9` was reported from a larger BFS not committed here); cycle diameter
+  `1,1,2,2,2,3,3` for `n ≤ 8` (independently reproduced; `n = 9 → 3` from the
+  uncommitted compiled BFS). **[VERIFIED n ≤ 8; n = 9 per absent code]**
 
 **Open.**
 - P vs NP-hard for both SPLIT-MERGE-OPS and the cycle problem.

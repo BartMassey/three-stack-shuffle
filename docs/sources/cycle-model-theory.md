@@ -1,5 +1,14 @@
 # The Split–Merge Permuter — Theory
 
+> **Provenance note.** The whole-cycle model is now implemented in
+> `splitmerge/cycle.py` and verified by `tests/test_cycle.py`: the algebraic
+> one-cycle test (`LIS(d⁻¹e) ≤ 2`) matches the brute-force interleaving oracle,
+> neighbour counts equal the Catalan numbers, and the Cayley-graph diameters
+> reproduce. `D(n)` and the per-distance `LIS` breakdowns of §4 are reproduced
+> for `n ≤ 8` (the `n = 9` row was reported from an uncommitted compiled BFS and
+> is consistent with the pattern but not re-verified here). The §7 tooling is the
+> reference implementation.
+
 **Scope.** This is the formal write-up for the *LIFO* split–merge machine: the only
 operations are "pop the top card of one pile, push it onto the top of another pile."
 There is no flip, no peek, no per-pile orientation choice. The document supersedes
@@ -162,7 +171,8 @@ The remaining question is its exact complexity inside NP (P vs NP-hard); see §5
 ## 4. What is known about `f` (verified data)
 
 **Termination / generation.** `C` generates `Sₙ`; every permutation is reachable.
-Confirmed by exhaustive BFS reaching all `n!` permutations for every `n ≤ 9`.
+Confirmed by exhaustive BFS reaching all `n!` permutations for every `n ≤ 8`
+here (`n = 9` per the uncommitted compiled BFS).
 
 **Diameter** `D(n) = max_π f(π)`, exhaustive BFS over the full Cayley graph:
 
@@ -170,8 +180,10 @@ Confirmed by exhaustive BFS reaching all `n!` permutations for every `n ≤ 9`.
 |------|---|---|---|---|---|---|---|---|
 | D(n) | 1 | 1 | 2 | 2 | 2 | 3 | 3 | 3 |
 
-`D(8)` and `D(9)` are new here (n ≤ 7 reproduces the old notes). BFS layer sizes for
-`n = 9`: `1, 4862, 261807, 96210` (sums to `9! = 362880`).
+`D(n)` for `n ≤ 8` is reproduced by `splitmerge/cycle.py` (and the dist-3 `LIS`
+breakdown is asserted in `tests/test_cycle.py`); `D(9) = 3` is from an
+**uncommitted** compiled BFS — layer sizes `1, 4862, 261807, 96210` (sum to
+`9! = 362880`), consistent with the pattern but not re-verified here.
 
 **Diameter formula — status updated.** The two live hypotheses were:
 
@@ -180,7 +192,8 @@ Confirmed by exhaustive BFS reaching all `n!` permutations for every `n ≤ 9`.
 - `⌈log₂ n⌉`, predicting `D(9) = 4`.
 
 The computed **`D(9) = 3` refutes the `⌈log₂ n⌉` formula** and is consistent with the
-triangular formula. **[VERIFIED n ≤ 9.]** Note, however, that `n ≤ 9` cannot separate
+triangular formula. **[VERIFIED n ≤ 8 here; `D(9) = 3` per uncommitted BFS.]**
+Note, however, that `n ≤ 9` cannot separate
 the *asymptotic* growth `Θ(√n)` from `Θ(log n)` — the two formulas first diverge by
 more than one only around `n ≈ 16`. The triangular formula predicts `D(10) = 3` and a
 first jump to `D = 4` at `n = 11`; both are **[OPEN]** (n = 11 BFS is ~10¹² ops).
@@ -294,6 +307,7 @@ You are studying the **LIFO** two-stack split–merge permuter. **One cycle ⟺ 
 relative permutation is 123-avoiding (`LIS ≤ 2`)**; the reachability graph is the
 **undirected Cayley graph `Cay(Sₙ, {LIS ≤ 2})`**, and `f(π)` is the word length there.
 **Proven:** sortable-in-one ⟺ `LIS ≤ 2`; `f(π) ≤ 2(n−1)`, so the problem is in **NP**.
-**Verified:** diameters `1,1,2,2,2,3,3,3` for `n = 2..9` — `D(9)=3` kills the
-`⌈log₂ n⌉` formula; `LIS` decides `f` only outside `LIS ∈ {3,4}`. **Open:** P
+**Verified:** diameters `1,1,2,2,2,3,3` for `n = 2..8` (reproduced here; `D(9)=3`
+per an uncommitted BFS) — `D(9)=3` kills the `⌈log₂ n⌉` formula; `LIS` decides
+`f` only outside `LIS ∈ {3,4}`. **Open:** P
 vs NP-hardness (start at `k = 2`), the exact invariant, and asymptotic diameter.
