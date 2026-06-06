@@ -37,6 +37,13 @@ from .cycle import (
     one_cycle_ok,
     rel,
 )
+from .planner import (
+    completion,
+    greedy_solution,
+    local_search,
+    rollout,
+    rollout_merge,
+)
 
 __all__ = [
     # machine
@@ -52,4 +59,6 @@ __all__ = [
     # whole-cycle model
     "cycle_diameter", "cycle_distances", "f", "generators", "lis",
     "one_cycle_ok", "rel",
+    # inadmissible local-search planner
+    "rollout", "rollout_merge", "completion", "greedy_solution", "local_search",
 ]

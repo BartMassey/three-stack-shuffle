@@ -41,9 +41,10 @@ moves. The headline target is `n = 52`.
       oct.py          exact constrained OCT (odd-cycle branch-and-bound)
       sorters.py      constructive merge sorters: natural / top-down / Hu-Tucker
       cycle.py        whole-cycle model: one-cycle reachability, f, diameter
+      planner.py      inadmissible rollout estimate + anytime local search
     tests/            admissibility (full BFS n<=7), dominance, reversal, IDA*==BFS,
-                      OCT oracle, sorter replay (all perms n<=7), cycle diameters
-    experiments/      heuristic benchmark, M(n) conjecture search, sorter benchmark
+                      OCT oracle, sorter replay (all perms n<=7), cycle, planner
+    experiments/      heuristic benchmark, M(n) conjecture, sorter + planner search
     docs/
       OVERVIEW.md           this file: orientation + run instructions
       NOTES.md              the full technical reference (start here for the science)

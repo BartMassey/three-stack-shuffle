@@ -329,14 +329,30 @@ exact optima (`splitmerge/search.py`).
    branch-and-bound budget on large far-from-clique graphs (validate any
    replacement against `heuristics._oct_pre_bruteforce` on all `n ≤ 7` states).
    **[OPEN, engineering]**
-5. **An anytime local-search planner [UNBUILT].** A practical (non-optimal) sorter
-   for `n = 52`: greedy descent on a tight *inadmissible* estimate (e.g.
-   `g + rollout`, a deterministic settle-the-next-card completion) with
-   restarts/perturbation, returning the best complete sort within a time budget.
-   Calibrate on the reversed deck (known optimum `204`); report quality as
-   `cost − h_joint(deck)`. A full spec is in `docs/old/HANDOFF.md` §4. The open
-   question is whether quality at `n = 52` within ~30 s is good enough to be
-   useful.
+5. **An anytime local-search planner [BUILT — `splitmerge/planner.py`].** A
+   practical (non-optimal) sorter steered by a tight *inadmissible* estimate.
+   Two deterministic completions supply the estimate: `rollout` (settle the next
+   card, draining the above-base deck into two patience piles) and `rollout_merge`
+   (pour the buffers back, then Hu–Tucker); the planner steers by the cheaper of
+   the two and runs perturbed greedy descents within a time budget
+   (`experiments/planner_search.py`). **Measured at `n = 52`:**
+   - First complete solution: **`204` on the reversed deck** — the settle rollout
+     is *exact* there, reconstructing the `comb` optimum — and **`~480` on random
+     decks** (the merge rollout, on par with Hu–Tucker), each in **~0.5–1.6 ms**.
+   - The two rollouts are mirror images: settle is exact on the reversal but
+     `~850` on random; merge is `~480` on random but `600` on the reversal — so
+     their min is never worse than either.
+   - **Negative result:** the greedy local search **does not improve** on the
+     first solution within seconds (0 improvement over 6 s on the reversal and on
+     random decks, ~10–18 restarts). The rollout is a good *completion* but a poor
+     *steering gradient* — the single-move landscape is flat — so the
+     believed-achievable `~300` is **not** reached; the planner sits at the
+     merge-sort frontier.
+
+   Tightening the settle rollout's blocker-routing (the main quality lever) or
+   replacing greedy descent with a non-greedy search is the open lead. *(This
+   supersedes the fabricated `n = 52` planner figures flagged in
+   `docs/old/HANDOFF.md` §2 — those were never run; these are reproducible.)*
 
 ---
 
@@ -448,7 +464,9 @@ Kept deliberately, clearly labeled, so they are not revisited.
 - Exact operation diameter at finite `n` (`n = 52`: in `[204, 600]`).
 - Asymptotic cycle diameter (`Θ(√n)` vs `Θ(log n)`).
 - Polynomial exact `OCT_pre` with pre-colouring (remove the budget fallback).
-- The anytime local-search planner (I.6 #5) — proposed, not yet built.
+- A practical sorter below the merge-sort frontier: the inadmissible planner
+  (I.6 #5) is built but only reaches `~480` on random `n = 52` (the believed
+  `~300` is not achieved); a better steering signal or search is open.
 
 **The one-line state.** We can sort a shuffled 52-card deck in `~484` moves
 (Hu–Tucker; `≤ 600` worst) and believe `~300` is achievable; the asymptotics are
@@ -467,12 +485,16 @@ random access.
 | `splitmerge/oct.py` | exact constrained `OCT_pre` (I.4) |
 | `splitmerge/sorters.py` | `natural` / `top-down` / `Hu–Tucker` sorters (I.3) |
 | `splitmerge/cycle.py` | one-cycle reachability, `f`, diameter (Part II) |
-| `tests/` | admissibility, reversal, IDA*=BFS, OCT oracle, sorter replay, cycle |
-| `experiments/` | `benchmark_heuristics`, `conjecture_Mn`, `benchmark_sorters` |
+| `splitmerge/planner.py` | inadmissible rollout estimate + anytime local search (I.6 #5) |
+| `tests/` | admissibility, reversal, IDA*=BFS, OCT oracle, sorter replay, cycle, planner |
+| `experiments/` | `benchmark_heuristics`, `conjecture_Mn`, `benchmark_sorters`, `planner_search` |
 
 **Provenance.** Earlier drafts (now in `docs/old/`) cited implementing code and
 "*N* checks pass" counts that had never been committed. The merge sorters and the
 whole-cycle model are now restored and verified; the bogus counts were replaced
 by what the tests actually check; recursive-thirds and bidirectional merge remain
-**[NOT VERIFIED]**; the `n = 52` local-search planner remains **unbuilt**. The
-archived documents are kept only for their longer proofs and history.
+**[NOT VERIFIED]**. The `n = 52` local-search planner — whose fabricated figures
+were the original void result — is now **built and measured** (I.6 #5), with the
+honest outcome that it reaches the merge-sort frontier (`~480` random) but not
+the hoped-for `~300`. The archived documents are kept only for their longer
+proofs and history.
