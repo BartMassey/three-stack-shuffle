@@ -34,8 +34,12 @@ moves. The headline target is `n = 52`.
       machine.py      states, moves, successors, base, comb_solution
       search.py       exact BFS (small n), IDA* (parametrized by heuristic)
       heuristics.py   h0, h_best, h_joint  (+ the bounce / OCT internals)
-    tests/            admissibility (full BFS n<=7), dominance, reversal, IDA*==BFS
-    experiments/      heuristic benchmark, M(n) conjecture search
+      oct.py          exact constrained OCT (odd-cycle branch-and-bound)
+      sorters.py      constructive merge sorters: natural / top-down / Hu-Tucker
+      cycle.py        whole-cycle model: one-cycle reachability, f, diameter
+    tests/            admissibility (full BFS n<=7), dominance, reversal, IDA*==BFS,
+                      OCT oracle, sorter replay (all perms n<=7), cycle diameters
+    experiments/      heuristic benchmark, M(n) conjecture search, sorter benchmark
     docs/
       PAPER.md              the consolidated narrative / paper basis (start here)
       HANDOFF.md            continuation note for Claude Code (void results + plan)
@@ -57,6 +61,11 @@ from splitmerge import reversed_deck, ida_star, h_joint, comb_solution
 
 cost, nodes = ida_star(reversed_deck(52), h_joint)   # -> (204, 204)
 moves = comb_solution(52)                             # explicit 204-move solution
+
+# constructive sorter for any deck (replayable on the machine; <= 600 moves at n=52)
+from splitmerge import hutucker_sort, apply_moves, GOAL
+moves = hutucker_sort([5, 3, 1, 2, 4])
+assert apply_moves(([5, 3, 1, 2, 4], (), ()), moves) == GOAL(5)
 ```
 
 ```sh
