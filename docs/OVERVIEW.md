@@ -12,14 +12,14 @@ moves. The headline target is `n = 52`.
   natural merge sort gives O(n log n). No linear-operation sorter exists. The
   machine is a 3-stack *star* (reusable hub), the k=3 regime in the
   stack-sorting literature.
-- **The reversed deck needs exactly `4(n-1)` moves** (proven three ways: the
-  `comb_solution` construction, the `h_joint` lower bound, and IDA* search). For
-  n=52 that is **204**. This is the operation diameter for n ≤ 9 (BFS) and
-  through n ≈ 11 (search) — but that is a *small-n coincidence*: `4(n-1)` is
-  **not** the asymptotic diameter (it is linear; the diameter is Θ(n log n)).
-  An earlier "M(n) = 4(n-1)" conjecture is **retracted**; see `docs/PAPER.md`.
-  (`4(n-1)` is the operation diameter for n <= 8 by full BFS in this repo; n=9
-  was reported from a larger BFS not committed here.)
+- **The reversed deck needs exactly `4(n-1)` moves** (proven: the `comb_solution`
+  construction gives the upper bound, the analytic LIS / two-buffer charge gives
+  the matching lower bound; IDA* independently certifies it). For n=52 that is
+  **204**. This is the operation diameter for n ≤ 8 (full BFS in this repo; n=9
+  was reported from a larger BFS not committed here) and through n ≈ 11 (search)
+  — but that is a *small-n coincidence*: `4(n-1)` is **not** the asymptotic
+  diameter (it is linear; the diameter is Θ(n log n)). An earlier "M(n) = 4(n-1)"
+  conjecture is **retracted**; see `docs/NOTES.md`.
 - **Heuristics:** `h0 <= h_best <= h_joint`, all admissible lower bounds on the
   optimal move count (the test suite asserts this by full BFS for n <= 7;
   separately confirmed exhaustively at n = 8, 0 violations). `h_joint` is the
@@ -45,18 +45,14 @@ moves. The headline target is `n = 52`.
                       OCT oracle, sorter replay (all perms n<=7), cycle diameters
     experiments/      heuristic benchmark, M(n) conjecture search, sorter benchmark
     docs/
-      PAPER.md              the consolidated narrative / paper basis (start here)
-      HANDOFF.md            continuation note for Claude Code (void results + plan)
-      sources/              the working write-ups PAPER.md synthesizes
-        operation-count-theory.md   structural theory + merge sorters + literature
-        SORTING-BOUNDS.md           merge-family algorithms and bounds
-        HEURISTIC-BOUNDS.md         the heuristic / IDA* program
-        cycle-model-theory.md       whole-cycle permutation distance
-        original-notes.md           the seed notes
+      OVERVIEW.md           this file: orientation + run instructions
+      NOTES.md              the full technical reference (start here for the science)
+      old/                  the original write-ups, superseded by NOTES.md (archive)
 
-`docs/PAPER.md` is the coherent account of the whole project (both cost models,
-all proven results, dead ends, and open problems); the `sources/` files hold the
-detailed proofs and tables it cites.
+`docs/NOTES.md` is the single coherent account of the whole project (both cost
+models, all proven results, dead ends, and open problems, with the proofs folded
+in). The superseded originals are frozen under `docs/old/` for their longer
+proofs and history.
 
 ## Usage
 

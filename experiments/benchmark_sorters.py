@@ -1,5 +1,5 @@
 """Average and worst-case move counts for the three no-reversal merge sorters,
-on random decks -- reproduces the figures in ``docs/sources/SORTING-BOUNDS.md``
+on random decks -- reproduces the figures in ``docs/NOTES.md`` §I.3
 (at n=52: average ~520 / ~487 / ~484, worst 624 / 600 / 600).
 
 Costs are taken from the closed forms (``*_cost``), which the test suite proves

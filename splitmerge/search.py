@@ -34,7 +34,7 @@ def ida_star(start, heuristic, node_cap=2_000_000):
 
     Uses parent-move pruning, on-path cycle detection, and pathmax -- the
     latter because the strong heuristics here are admissible but *not*
-    consistent (HEURISTIC-BOUNDS.md, section 13), and pathmax repairs
+    consistent (docs/NOTES.md, §I.4), and pathmax repairs
     consistency along each search path.
 
     Returns ``(cost, nodes_expanded)``; ``cost`` is ``None`` if the node cap

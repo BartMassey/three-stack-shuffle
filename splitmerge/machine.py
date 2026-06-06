@@ -78,7 +78,7 @@ def apply_moves(state, moves):
 def comb_solution(n):
     """An explicit solution that sorts the *reversed* deck ``(n, ..., 1)`` in
     exactly ``4(n-1)`` moves -- the constructive witness for the upper bound
-    ``opt(reversed deck) <= 4(n-1)`` (HEURISTIC-BOUNDS.md, section 7).
+    ``opt(reversed deck) <= 4(n-1)`` (docs/NOTES.md, §I.5).
 
     Returns the list of move names.
     """

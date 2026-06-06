@@ -4,7 +4,7 @@ A *cycle* drains the whole deck into the two buffers (``n`` splits) then merges
 everything back (``n`` merges); cost is the number of cycles.  This is a
 restricted operation schedule and a different cost measure from the
 operation-count model in the rest of the package -- keep them separate (see
-``docs/sources/cycle-model-theory.md``).
+``docs/NOTES.md`` Part II).
 
 Core facts realized here:
 

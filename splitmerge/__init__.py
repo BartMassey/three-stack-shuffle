@@ -1,6 +1,6 @@
 """splitmerge -- the three-stack split-merge card-sorting machine.
 
-Two cost models of one machine (kept separate; see ``docs/PAPER.md``):
+Two cost models of one machine (kept separate; see ``docs/NOTES.md``):
 
 * **operation count** -- ``machine``, ``heuristics``, ``oct``, ``search`` (exact
   lower bounds + IDA*), and ``sorters`` (constructive merge sorters).

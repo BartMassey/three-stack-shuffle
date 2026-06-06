@@ -16,7 +16,7 @@ runs), differing only in the binary **merge tree** they build over the runs:
 
 where ``r`` = number of maximal ascending runs and ``W(T) = sum_i s_i*depth_i``
 is the weighted external path length (leaf weights = run sizes).  See
-``docs/sources/SORTING-BOUNDS.md`` and ``operation-count-theory.md`` (Part I.3).
+``docs/NOTES.md`` §I.3.
 
 The realizations keep runs **ascending bottom-to-top (max on top)** on the deck;
 a pour onto a buffer reverses a run to min-on-top, and a count-bounded merge

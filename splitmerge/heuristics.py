@@ -3,7 +3,7 @@
 All heuristics have the form ``h = h0 + 2 * (forced bounces)``, where a *bounce*
 is a card forced to enter the deck more than once.  Each move handles one card,
 so the number of moves is the base cost plus two per forced bounce
-(HEURISTIC-BOUNDS.md, sections 1 and 9).  Three heuristics, increasing strength:
+(docs/NOTES.md, §I.1 and §I.4).  Three heuristics, increasing strength:
 
     h0      base charge only: 2*(above-base deck) + |A| + |B|
     h_best  + 2*max((LIS-2)+ buried,  clique-2)      -- the "max" version
@@ -36,7 +36,7 @@ def _lis_len(seq):
 def _buried_set(A, B):
     """Cards that are *buried*: a smaller card sits below them in the same
     buffer, so they must lift off before it settles -> they must bounce
-    (HEURISTIC-BOUNDS.md, section 4).
+    (docs/NOTES.md, §I.4).
     """
     out = set()
     for buf in (A, B):
@@ -105,7 +105,7 @@ def _clique_chain(D, A, B, k):
 @lru_cache(maxsize=None)
 def h_best(state):
     """The "max" heuristic: ``h0 + 2*max((LIS-2)+buried, clique-2)``
-    (HEURISTIC-BOUNDS.md, section 11)."""
+    (docs/NOTES.md, §I.4)."""
     D, A, B = state
     k = base_len(D)
     pi = tuple(reversed(D[k:]))
@@ -148,7 +148,7 @@ def _two_colourable(verts, adj, pre):
 
 
 def _soft_conflict_graph(state):
-    """Build the soft-conflict graph (HEURISTIC-BOUNDS.md, section 12).
+    """Build the soft-conflict graph (docs/NOTES.md, §I.4).
 
     Vertices: non-buried buffer cards (pre-coloured by their buffer) and all
     above-base deck cards (free).  A *soft* edge joins two cards that could go
@@ -230,7 +230,7 @@ def _oct_pre_bruteforce(vals, adj, pre):
 @lru_cache(maxsize=None)
 def h_joint(state):
     """The joint heuristic: ``h0 + 2*(buried + OCT_pre)``
-    (HEURISTIC-BOUNDS.md, section 12).  Eliminates the ``max`` of ``h_best`` by
+    (docs/NOTES.md, §I.4).  Eliminates the ``max`` of ``h_best`` by
     bounding the single-arrival set directly, and dominates ``h_best``.
     """
     vals, adj, pre, n_buried = _soft_conflict_graph(state)
