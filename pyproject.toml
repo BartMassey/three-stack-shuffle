@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "splitmerge"
+version = "0.1.0"
+description = "Admissible heuristics and lower bounds for a 3-stack split-merge card-sorting machine"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["splitmerge"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
