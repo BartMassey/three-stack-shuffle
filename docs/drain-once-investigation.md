@@ -1,5 +1,23 @@
 # Reverse-engineering the optimal "drain-once" sorter (working log)
 
+> **RETRACTION / correction (most important).** "Mostly drain the deck, then merge
+> once" is a **small-`n` (`n ≲ 30`) artifact**, not the asymptotic optimal. There
+> is **no "≤1 bounce per card" theorem — the opposite is forced.** For a clean
+> start deck, `g(π) = 2·Σ_c e_c` where `e_c` = times card `c` enters `D`; since the
+> diameter (and a typical `g ≈ 0.8 n log₂ n`) is `Θ(n log n)`, we get
+> `avg_c e_c = g/(2n) = Θ(log n)`, so the **average** card bounces `Θ(log n)` times,
+> and some card `Ω(log n)` times. Avg bounces/card `= g/(2n) − 1 ≈ 0.4 log₂n − 1`
+> crosses 1 near `n ≈ 32`. Empirically (`analyze bounces`): max per-card entries
+> `2.00→2.05→2.24` and `%cards bouncing ≥2` `0→1→2%` at `n = 8,10,12` — just
+> starting to grow. So the optimal is fundamentally **multi-pass** (cards cycle
+> through `D` `Θ(log n)` times), structurally like the merge sorter; the reversed
+> deck (`g = 4(n−1) = Θ(n)`, ~1 bounce/card) is the misleading special case. The
+> real question is the **constant** (optimal `~0.8` vs merge `~1.75`), i.e. how the
+> optimal distributes each card's `Θ(log n)` movements more cheaply than the merge
+> sorter's "every card pays full depth `⌈log₂ r⌉`" — NOT a drain-once construction.
+> The two-phase findings below hold only for small `n`.
+
+
 Goal: a *deterministic* sort algorithm for the operation-count machine that
 beats the merge sorter (~1.9× opt), ideally approaching opt. Method: extract
 optimal move sequences for random `n ≤ 14` decks (`analyze` binary, IDA* +

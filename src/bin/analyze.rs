@@ -146,10 +146,51 @@ fn stats(num: usize) {
     }
 }
 
+/// Per-card entry counts in optimal solutions: does the max grow with n?
+fn bounce_dist(num: usize) {
+    println!("optimal per-card entries into D (= 1 + bounces), {num} random decks each");
+    println!(" n |  opt  | mean entries | max entries | %cards bounce>=1 | %cards bounce>=2");
+    for n in [8usize, 10, 12, 14] {
+        let mut rng = Rng::new(300 + n as u64);
+        let (mut sopt, mut smean, mut smax, mut sb1, mut sb2, mut cnt) =
+            (0.0, 0.0, 0.0, 0.0, 0.0, 0usize);
+        for _ in 0..num {
+            let st = State::from_deck(rng.perm(n));
+            let (path, _) = ida_star_path(&st, &h_joint, 20_000_000);
+            let Some(path) = path else { continue };
+            let mut entries = vec![0usize; n + 1];
+            let mut s = st.clone();
+            for &mv in &path {
+                s.apply(mv);
+                if matches!(mv, Move::MA | Move::MB) {
+                    entries[*s.d.last().unwrap() as usize] += 1;
+                }
+            }
+            let nz: Vec<usize> = entries.into_iter().filter(|&e| e > 0).collect();
+            sopt += path.len() as f64;
+            smean += nz.iter().sum::<usize>() as f64 / nz.len() as f64;
+            smax += *nz.iter().max().unwrap() as f64;
+            sb1 += nz.iter().filter(|&&e| e >= 2).count() as f64 / nz.len() as f64;
+            sb2 += nz.iter().filter(|&&e| e >= 3).count() as f64 / nz.len() as f64;
+            cnt += 1;
+        }
+        let c = cnt as f64;
+        println!(
+            " {n:2} | {:5.1} |    {:.2}      |    {:.2}     |     {:4.0}%        |     {:4.0}%",
+            sopt / c,
+            smean / c,
+            smax / c,
+            100.0 * sb1 / c,
+            100.0 * sb2 / c
+        );
+    }
+}
+
 fn main() {
     let a: Vec<String> = std::env::args().collect();
     let cmd = a.get(1).map(|s| s.as_str()).unwrap_or("stats");
     match cmd {
+        "bounces" => bounce_dist(a.get(2).and_then(|s| s.parse().ok()).unwrap_or(60)),
         "traces" => traces(
             a.get(2).and_then(|s| s.parse().ok()).unwrap_or(9),
             a.get(3).and_then(|s| s.parse().ok()).unwrap_or(6),
