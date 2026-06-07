@@ -12,6 +12,23 @@ file summarizes the frontier and points there, it does not replace it.
 
 ---
 
+## Notation (so this file is standalone)
+
+- `n` cards; `π` the deck (a permutation); `m` non-base cards.
+- `σ` — **departure order** = the deck read top-to-bottom (the sequence sorted away).
+- `a₂(σ)` — max #cards coverable by **two `σ`-decreasing subsequences**
+  (Greene–Kleitman, polynomial). `OCT = n − a₂` is the **static bounce lower bound**.
+- `LIS` / `LDS` — longest increasing / decreasing subsequence of `σ` (`≈ 2√n` random).
+- `r` — number of **ascending runs** (the merge sorter's granularity); `LDS ≤ r`.
+- `OCT` is a bound on **bounces** `B`; `h_joint = h0 + 2·OCT` is the admissible
+  bound on the full **move** count, so `opt − h_joint = 2·(opt_bounces − OCT) =
+  2·cascade`. (`h_joint` is what the code/IDA* use; `OCT` is its bounce part.)
+- **comb** — the reversed-deck-optimal construction: pile everything onto one
+  buffer, then transfer the whole pile across (reversing it to sorted), each card
+  once → `n−2` transfers. "comb-like" = a *global* one-sweep resolution.
+- `Φ` — a hypothetical potential function (open Q1). `T` — the tangle graph
+  (increasing-pair comparability graph of `σ`).
+
 ## The thread
 
 Understand the operation-count optimum well enough to get **either** an
@@ -63,7 +80,8 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
    distinctions force transfers).
 2. **Resolution schedule** of deferred transfers (the cascade): global/comb-like
    (cheap) or irreducibly tangled?
-3. Running-`LIS`-excess of `σ` vs `opt` — does it total `Θ(n log n)`?
+3. (magnitude half of 1–2) Does the running-`LIS`-excess of `σ` total `Θ(n log n)`,
+   matching `opt`? — i.e. is the multi-scale sum the *right size*, not just a bound.
 4. Two-open-pile lazy policy: how close to `log(LDS)` rounds can it get?
 
 ## Guardrails (don't repeat)
