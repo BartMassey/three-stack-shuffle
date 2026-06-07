@@ -9,8 +9,11 @@ pub type Card = u8;
 /// A machine state `(D, A, B)`, each stack with its top at the end.
 #[derive(Clone, PartialEq, Eq, Hash, Debug)]
 pub struct State {
+    /// The deck (hub + I/O port); top at the end.
     pub d: Vec<Card>,
+    /// Buffer A; top at the end.
     pub a: Vec<Card>,
+    /// Buffer B; top at the end.
     pub b: Vec<Card>,
 }
 
@@ -18,9 +21,13 @@ pub struct State {
 /// buffer top back onto the deck.
 #[derive(Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub enum Move {
+    /// Pop the deck top onto buffer A (`D → A`).
     SA,
+    /// Pop the deck top onto buffer B (`D → B`).
     SB,
+    /// Pour buffer A's top back onto the deck (`A → D`).
     MA,
+    /// Pour buffer B's top back onto the deck (`B → D`).
     MB,
 }
 
@@ -35,6 +42,7 @@ impl Move {
             Move::MB => Move::SB,
         }
     }
+    /// The two-letter move name (`"SA"`, `"SB"`, `"MA"`, `"MB"`).
     pub fn name(self) -> &'static str {
         match self {
             Move::SA => "SA",
@@ -83,16 +91,19 @@ impl State {
         }
     }
 
+    /// Total number of cards in the state.
     #[inline]
     pub fn size(&self) -> usize {
         self.d.len() + self.a.len() + self.b.len()
     }
 
+    /// Length of the committed sorted base of the deck.
     #[inline]
     pub fn base(&self) -> usize {
         base_len(&self.d)
     }
 
+    /// Is this the sorted goal (deck `(1..=n)`, buffers empty)?
     #[inline]
     pub fn is_goal(&self) -> bool {
         self.a.is_empty() && self.b.is_empty() && base_len(&self.d) == self.d.len()
@@ -195,9 +206,21 @@ mod tests {
     fn moves_are_involutive_inverses() {
         let states = [
             State::from_deck(vec![4, 3, 2, 1]),
-            State { d: vec![3], a: vec![1], b: vec![2] },
-            State { d: vec![], a: vec![2, 4], b: vec![1, 3, 5] },
-            State { d: vec![6, 2, 5], a: vec![4, 1], b: vec![3] },
+            State {
+                d: vec![3],
+                a: vec![1],
+                b: vec![2],
+            },
+            State {
+                d: vec![],
+                a: vec![2, 4],
+                b: vec![1, 3, 5],
+            },
+            State {
+                d: vec![6, 2, 5],
+                a: vec![4, 1],
+                b: vec![3],
+            },
         ];
         for s in &states {
             for (t, mv) in s.successors() {

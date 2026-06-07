@@ -29,13 +29,18 @@ impl Hasher for FxHasher {
     }
 }
 
+/// A `BuildHasher` for [`FxHasher`].
 pub type FxBuildHasher = BuildHasherDefault<FxHasher>;
+/// A `HashMap` using the fast FxHash hasher.
 pub type FxHashMap<K, V> = HashMap<K, V, FxBuildHasher>;
+/// A `HashSet` using the fast FxHash hasher.
 pub type FxHashSet<K> = HashSet<K, FxBuildHasher>;
 
+/// A new empty [`FxHashMap`].
 pub fn fxmap<K, V>() -> FxHashMap<K, V> {
     FxHashMap::default()
 }
+/// A new empty [`FxHashSet`].
 pub fn fxset<K>() -> FxHashSet<K> {
     FxHashSet::default()
 }
@@ -46,11 +51,13 @@ pub struct Rng {
 }
 
 impl Rng {
+    /// Seed the generator.
     pub fn new(seed: u64) -> Self {
         Rng {
             state: seed.wrapping_add(0x9E37_79B9_7F4A_7C15),
         }
     }
+    /// The next 64-bit output.
     #[inline]
     pub fn next_u64(&mut self) -> u64 {
         self.state = self.state.wrapping_add(0x9E37_79B9_7F4A_7C15);
@@ -64,6 +71,7 @@ impl Rng {
     pub fn below(&mut self, n: usize) -> usize {
         (self.next_u64() % n as u64) as usize
     }
+    /// A uniform `f64` in `[0, 1)`.
     #[inline]
     pub fn f64(&mut self) -> f64 {
         (self.next_u64() >> 11) as f64 / ((1u64 << 53) as f64)

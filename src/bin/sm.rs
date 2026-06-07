@@ -1,24 +1,30 @@
-//! Experiment runner (the ports of `python/experiments/*`, plus the opt-vs-merge
+//! Experiment runner (the ports of `old/experiments/*`, plus the opt-vs-merge
 //! frontier measurement). Subcommands:
 //!
-//!   sm heuristics [n] [num]      h_best vs h_joint node expansions (IDA*)
-//!   sm sorters    [n] [num]      merge-sorter averages and worst cases
-//!   sm conjecture [n] [num]      does any deck beat 4(n-1)?
-//!   sm planner    [n] [budget] [num]   first / restart / ILS at size n
-//!   sm cascade    [max_n] [num]  cascade charge vs exact opt (tightness)
-//!   sm frontier   [budget] [num] opt vs merge vs ILS across n (the headline)
+//! ```text
+//! sm heuristics [n] [num]            h_best vs h_joint node expansions (IDA*)
+//! sm sorters    [n] [num]            merge-sorter averages and worst cases
+//! sm conjecture [n] [num]            does any deck beat 4(n-1)?
+//! sm planner    [n] [budget] [num]   first / restart / ILS at size n
+//! sm cascade    [max_n] [num]        cascade charge vs exact opt (tightness)
+//! sm frontier   [budget] [num]       opt vs merge vs ILS across n (the headline)
+//! ```
 
 use std::time::Instant;
 
 use splitmerge::heuristics::{h_best, h_joint};
 use splitmerge::machine::State;
-use splitmerge::planner::{cascade_charge, completion, iterated_local_search, local_search, rollout_cost, rollout_merge};
+use splitmerge::planner::{
+    cascade_charge, completion, iterated_local_search, local_search, rollout_cost, rollout_merge,
+};
 use splitmerge::search::ida_star;
 use splitmerge::sorters::{hutucker_cost, natural_cost, topdown_cost};
 use splitmerge::util::Rng;
 
 fn arg(i: usize, default: &str) -> String {
-    std::env::args().nth(i).unwrap_or_else(|| default.to_string())
+    std::env::args()
+        .nth(i)
+        .unwrap_or_else(|| default.to_string())
 }
 fn mean(v: &[f64]) -> f64 {
     v.iter().sum::<f64>() / v.len() as f64
@@ -30,7 +36,10 @@ fn log2(n: usize) -> f64 {
 fn heuristics(n: usize, num: usize) {
     let mut rng = Rng::new(11);
     let decks: Vec<State> = (0..num).map(|_| State::from_deck(rng.perm(n))).collect();
-    for (name, h) in [("h_best", h_best as fn(&State) -> u32), ("h_joint", h_joint)] {
+    for (name, h) in [
+        ("h_best", h_best as fn(&State) -> u32),
+        ("h_joint", h_joint),
+    ] {
         let t = Instant::now();
         let mut nodes = Vec::new();
         let mut costs = Vec::new();
@@ -169,7 +178,10 @@ fn frontier(budget: f64, num: usize) {
                 ils / merge
             );
         } else {
-            println!(" {n:2}   -          -        {merge:5.0}     -      {ils:4.0}   {:.3}", ils / merge);
+            println!(
+                " {n:2}   -          -        {merge:5.0}     -      {ils:4.0}   {:.3}",
+                ils / merge
+            );
         }
     }
 }
@@ -178,8 +190,14 @@ fn main() {
     let cmd = arg(1, "frontier");
     match cmd.as_str() {
         "heuristics" => heuristics(arg(2, "10").parse().unwrap(), arg(3, "80").parse().unwrap()),
-        "sorters" => sorters(arg(2, "52").parse().unwrap(), arg(3, "2000").parse().unwrap()),
-        "conjecture" => conjecture(arg(2, "10").parse().unwrap(), arg(3, "150").parse().unwrap()),
+        "sorters" => sorters(
+            arg(2, "52").parse().unwrap(),
+            arg(3, "2000").parse().unwrap(),
+        ),
+        "conjecture" => conjecture(
+            arg(2, "10").parse().unwrap(),
+            arg(3, "150").parse().unwrap(),
+        ),
         "planner" => planner(
             arg(2, "52").parse().unwrap(),
             arg(3, "6").parse().unwrap(),

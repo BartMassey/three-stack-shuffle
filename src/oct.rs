@@ -9,10 +9,14 @@ use std::collections::{HashMap, HashSet, VecDeque};
 
 /// Vertices are card values (`>= 1`); the terminals are negative sentinels.
 pub type Vertex = i16;
+/// An undirected graph as vertex → neighbour set.
 pub type Graph = HashMap<Vertex, HashSet<Vertex>>;
+/// A pre-colouring: vertex → fixed side (`0` or `1`).
 pub type PreColour = HashMap<Vertex, u8>;
 
+/// Undeletable terminal for colour side 0.
 pub const T0: Vertex = -1;
+/// Undeletable terminal for colour side 1.
 pub const T1: Vertex = -2;
 
 fn link(g: &mut Graph, a: Vertex, b: Vertex) {
@@ -192,7 +196,16 @@ pub fn exact_oct(vals: &[Vertex], adj: &Graph, pre: &PreColour, budget: u64) -> 
     let mut calls = 0u64;
     let mut aborted = false;
     let remaining: HashSet<Vertex> = vals.iter().copied().collect();
-    bb(&aug, 0, &remaining, adj, budget, &mut best, &mut calls, &mut aborted);
+    bb(
+        &aug,
+        0,
+        &remaining,
+        adj,
+        budget,
+        &mut best,
+        &mut calls,
+        &mut aborted,
+    );
     if aborted {
         (clique(&remaining, adj).saturating_sub(2), false)
     } else {
@@ -200,6 +213,7 @@ pub fn exact_oct(vals: &[Vertex], adj: &Graph, pre: &PreColour, budget: u64) -> 
     }
 }
 
+/// Default branch-and-bound node-expansion budget before falling back.
 pub const DEFAULT_BUDGET: u64 = 40_000;
 
 // ----- reference oracle (exponential; tests only) -----------------------------
@@ -253,7 +267,13 @@ fn two_colourable(verts: &[Vertex], adj: &Graph, pre: &PreColour) -> bool {
 fn combinations(vals: &[Vertex], d: usize) -> Vec<Vec<Vertex>> {
     let mut out = Vec::new();
     let mut cur = Vec::new();
-    fn rec(vals: &[Vertex], d: usize, start: usize, cur: &mut Vec<Vertex>, out: &mut Vec<Vec<Vertex>>) {
+    fn rec(
+        vals: &[Vertex],
+        d: usize,
+        start: usize,
+        cur: &mut Vec<Vertex>,
+        out: &mut Vec<Vec<Vertex>>,
+    ) {
         if cur.len() == d {
             out.push(cur.clone());
             return;
@@ -273,7 +293,11 @@ pub fn oct_pre_bruteforce(vals: &[Vertex], adj: &Graph, pre: &PreColour) -> usiz
     for d in 0..=vals.len() {
         for drop in combinations(vals, d) {
             let dropped: HashSet<Vertex> = drop.iter().copied().collect();
-            let kept: Vec<Vertex> = vals.iter().copied().filter(|v| !dropped.contains(v)).collect();
+            let kept: Vec<Vertex> = vals
+                .iter()
+                .copied()
+                .filter(|v| !dropped.contains(v))
+                .collect();
             let mut sub: Graph = HashMap::new();
             for &v in &kept {
                 let nb: HashSet<Vertex> = adj
@@ -319,11 +343,17 @@ mod tests {
 
     #[test]
     fn edge_cases() {
-        assert_eq!(exact_oct(&[], &Graph::new(), &PreColour::new(), DEFAULT_BUDGET), (0, true));
+        assert_eq!(
+            exact_oct(&[], &Graph::new(), &PreColour::new(), DEFAULT_BUDGET),
+            (0, true)
+        );
         let mut adj: Graph = HashMap::new();
         for v in [1, 2, 3] {
             adj.insert(v, HashSet::new());
         }
-        assert_eq!(exact_oct(&[1, 2, 3], &adj, &PreColour::new(), DEFAULT_BUDGET).0, 0);
+        assert_eq!(
+            exact_oct(&[1, 2, 3], &adj, &PreColour::new(), DEFAULT_BUDGET).0,
+            0
+        );
     }
 }

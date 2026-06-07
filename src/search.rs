@@ -75,7 +75,18 @@ fn dfs<H: Fn(&State) -> u32>(
             continue;
         }
         on_path.insert(t.clone());
-        let r = dfs(&t, g + 1, bound, Some(mv), ph, goal, h, node_cap, nodes, on_path);
+        let r = dfs(
+            &t,
+            g + 1,
+            bound,
+            Some(mv),
+            ph,
+            goal,
+            h,
+            node_cap,
+            nodes,
+            on_path,
+        );
         on_path.remove(&t);
         match r {
             R::Found => return R::Found,
@@ -89,11 +100,7 @@ fn dfs<H: Fn(&State) -> u32>(
 /// IDA* from `start` to the sorted goal using `h` (must be admissible for the
 /// returned cost to be optimal). Returns `(cost, nodes_expanded)`; `cost` is
 /// `None` if the node cap was hit before a solution was found.
-pub fn ida_star<H: Fn(&State) -> u32>(
-    start: &State,
-    h: &H,
-    node_cap: u64,
-) -> (Option<u32>, u64) {
+pub fn ida_star<H: Fn(&State) -> u32>(start: &State, h: &H, node_cap: u64) -> (Option<u32>, u64) {
     let goal = State::goal(start.size());
     let mut nodes = 0u64;
     let mut on_path: FxHashSet<State> = fxset();
@@ -101,7 +108,16 @@ pub fn ida_star<H: Fn(&State) -> u32>(
     let mut bound = h(start);
     loop {
         match dfs(
-            start, 0, bound, None, bound, &goal, h, node_cap, &mut nodes, &mut on_path,
+            start,
+            0,
+            bound,
+            None,
+            bound,
+            &goal,
+            h,
+            node_cap,
+            &mut nodes,
+            &mut on_path,
         ) {
             R::Found => return (Some(bound), nodes),
             R::GaveUp => return (None, nodes),
@@ -127,7 +143,14 @@ mod tests {
     #[test]
     fn bfs_state_counts_match_reference() {
         // reachable-state counts (Python oracle): n = 2..=8
-        let expected = [(2, 12), (3, 60), (4, 360), (5, 2520), (6, 20160), (7, 181440)];
+        let expected = [
+            (2, 12),
+            (3, 60),
+            (4, 360),
+            (5, 2520),
+            (6, 20160),
+            (7, 181440),
+        ];
         for (n, count) in expected {
             assert_eq!(bfs_dist(n).len(), count, "state count at n={}", n);
         }

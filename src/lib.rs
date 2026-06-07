@@ -2,8 +2,9 @@
 //! bounds, exact search, constructive merge sorters, an inadmissible local-search
 //! planner, and the whole-cycle permutation-distance model.
 //!
-//! A Rust port of the (now reference) Python implementation under `python/`,
+//! A Rust port of the (now reference) Python implementation under `old/`,
 //! validated against the same invariants. See `docs/NOTES.md`.
+#![warn(missing_docs)]
 
 pub mod cycle;
 pub mod heuristics;

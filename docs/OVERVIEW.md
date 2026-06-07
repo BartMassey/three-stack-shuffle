@@ -33,7 +33,7 @@ moves. The headline target is `n = 52`.
   ~484 with that sorter.
 
 The code is **Rust** (a `std`-only crate, no dependencies). The original Python
-is kept under `python/` as a validated reference oracle.
+is kept under `old/` as a validated reference oracle.
 
 ## Layout
 
@@ -49,7 +49,7 @@ is kept under `python/` as a validated reference oracle.
       bin/sm.rs       experiment runner (heuristics / sorters / planner / frontier ...)
     tests/            cross-validation vs the Python oracle (admissibility n<=8,
                       OCT vs brute force, IDA*==BFS, reversed-52 = 204/204, ...)
-    python/           the reference Python implementation (run with pytest)
+    old/              the reference Python implementation (run with pytest)
     docs/
       OVERVIEW.md           this file: orientation + run instructions
       NOTES.md              the full technical reference (start here for the science)
@@ -82,7 +82,7 @@ cargo test --release            # all proven facts, validated vs the Python orac
 cargo run --release --bin sm -- frontier      # opt vs merge vs ILS across n
 cargo run --release --bin sm -- planner 52    # planner at n=52
 cargo run --release --bin sm -- heuristics 10 # h_best vs h_joint node counts
-(cd python && pytest)           # the reference implementation
+(cd old && pytest)              # the reference implementation
 ```
 
 ## The OCT computation

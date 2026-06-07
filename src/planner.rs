@@ -70,8 +70,8 @@ impl Roller {
         let c = *self.d.last().unwrap();
         let ta = self.a.last().copied();
         let tb = self.b.last().copied();
-        let a_ok = ta.map_or(false, |t| t > c);
-        let b_ok = tb.map_or(false, |t| t > c);
+        let a_ok = ta.is_some_and(|t| t > c);
+        let b_ok = tb.is_some_and(|t| t > c);
         if a_ok && b_ok {
             if ta.unwrap() <= tb.unwrap() {
                 self.sa();
@@ -141,6 +141,7 @@ pub fn rollout_merge(s: &State) -> Vec<Move> {
     moves
 }
 
+/// Length of the settle-next-card completion (an upper bound on `g`).
 pub fn rollout_cost(s: &State) -> usize {
     rollout(s).len()
 }
@@ -169,6 +170,7 @@ pub fn completion(s: &State) -> (Vec<Move>, usize) {
     }
 }
 
+/// The cheaper completion's length — the tight inadmissible steering estimate.
 pub fn completion_cost(s: &State) -> usize {
     rollout_cost(s).min(rollout_merge(s).len())
 }
@@ -218,10 +220,15 @@ pub fn greedy_solution(
 
 /// Anytime result of a search.
 pub struct Anytime {
+    /// The best complete solution found (a legal start→goal move stream).
     pub best_moves: Vec<Move>,
+    /// The best solution's move count.
     pub best_cost: usize,
+    /// The first solution's move count.
     pub first_cost: usize,
+    /// Wall-clock seconds to the first solution.
     pub first_secs: f64,
+    /// Number of search iterations performed.
     pub iters: u64,
 }
 
@@ -251,13 +258,24 @@ pub fn local_search(
             best_cost = cost;
         }
     }
-    Anytime { best_moves, best_cost, first_cost, first_secs, iters }
+    Anytime {
+        best_moves,
+        best_cost,
+        first_cost,
+        first_secs,
+        iters,
+    }
 }
 
 /// Iterated local search with path kicks: from the best solution, back up to a
 /// random state on its path, take a few random legal moves, re-complete; keep the
 /// best. Every candidate sorts the given deck.
-pub fn iterated_local_search(start: &State, time_budget: f64, seed: u64, max_kick: usize) -> Anytime {
+pub fn iterated_local_search(
+    start: &State,
+    time_budget: f64,
+    seed: u64,
+    max_kick: usize,
+) -> Anytime {
     let goal = State::goal(start.size());
     let mut rng = Rng::new(seed);
     let t0 = Instant::now();
@@ -268,7 +286,11 @@ pub fn iterated_local_search(start: &State, time_budget: f64, seed: u64, max_kic
     while t0.elapsed().as_secs_f64() < time_budget {
         iters += 1;
         let path = &best_moves;
-        let cut = if path.len() > 1 { rng.below(path.len()) } else { 0 };
+        let cut = if path.len() > 1 {
+            rng.below(path.len())
+        } else {
+            0
+        };
         let prefix: Vec<Move> = path[..cut].to_vec();
         let mut s = start.applied(&prefix);
         let mut last = prefix.last().copied();
@@ -278,7 +300,7 @@ pub fn iterated_local_search(start: &State, time_budget: f64, seed: u64, max_kic
             let opts: Vec<(State, Move)> = s
                 .successors()
                 .into_iter()
-                .filter(|(_, mv)| last.map_or(true, |lm| *mv != lm.inv()))
+                .filter(|(_, mv)| last.is_none_or(|lm| *mv != lm.inv()))
                 .collect();
             if opts.is_empty() {
                 break;
@@ -301,7 +323,13 @@ pub fn iterated_local_search(start: &State, time_budget: f64, seed: u64, max_kic
             best_moves = cand;
         }
     }
-    Anytime { best_moves, best_cost, first_cost, first_secs, iters }
+    Anytime {
+        best_moves,
+        best_cost,
+        first_cost,
+        first_secs,
+        iters,
+    }
 }
 
 #[cfg(test)]

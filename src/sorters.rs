@@ -131,11 +131,14 @@ pub fn natural_sort(deck: &[Card]) -> Vec<Move> {
 
 /// A binary merge tree over the runs.
 pub enum Tree {
+    /// A single run of the given size (already sorted on the deck).
     Leaf(usize),
+    /// An internal merge of two subtrees, with the total card count.
     Node(Box<Tree>, Box<Tree>, usize),
 }
 
 impl Tree {
+    /// Total number of cards under this node.
     pub fn size(&self) -> usize {
         match self {
             Tree::Leaf(s) => *s,
@@ -174,15 +177,14 @@ pub fn build_topdown(run_sizes: &[usize]) -> Tree {
             return Tree::Leaf(run_sizes[i]);
         }
         let target = (pre[i] + pre[j]) as f64 / 2.0;
-        let mut best_k = i + 1;
-        let mut best_d = f64::INFINITY;
-        for k in (i + 1)..j {
-            let d = (pre[k] as f64 - target).abs();
-            if d < best_d {
-                best_d = d;
-                best_k = k;
-            }
-        }
+        // boundary nearest the card midpoint (first on ties)
+        let best_k = (i + 1..j)
+            .min_by(|&k1, &k2| {
+                let d1 = (pre[k1] as f64 - target).abs();
+                let d2 = (pre[k2] as f64 - target).abs();
+                d1.partial_cmp(&d2).unwrap()
+            })
+            .unwrap();
         let left = build(i, best_k, run_sizes, pre);
         let right = build(best_k, j, run_sizes, pre);
         Tree::Node(Box::new(left), Box::new(right), pre[j] - pre[i])
@@ -202,8 +204,8 @@ pub fn build_hutucker(run_sizes: &[usize]) -> Tree {
     let pre = prefix_sums(run_sizes);
     let mut c = vec![vec![0usize; r]; r];
     let mut kbest = vec![vec![0usize; r]; r];
-    for i in 0..r {
-        kbest[i][i] = i;
+    for (i, row) in kbest.iter_mut().enumerate() {
+        row[i] = i;
     }
     for length in 2..=r {
         for i in 0..=(r - length) {
@@ -254,16 +256,19 @@ pub fn realize_tree(deck: &[Card], tree: &Tree) -> Vec<Move> {
     m.moves
 }
 
+/// Adaptive top-down merge sort; returns the move list (cost `2*W`).
 pub fn topdown_sort(deck: &[Card]) -> Vec<Move> {
     realize_tree(deck, &build_topdown(&ascending_runs(deck)))
 }
 
+/// Optimal Hu-Tucker merge sort; returns the move list (cost `2*W`, minimal).
 pub fn hutucker_sort(deck: &[Card]) -> Vec<Move> {
     realize_tree(deck, &build_hutucker(&ascending_runs(deck)))
 }
 
 // ----- closed-form costs (no replay) ------------------------------------------
 
+/// `2n*ceil(log2 r)` — the exact `natural_sort` move count.
 pub fn natural_cost(deck: &[Card]) -> usize {
     let n = deck.len();
     let r = ascending_runs(deck).len();
@@ -274,10 +279,12 @@ pub fn natural_cost(deck: &[Card]) -> usize {
     }
 }
 
+/// `2*W` of the adaptive top-down tree.
 pub fn topdown_cost(deck: &[Card]) -> usize {
     2 * weighted_path_length(&build_topdown(&ascending_runs(deck)))
 }
 
+/// `2*W` of the optimal Hu-Tucker tree (minimal over order-preserving trees).
 pub fn hutucker_cost(deck: &[Card]) -> usize {
     2 * weighted_path_length(&build_hutucker(&ascending_runs(deck)))
 }
@@ -309,7 +316,10 @@ mod tests {
             let goal = State::goal(n);
             perms(n, &mut |p| {
                 for (sort, cost) in [
-                    (natural_sort as fn(&[Card]) -> Vec<Move>, natural_cost as fn(&[Card]) -> usize),
+                    (
+                        natural_sort as fn(&[Card]) -> Vec<Move>,
+                        natural_cost as fn(&[Card]) -> usize,
+                    ),
                     (topdown_sort, topdown_cost),
                     (hutucker_sort, hutucker_cost),
                 ] {

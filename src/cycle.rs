@@ -8,6 +8,7 @@ use std::collections::VecDeque;
 
 use crate::util::{fxmap, fxset, FxHashMap};
 
+/// A permutation in one-line notation (0-indexed values).
 pub type Perm = Vec<u8>;
 
 /// Length of the longest strictly-increasing subsequence.
@@ -121,8 +122,14 @@ pub fn one_cycle_neighbors_bruteforce(d: &[u8]) -> crate::util::FxHashSet<Perm> 
     let n = d.len();
     let mut reach = fxset();
     for bits in 0u32..(1u32 << n) {
-        let a: Vec<u8> = (0..n).filter(|&i| (bits >> i) & 1 == 1).map(|i| d[i]).collect();
-        let b: Vec<u8> = (0..n).filter(|&i| (bits >> i) & 1 == 0).map(|i| d[i]).collect();
+        let a: Vec<u8> = (0..n)
+            .filter(|&i| (bits >> i) & 1 == 1)
+            .map(|i| d[i])
+            .collect();
+        let b: Vec<u8> = (0..n)
+            .filter(|&i| (bits >> i) & 1 == 0)
+            .map(|i| d[i])
+            .collect();
         let ra: Vec<u8> = a.iter().rev().copied().collect();
         let rb: Vec<u8> = b.iter().rev().copied().collect();
         for pos in combinations(n, ra.len()) {
@@ -157,6 +164,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::needless_range_loop)] // n is both the index and the argument
     fn generators_are_catalan() {
         for n in 2..=8 {
             assert_eq!(generators(n).len(), CATALAN[n]);
@@ -164,13 +172,17 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::needless_range_loop)] // n is both the index and the argument
     fn bruteforce_equals_lis_test() {
         for n in 2..=5 {
             let perms = all_perms(n);
             for d in &perms {
                 let bf = one_cycle_neighbors_bruteforce(d);
-                let alg: crate::util::FxHashSet<Perm> =
-                    perms.iter().filter(|e| one_cycle_ok(d, e)).cloned().collect();
+                let alg: crate::util::FxHashSet<Perm> = perms
+                    .iter()
+                    .filter(|e| one_cycle_ok(d, e))
+                    .cloned()
+                    .collect();
                 assert_eq!(bf, alg);
             }
         }
@@ -185,7 +197,11 @@ mod tests {
     fn lis_breakdown_n7() {
         // distance-3 permutations at n=7 all have LIS 3 (the "225 states")
         let dist = cycle_distances(7);
-        let far: Vec<&Perm> = dist.iter().filter(|(_, &d)| d == 3).map(|(p, _)| p).collect();
+        let far: Vec<&Perm> = dist
+            .iter()
+            .filter(|(_, &d)| d == 3)
+            .map(|(p, _)| p)
+            .collect();
         assert_eq!(far.len(), 225);
         assert!(far.iter().all(|p| lis(p) == 3));
     }

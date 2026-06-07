@@ -17,11 +17,11 @@ false), **[DEAD END]** (a route that does not work, kept so it is not retried),
 OCT, IDA*/BFS search, the constructive merge sorters, the whole-cycle model, and
 the inadmissible planner are all in the Rust crate (`src/`) and exercised by
 `cargo test` (validated against the reference Python implementation under
-`python/`). Where a claim is reproducible, the relevant module is named inline.
+`old/`). Where a claim is reproducible, the relevant module is named inline.
 
 > **Code references.** Inline names below use the module/function names shared by
 > the Rust crate (`src/<module>.rs`, canonical) and the reference Python
-> (`python/splitmerge/<module>.py`) — e.g. `h_joint`, `hutucker_sort`,
+> (`old/splitmerge/<module>.py`) — e.g. `h_joint`, `hutucker_sort`,
 > `iterated_local_search`. Experiments named `experiments/foo.py` are ported to
 > the `sm` CLI subcommands (`cargo run --release --bin sm -- foo`).
 
@@ -508,7 +508,7 @@ random access.
 ## Appendix — code map
 
 Rust crate (`src/`); the reference Python mirrors it module-for-module under
-`python/splitmerge/`.
+`old/splitmerge/`.
 
 | module | backs |
 |--------|-------|

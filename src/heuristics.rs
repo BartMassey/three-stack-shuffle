@@ -97,8 +97,7 @@ fn clique_chain(s: &State) -> usize {
     let mut ans = 0;
     for a in 0..n {
         let i = order[a];
-        for b in 0..a {
-            let j = order[b];
+        for &j in &order[..a] {
             if edge(i, j) && best[j] + 1 > best[i] {
                 best[i] = best[j] + 1;
             }
