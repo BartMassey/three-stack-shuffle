@@ -10,8 +10,11 @@ Run:  python -m experiments.planner_search [n] [budget_seconds] [num_random]
 
 Honest summary at n=52: the first solution is ~204 on the reversal (the settle
 rollout is optimal there) and ~480 on random decks (the merge rollout, on par
-with Hu-Tucker); the greedy local search does **not** improve on it within
-seconds — the rollout estimate is a good completion but a poor steering gradient.
+with Hu-Tucker). Greedy *stepping* (epsilon-restart `local_search`) does **not**
+improve on it -- the estimate is a good completion but a poor steering gradient.
+Path-kick `iterated_local_search` does make small, real gains (~1-3%, e.g.
+452 -> 438 over 30 s) but stays at the merge frontier; the believed ~300 is not
+reached -- the bottleneck is completion quality, not the search.
 """
 import random
 import sys
@@ -30,11 +33,14 @@ def _row(name, st, budget):
     assert apply_moves(st, first_moves) == GOAL(n)
     settle, merge = P.rollout_cost(st), len(P.rollout_merge(st))
     lb = h_joint(st)
-    bm, best, fc, _, nr = P.local_search(st, time_budget=budget, seed=1)
-    assert apply_moves(st, bm) == GOAL(n)
+    # epsilon-greedy restart (drifts -- no gain) vs path-kick ILS (small gains)
+    _, ls_best, _, _, _ = P.local_search(st, time_budget=budget, seed=1)
+    im, ils_best, _, nit = P.iterated_local_search(st, time_budget=budget, seed=1)
+    assert apply_moves(st, im) == GOAL(n)
     print(f"  {name:12s} first={first:5d} ({ft*1000:6.1f}ms)  "
           f"[settle={settle:5d} merge={merge:5d}]  h_joint(LB)={lb:4d}  "
-          f"first/LB={first/lb:4.2f}  best@{budget:.0f}s={best:5d} (x{nr})")
+          f"first/LB={first/lb:4.2f}  restart@{budget:.0f}s={ls_best:5d}  "
+          f"ILS@{budget:.0f}s={ils_best:5d} (x{nit})")
 
 
 def run(n=52, budget=6.0, num_random=5, seed=7):

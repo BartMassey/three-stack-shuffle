@@ -80,3 +80,6 @@ def test_greedy_and_local_search_sort():
             bm, bc, fc, ft, nr = P.local_search(st, time_budget=0.1, seed=2)
             assert apply_moves(st, bm) == GOAL(n)
             assert bc <= fc                          # anytime: best never worse than first
+            im, ic, ifc, it = P.iterated_local_search(st, time_budget=0.1, seed=2)
+            assert apply_moves(st, im) == GOAL(n)    # path kicks stay legal
+            assert ic <= ifc

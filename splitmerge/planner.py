@@ -24,7 +24,7 @@ passes. The blocker-routing choice is the main quality lever (see HANDOFF §4a).
 import random
 import time
 
-from .machine import GOAL, base_len, size, succ
+from .machine import GOAL, INV, apply_moves, base_len, size, succ
 from .sorters import hutucker_sort
 from .heuristics import h0
 
@@ -206,3 +206,46 @@ def local_search(start, time_budget=10.0, seed=0, estimate=None):
         if cost < best_cost:
             best_moves, best_cost = moves, cost
     return best_moves, best_cost, first_cost, first_time, restarts
+
+
+def iterated_local_search(start, time_budget=10.0, seed=0, max_kick=6):
+    """Iterated local search with **path kicks**: from the best solution found so
+    far, back up to a random state along its path, take 1..``max_kick`` random
+    legal moves (the perturbation — never immediately undoing a move), then
+    finish with the strong `completion`; keep the best complete solution. Every
+    candidate is a legal start→goal move stream, so it sorts the *given* deck
+    (unlike perturbing the start deck, which would change the problem).
+
+    The first solution is the plain `completion` (greedy *stepping* only drifts —
+    see `greedy_solution` — so the search perturbs and re-completes rather than
+    descends move-by-move).
+
+    Returns ``(best_moves, best_cost, first_cost, n_iters)``."""
+    rng = random.Random(seed)
+    goal = GOAL(size(start))
+    t0 = time.time()
+    best_moves, best_cost = completion(start)
+    first_cost = best_cost
+    iters = 0
+    while time.time() - t0 < time_budget:
+        iters += 1
+        path = best_moves
+        cut = rng.randrange(0, len(path)) if len(path) > 1 else 0
+        prefix = path[:cut]
+        s = apply_moves(start, prefix)
+        last = prefix[-1] if prefix else None
+        kick = []
+        for _ in range(rng.randint(1, max_kick)):
+            opts = [(t, mv) for t, mv in succ(s) if not (last and mv == INV[last])]
+            if not opts:
+                break
+            t, mv = rng.choice(opts)
+            s, last = t, mv
+            kick.append(mv)
+            if s == goal:
+                break
+        tail = [] if s == goal else completion(s)[0]
+        cand = prefix + kick + tail
+        if len(cand) < best_cost:
+            best_moves, best_cost = cand, len(cand)
+    return best_moves, best_cost, first_cost, iters

@@ -42,6 +42,7 @@ from .planner import (
     cascade_charge,
     completion,
     greedy_solution,
+    iterated_local_search,
     local_search,
     rollout,
     rollout_merge,
@@ -63,5 +64,5 @@ __all__ = [
     "one_cycle_ok", "rel",
     # inadmissible local-search planner
     "rollout", "rollout_merge", "completion", "greedy_solution", "local_search",
-    "cascade_charge", "cascade_bounces",
+    "iterated_local_search", "cascade_charge", "cascade_bounces",
 ]

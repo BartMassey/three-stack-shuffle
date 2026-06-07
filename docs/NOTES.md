@@ -333,8 +333,8 @@ exact optima (`splitmerge/search.py`).
    practical (non-optimal) sorter steered by a tight *inadmissible* estimate.
    Two deterministic completions supply the estimate: `rollout` (settle the next
    card, draining the above-base deck into two patience piles) and `rollout_merge`
-   (pour the buffers back, then Hu–Tucker); the planner steers by the cheaper of
-   the two and runs perturbed greedy descents within a time budget
+   (pour the buffers back, then Hu–Tucker); the first solution is the cheaper of
+   the two, then a path-kick search perturbs and re-completes within a time budget
    (`experiments/planner_search.py`). **Measured at `n = 52`:**
    - First complete solution: **`204` on the reversed deck** — the settle rollout
      is *exact* there, reconstructing the `comb` optimum — and **`~480` on random
@@ -342,12 +342,19 @@ exact optima (`splitmerge/search.py`).
    - The two rollouts are mirror images: settle is exact on the reversal but
      `~850` on random; merge is `~480` on random but `600` on the reversal — so
      their min is never worse than either.
-   - **Negative result:** the greedy local search **does not improve** on the
-     first solution within seconds (0 improvement over 6 s on the reversal and on
-     random decks, ~10–18 restarts). The rollout is a good *completion* but a poor
-     *steering gradient* — the single-move landscape is flat — so the
-     believed-achievable `~300` is **not** reached; the planner sits at the
-     merge-sort frontier.
+   - **Search on top — two regimes.** Greedy *stepping* (descend move-by-move on
+     the estimate; `local_search`'s epsilon-restarts) **does not help and even
+     drifts** — a step + re-completion is usually worse than completing
+     immediately, so the best it does is the plain completion. The rollout is a
+     good *completion* but a poor *steering gradient* (flat single-move
+     landscape). **Path-kick iterated local search** (`iterated_local_search`:
+     back up to a random state on the best path, take a few random legal moves,
+     re-complete; keep the best) **does** make small, real gains — `~1–3 %` below
+     the merge frontier (e.g. random `n = 52`: `452 → 438` over 30 s, ~10⁵
+     kicks), and exact `204` on the reversal. But the believed-achievable `~300`
+     is **not** reached: the perturbation polishes within the merge basin but
+     cannot find a structurally cheaper sort. **The bottleneck is completion
+     quality (the `~480` merge frontier), not the search strategy.**
 
    **The "cascading charge" idea, measured [REFUTED].** A project note proposed a
    tighter inadmissible heuristic: simulate the forced bounces greedily ("every
@@ -363,10 +370,12 @@ exact optima (`splitmerge/search.py`).
    *looser*, not tighter, than the static bound — and steering the search by it
    instead of by the combined completion gives the same plateau (~470–504).
 
-   Tightening the settle rollout's blocker-routing (the main quality lever) or
-   replacing greedy descent with a non-greedy search is the open lead. *(This
-   supersedes the fabricated `n = 52` planner figures flagged in
-   `docs/old/HANDOFF.md` §2 — those were never run; these are reproducible.)*
+   Path-kick search already wins what little there is to win above the merge
+   completion; the real open lead is a **better completion** — a sub-`1.75`
+   constructive sorter (#2) — since that, not the search, is the binding
+   constraint. *(All of this supersedes the fabricated `n = 52` planner figures
+   flagged in `docs/old/HANDOFF.md` §2 — those were never run; these are
+   reproducible via `experiments/planner_search.py` and `cascade_eval.py`.)*
 
 ---
 
