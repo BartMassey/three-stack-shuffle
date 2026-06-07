@@ -371,7 +371,38 @@ fn split_ls_experiment() {
     );
 }
 
+/// The "interleave" class: deck = [1, m+1, 2, m+2, ..., m, 2m] (riffle of the two
+/// halves). Departure order is a union of two decreasing subsequences, so B=0 and
+/// opt=2n (zero transfers) -- yet it has m = n/2 ascending runs, so the merge
+/// sorter pays ~log(n/2) passes. The transfer view sees 0; the run view sees log.
+fn obvious_class() {
+    println!("interleave deck (B=0 in transfer view): opt vs merge");
+    println!(" n |  opt  h_joint  2n | hutucker  merge/opt");
+    for n in [8usize, 10, 12, 14, 16] {
+        let m = n / 2;
+        let mut deck: Vec<Card> = Vec::new();
+        for i in 1..=m {
+            deck.push(i as Card);
+            deck.push((m + i) as Card);
+        }
+        let st = State::from_deck(deck.clone());
+        let opt = ida_star(&st, &h_joint, 50_000_000).0;
+        let hj = h_joint(&st);
+        let ht = hutucker_cost(&deck);
+        println!(
+            " {n:2} |  {:?}   {hj:3}   {} | {ht:4}    {:.2}",
+            opt,
+            2 * n,
+            ht as f64 / opt.unwrap_or(1) as f64
+        );
+    }
+}
+
 fn main() {
+    if std::env::args().nth(1).as_deref() == Some("obvious") {
+        obvious_class();
+        return;
+    }
     if std::env::args().nth(1).as_deref() == Some("ls") {
         split_ls_experiment();
         return;
