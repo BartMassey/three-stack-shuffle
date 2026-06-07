@@ -132,13 +132,23 @@ B_opt  =  OCT(T)            +            cascade(π)
             Θ(n), "tangle"                 the open hard core
 ```
 
-To "understand the complexity" we must formalize **cascade**: a scheduling /
-recursion problem — choose, over time, which buffer each bounce goes to and when,
-so that the re-entries it forces are minimized. Conjecturally it has a recursive
-structure (one "level" resolves a 2-colourable layer and pushes the rest down,
-`Θ(log n)` levels — the merge-sort skeleton), and the constant question (`0.8` vs
-`1.75`) is how cheaply each level is handled by exploiting free interleaving rather
-than synchronized passes. Formalizing that recursion is the next step.
+To "understand the complexity" we must formalize **cascade**: choosing, over time,
+which buffer each bounce goes to and when, so the re-entries it forces are
+minimized. **We do not assume it is pass- or recursion-structured.** The merge
+sorter *is* recursive (uniform passes; every card paid `⌈log₂ r⌉`), and that
+uniformity is precisely its `1.75` waste. The optimum need not look like that at
+all: the deck and buffer sizes may move up and down freely, cards settling
+opportunistically the instant they become accessible, with the `Θ(log n)`-average
+re-entries spread *unevenly* (most cards once, a few many times) rather than
+log-deep across all. We genuinely cannot observe this at scale — `opt` is
+uncomputable past `n ≈ 15` — so a clean global structure there is unfalsifiable
+and not to be presumed. The live possibility: the optimum is the trajectory of a
+simple *local/online policy* (settle-when-you-can + good buffer routing) whose
+emergent path is unstructured. Two structure-agnostic handles: a **potential**
+`Φ` with `|ΔΦ| = O(1)` per move and `Φ(start) = Θ(n log n)` (a per-instance lower
+bound tighter than `OCT`, and a hint at the policy), and direct design+analysis
+of such a local policy. The counting lower bound is itself structure-agnostic, so
+nothing forces passes.
 
 *(Tooling note: `a₂(σ) = (g(reversed-equivalent) …)`; the static bound is
 `h_joint`. The cascade is `B_opt − OCT(T)`, which `ida_star` gives exactly for
