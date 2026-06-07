@@ -313,3 +313,33 @@ events under best placement, or strictly more (does resolving one force later
 ones)? (b) The optimal pile-to-break and displaced-card destination at a forced
 event. (c) Magnitude: the running-`LIS`-excess of `σ` vs `opt` — `Θ(n log n)` for
 random `σ`?
+
+### 10a. What to do at a forced event (answers (a))
+
+Two extreme local actions, both wrong:
+
+- **Peel-to-fit** (transfer small tops away until a pile top exceeds `v`, then
+  free-place `v`): this is **insertion sort → `O(n²)`**. To free-place `v` you must
+  expose an *already-placed* card `> v` by relocating the smaller cards above it;
+  on increasing `σ` (reversed) no card `> v` exists yet, so it can't free-place at
+  all, and elsewhere it relocates `O(n)` small cards per event. Confirmed bad.
+- **Bury** (place `v` on a pile, deferring one transfer): `O(1)` locally and
+  *exactly optimal on reversed* (it is the comb — each card transfers once).
+
+So the right local action is **one deferred transfer (bury), not a peel.** But that
+does **not** make `min transfers = #forced events`. The number of forced events is
+exactly `OCT = n − a₂` (the cards outside the best 2-decreasing cover) `= Θ(n)`,
+yet `opt = Θ(n log n)`. The gap is the **cascade**: the deferred transfer, when it
+finally executes (`v` moves to expose the card it buried), can re-bury on the other
+pile, forcing more. So:
+
+> Forced events are the right *trigger* (they count the `Θ(n)` first-order
+> transfers, `= OCT`) but the wrong *granularity for cost* — the `Θ(n log n)` bulk
+> is the resolution of the deferred transfers, and it is **not local**: the comb
+> resolves globally (pile everything on `B`, reverse the whole pile onto `A`, each
+> card once), not bury-by-bury. **(a) answered: `min transfers` is strictly more
+> than `#forced events` once the cascade is nonzero — i.e. for `n ≳ 30`.**
+
+So the object to understand is the **resolution schedule** of the deferred
+transfers (where each buried card goes when it must move), which is the cascade —
+and it is global, not a per-event greedy.
