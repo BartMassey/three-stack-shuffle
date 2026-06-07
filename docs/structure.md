@@ -188,3 +188,43 @@ shadow of this; we need its per-instance, structural form.
 - The **full Greene–Kleitman hierarchy** `a_1, a_2, …` (whole RSK shape), not just
   `a_2` — the "2" is the two buffers, the missing `log` should come from iterating
   the chain/antichain structure, if it is a graph parameter at all.
+
+## 8. A clean reduction, and why naive cuts fail
+
+**Settle-time lemma.** Just before card `i` settles, `D = (1,…,i−1)` *exactly*
+(any extra card would seat `i` too high). So at the instant `i` settles, the deck
+holds only the committed base and **all `n−i` unsettled cards are in the two
+buffers**. The deck is thus never a place to *store* unsettled cards across a
+settle — only an I/O port and a one-card transit slot.
+
+**Bounces = transfers between two stacks.** Consequently every non-settling deck
+entry is a card going `A → D → B` (or symmetric): a **transfer** of a stack top to
+the other stack, costing 2 moves. With `g = 2n + 2B`, **`B` = number of
+inter-buffer transfers**, and the whole problem reduces to:
+
+> Drain the deck (one stack, in departure order `σ`) into two stacks and extract
+> `1,…,n` in increasing order; the only nontrivial operation is moving a stack-top
+> to the other stack (cost 2). **Minimize transfers.** (The split is itself free
+> to choose.)
+
+This is *sorting two stacks by transfers* — a cleaner object than the full machine,
+for both the bound and the policy.
+
+**Why a single value-cut proves nothing.** Project values to two classes
+(`≤ k`, `> k`). The projected instance has only two distinct values, so it needs
+**zero** transfers (push one class to each stack; equal values never bury). So
+`B(π) ≥ B(\text{binary projection}) = 0` — vacuous. Bounces are not forced by any
+coarse 2-way separation; they require a **3-way** distinction (three values can
+have `LIS = 3`, exceeding the two stacks). This is the crux: the cost lives in the
+*fine, multi-scale* order, not in any single cut — which is exactly why it is
+`Θ(n log n)` (a hierarchy of `≈ log n` refinements) and why no single
+separator/cutwidth quantity can capture it.
+
+**So the lower bound we want is multi-scale.** Not one cut but a *hierarchy*: e.g.
+sum over a dyadic refinement of the value range of the transfers forced at each
+level (3-way `OCT` of each refinement), `Θ(n)` per level over `Θ(log n)` levels for
+random, but `Θ(n)` total for reversed (whose refinements stay monotone, hence
+transfer-free under reversal-by-pour). Making that sum a valid lower bound — i.e.
+showing transfers at different levels cannot be shared — is the open core; it is
+where an entropy / amortized-potential argument, not a static graph parameter,
+seems required. The reduction above is the right arena to attempt it.
