@@ -56,6 +56,20 @@ def test_settle_rollout_optimal_on_reversal():
         assert P.completion(reversed_deck(n))[1] == 4 * (n - 1)
 
 
+def test_cascade_charge_identity():
+    # the cascade charge is the settle rollout read as h0 + 2*bounces
+    from splitmerge.heuristics import h0
+    rng = random.Random(5)
+    for n in range(2, 12):
+        for _ in range(50):
+            st = _rand_state(n, rng)
+            assert P.cascade_charge(st) == len(P.rollout(st))
+            assert P.cascade_charge(st) == h0(st) + 2 * P.cascade_bounces(st)
+    # exact on the reversal: 4(n-1) total => n-2 cascade bounces
+    for n in (8, 12, 20, 52):
+        assert P.cascade_bounces(reversed_deck(n)) == n - 2
+
+
 def test_greedy_and_local_search_sort():
     rng = random.Random(1)
     for n in (6, 8, 10):

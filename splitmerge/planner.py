@@ -26,6 +26,7 @@ import time
 
 from .machine import GOAL, base_len, size, succ
 from .sorters import hutucker_sort
+from .heuristics import h0
 
 
 def rollout(state):
@@ -118,6 +119,23 @@ def rollout_cost(state):
     return len(rollout(state))
 
 
+def cascade_bounces(state):
+    """Forced bounces counted by the greedy settle-cascade (the ``rollout``
+    policy): a card bounces exactly when settling the next card would otherwise
+    bury it. By the identity ``|sigma| = h0 + 2*(bounces)`` this is
+    ``(rollout_cost - h0)/2`` -- the cascade is the rollout, read as a charge."""
+    return (rollout_cost(state) - h0(state)) // 2
+
+
+def cascade_charge(state):
+    """Inadmissible "cascading charge" ``h0 + 2*cascade_bounces`` (== the settle
+    rollout's length). Unlike `h_joint`'s static pairwise OCT it captures bounce
+    *sequencing* (a bounce that re-buries another card cascades), but it
+    *overshoots* (a cleverer interleaving may avoid some cascades), so it is a
+    realistic upper estimate, not a lower bound."""
+    return rollout_cost(state)
+
+
 def completion(state):
     """The cheaper of the two deterministic completions — the tight inadmissible
     estimate the planner steers by. Returns ``(moves, cost)``; ``moves`` always
@@ -131,13 +149,17 @@ def completion_cost(state):
     return completion(state)[1]
 
 
-def greedy_solution(start, rng=None, epsilon=0.0, step_cap=None):
+def greedy_solution(start, rng=None, epsilon=0.0, step_cap=None, estimate=None):
     """One local-search descent: from ``start`` repeatedly step to the successor
-    minimizing the rollout estimate (with probability ``epsilon`` take the
-    runner-up, for restart diversity); finish from wherever it stalls by running
-    the rollout, so the returned move list always sorts ``start``.
+    minimizing ``estimate`` (default the combined ``completion_cost``; pass e.g.
+    ``cascade_charge`` to steer by the cascade alone), with probability
+    ``epsilon`` taking the runner-up for restart diversity; finish from wherever
+    it stalls by running the (combined) completion, so the returned move list
+    always sorts ``start``.
 
     Returns ``(moves, cost)``."""
+    if estimate is None:
+        estimate = completion_cost
     n = size(start)
     goal = GOAL(n)
     if step_cap is None:
@@ -151,7 +173,7 @@ def greedy_solution(start, rng=None, epsilon=0.0, step_cap=None):
         for t, mv in succ(s):
             if t in visited:
                 continue
-            cands.append((completion_cost(t), t, mv))
+            cands.append((estimate(t), t, mv))
         if not cands:
             break
         cands.sort(key=lambda x: x[0])
@@ -166,7 +188,7 @@ def greedy_solution(start, rng=None, epsilon=0.0, step_cap=None):
     return moves, len(moves)
 
 
-def local_search(start, time_budget=10.0, seed=0):
+def local_search(start, time_budget=10.0, seed=0, estimate=None):
     """Anytime planner: the first solution is the plain rollout; then keep running
     perturbed greedy descents and keep the best complete solution, until the wall-
     clock budget elapses. Returns
@@ -179,7 +201,7 @@ def local_search(start, time_budget=10.0, seed=0):
     restarts = 0
     while time.time() - t0 < time_budget:
         eps = 0.0 if restarts == 0 else 0.3      # first descent is pure greedy
-        moves, cost = greedy_solution(start, rng=rng, epsilon=eps)
+        moves, cost = greedy_solution(start, rng=rng, epsilon=eps, estimate=estimate)
         restarts += 1
         if cost < best_cost:
             best_moves, best_cost = moves, cost

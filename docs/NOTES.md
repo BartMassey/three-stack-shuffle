@@ -349,6 +349,20 @@ exact optima (`splitmerge/search.py`).
      believed-achievable `~300` is **not** reached; the planner sits at the
      merge-sort frontier.
 
+   **The "cascading charge" idea, measured [REFUTED].** A project note proposed a
+   tighter inadmissible heuristic: simulate the forced bounces greedily ("every
+   card bounces as soon as it would bury a smaller one") and count moves, hoping
+   it beats `h_joint`'s static pairwise OCT. By the identity
+   `|σ| = h0 + 2·(bounces)` this *cascading charge* equals the settle-rollout's
+   length (`planner.cascade_charge` = `h0 + 2·cascade_bounces`), so it is exact on
+   the reversal (`n−2` bounces). But measured against the exact optimum on random
+   start decks (`experiments/cascade_eval.py`), it **overshoots**: cascade − opt
+   ≈ 4, 8, 13, 13 at `n = 8, 9, 10, 11` and growing, overshooting on ~26–39 of 40
+   decks, whereas `h_joint` sits **within ~1–2 below** opt. The greedy cascade
+   *overcounts* bounces relative to the optimal interleaving, so it is much
+   *looser*, not tighter, than the static bound — and steering the search by it
+   instead of by the combined completion gives the same plateau (~470–504).
+
    Tightening the settle rollout's blocker-routing (the main quality lever) or
    replacing greedy descent with a non-greedy search is the open lead. *(This
    supersedes the fabricated `n = 52` planner figures flagged in
