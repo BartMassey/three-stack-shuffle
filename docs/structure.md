@@ -150,6 +150,38 @@ bound tighter than `OCT`, and a hint at the policy), and direct design+analysis
 of such a local policy. The counting lower bound is itself structure-agnostic, so
 nothing forces passes.
 
-*(Tooling note: `a₂(σ) = (g(reversed-equivalent) …)`; the static bound is
-`h_joint`. The cascade is `B_opt − OCT(T)`, which `ida_star` gives exactly for
-small `n` and which the multi-bounce theorem lower-bounds as `Θ(n log n)`.)*
+## 7. The lower-bound question, and where graph theory enters
+
+**Pursue the lower bound before the heuristic `Φ`.** The gap is *entirely* here:
+`OCT = Θ(n)` is the only instance-sensitive bound we have, and it's a `log n`
+factor short; the counting `Θ(n log n)` is uniform (same for every deck) so it
+can't see that reversed is `Θ(n)` and random is `Θ(n log n)`. There is **no
+instance-sensitive `Ω(n log n)` bound** — that's the missing keystone. And a
+lower-bound potential and a steering potential are plausibly the *same* `Φ`, so
+the bound is the higher-leverage object; a `Φ` not grounded in one risks being
+loose-but-plausible (as the rollout was).
+
+**What actually needs bounding — and it is not the static conflict.** The cascade
+is the cost of *LIFO-scheduling* the 2-colouring, not of its existence. Tellingly
+it is **not monotone in `a₂`**: it is `0` at both extremes — reversed
+(`a₂ = 2`, fully tangled but *regular*, the comb pays no cascade) and sorted
+(`a₂ = n`) — and `Θ(n log n)` in the middle, for *generic/irregular* permutations.
+So the right bound is **incompressibility/entropy-flavoured** (a random `π` carries
+`Θ(n log n)` bits the machine must "pay off"; structured families are cheap),
+*instance-sensitive*, and unrelated to `OCT`. The counting argument is the global
+shadow of this; we need its per-instance, structural form.
+
+**Candidate graph-theory tools (to mine, not yet established here):**
+- This is a **2-stack + reusable-hub shuffle-minimisation** problem. The
+  `sources/` cite **König–Lübbecke** reducing a *restricted* `k=2` variant to
+  **MinUnCut** (a cut problem with known `O(√log n)`/`O(log n)` approximations) and
+  leaving the *unrestricted* (our reusable-hub) case open — **citation unverified;
+  worth checking**, because a cut formulation is exactly the kind of lower bound we
+  want. Also Tarjan, *networks of queues and stacks*.
+- **Buffer occupancy = a cut/separation profile.** `|A|+|B|` over departure time is
+  a vertex-separation / cutwidth-like quantity of `π`; the cost integrates it. The
+  cutwidth / Minimum-Linear-Arrangement / pathwidth literature is the natural home
+  for turning that profile into an `Ω(n log n)` bound.
+- The **full Greene–Kleitman hierarchy** `a_1, a_2, …` (whole RSK shape), not just
+  `a_2` — the "2" is the two buffers, the missing `log` should come from iterating
+  the chain/antichain structure, if it is a graph parameter at all.
