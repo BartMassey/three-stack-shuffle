@@ -51,14 +51,22 @@ is kept under `old/` as a validated reference oracle.
                       OCT vs brute force, IDA*==BFS, reversed-52 = 204/204, ...)
     old/              the reference Python implementation (run with pytest)
     docs/
+      CURRENT.md            active working context (READ FIRST when resuming work)
       OVERVIEW.md           this file: orientation + run instructions
       NOTES.md              the full technical reference (start here for the science)
+      structure.md          the live lower-bound / cascade theory (CURRENT points in)
       old/                  the original write-ups, superseded by NOTES.md (archive)
 
 `docs/NOTES.md` is the single coherent account of the whole project (both cost
 models, all proven results, dead ends, and open problems, with the proofs folded
 in). The superseded originals are frozen under `docs/old/` for their longer
 proofs and history.
+
+`docs/CURRENT.md` is volatile *saved context* for the active research thread — a
+terse, restart-ready snapshot of what is being worked on right now. Workflow:
+`NOTES.md` is updated from `CURRENT.md` **only when something is removed from
+`CURRENT.md`** (a settled item migrates into the permanent record). When picking
+up the work, read `CURRENT.md` first.
 
 ## Usage
 
