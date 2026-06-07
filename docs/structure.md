@@ -172,12 +172,15 @@ So the right bound is **incompressibility/entropy-flavoured** (a random `π` car
 shadow of this; we need its per-instance, structural form.
 
 **Candidate graph-theory tools (to mine, not yet established here):**
-- This is a **2-stack + reusable-hub shuffle-minimisation** problem. The
-  `sources/` cite **König–Lübbecke** reducing a *restricted* `k=2` variant to
-  **MinUnCut** (a cut problem with known `O(√log n)`/`O(log n)` approximations) and
-  leaving the *unrestricted* (our reusable-hub) case open — **citation unverified;
-  worth checking**, because a cut formulation is exactly the kind of lower bound we
-  want. Also Tarjan, *networks of queues and stacks*.
+- **The existing stack-sorting literature does not transfer** (checked). This is a
+  shuffle-minimisation problem in a stack network (Tarjan 1972), but the nearby
+  hardness/approximation results are for *different* machines: König–Lübbecke
+  (ISAAC 2008) prove `k ≥ 4` *complete* networks NP-hard via Min-`k`-Partition on
+  circle graphs; Mihalák–Pont (ATMOS 2019) handle *two stacks with a direct `A↔B`
+  edge* under the "midnight" constraint (an `O(√log n)` *approximation*, not a
+  lower bound). Neither models our reusable hub / no-`A↔B`-edge machine, and the
+  `k = 2, 3` exact complexity is open — so there is **no off-the-shelf cut
+  formulation to borrow**; the cut idea below must be built from scratch.
 - **Buffer occupancy = a cut/separation profile.** `|A|+|B|` over departure time is
   a vertex-separation / cutwidth-like quantity of `π`; the cost integrates it. The
   cutwidth / Minimum-Linear-Arrangement / pathwidth literature is the natural home

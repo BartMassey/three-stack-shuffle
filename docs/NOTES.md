@@ -110,9 +110,14 @@ in Tarjan's networks-of-stacks framework — the `k = 3` regime. Felsner & Perge
 merge sort; their counting lower bound matches ours. The `k = 2` `Ω(n²)` results
 (Mihalák & Pont) do **not** apply, because the hub is a reusable third stack. The
 exact optimum is NP-hard for general `k ≥ 4` networks (König & Lübbecke); for
-`k = 2, 3` its complexity is **[OPEN]** in the literature too. *(These citations
-were not re-verified against the primary sources; treat the attributions as
-provisional.)*
+`k = 2, 3` its complexity is **[OPEN]** in the literature too. *(Citations
+verified: Felsner & Pergel, ESA 2008, "The Complexity of Sorting with Networks of
+Stacks and Queues"; Felix G. König & Marco E. Lübbecke, ISAAC 2008, "Sorting with
+Complete Networks of Stacks" — `k ≥ 4` NP-hard via Min-`k`-Partition on circle
+graphs; Matúš Mihalák & Marc Pont, ATMOS 2019, "On Sorting with a Network of Two
+Stacks" — the `k = 2` MinUnCut/`Ω(n²)` result, for a two-stack machine with a
+direct edge under the "midnight" constraint, which does not model our reusable
+hub.)*
 
 > **[RETRACTED] `4(n−1)` is not the diameter.** Exhaustive BFS gives diameter
 > `4(n−1)` for `n = 2..8` (`4, 8, …, 28`; reproducible here via `bfs_dist` —
