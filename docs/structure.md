@@ -228,3 +228,43 @@ transfer-free under reversal-by-pour). Making that sum a valid lower bound — i
 showing transfers at different levels cannot be shared — is the open core; it is
 where an entropy / amortized-potential argument, not a static graph parameter,
 seems required. The reduction above is the right arena to attempt it.
+
+## 9. Runs vs. increasing-subsequence cover — "leave a run for later"
+
+The merge sorter pays `2·W(T)` for a binary tree `T` over the `r` **ascending
+runs**; Hu–Tucker minimises `W ≈ n·H(\text{run lengths}) ≤ n·log r`. But ascending
+runs are a **positional** artifact and *over-count* the disorder.
+
+> **Critique.** Ascending runs are *one* partition of the deck into increasing
+> subsequences (each run is increasing), using `r` pieces. The **minimum**
+> increasing-subsequence cover is `LDS` (Dilworth's dual; `LDS` = longest
+> decreasing subsequence), and `LDS ≤ r` always — often `≪` (interleave deck:
+> `LDS = 2` vs `r = n/2`; random: `LDS ≈ 2√n` vs `r ≈ n/2`). The merge sorter
+> *chops* coherent increasing subsequences into positional runs and re-merges them.
+
+**"Leave a run for later" = keep an increasing subsequence intact.** A card only
+ever has to move when a **smaller** card must pass it; *within* an increasing
+subsequence no card sits above a smaller one, so the whole subsequence pours out
+sorted for free (`0` transfers). So the cost is the number of *cross-subsequence*
+blocking events, and the `r − LDS` extra run-boundaries are exactly runs that
+needn't be a separate merge leaf — they can be absorbed into a longer subsequence
+("left for later") instead of merged early.
+
+**Quantitatively this is the right lever.** Swapping `log r` for `log(LDS)` takes
+the constant from the merge sorter's `~1.75` (`log(n/2)`) toward `log(2√n) =
+½ log₂ n + O(1)` — i.e. roughly halves it, into the neighbourhood of the measured
+optimum `~0.8`. Your instinct points straight at the optimal constant.
+
+**Two honest caveats.**
+1. *`LDS` is not the whole story* — it over-counts the *dual* way. Reversed has
+   `LDS = n` yet `opt = Θ(n)` (it's one *decreasing* run, sorted by
+   reversal-by-pour). So the cost is governed by the interaction of increasing
+   *and* decreasing structure (the full RSK shape), and `LDS` alone over-counts
+   decreasing-structured inputs exactly as `r` over-counts the interleave.
+2. *Realisation is the open obstruction.* Two buffers can keep only **two**
+   increasing subsequences "open" at once, but a random deck has `≈ 2√n` of them;
+   the rest must be merged, and whether that merge runs in `~log(LDS)` rounds
+   *without* the binary-search-over-pile-tops random access patience needs is the
+   open Greene–Dilworth question. The fresh, concrete sub-question the transfer
+   view poses: **with exactly two open piles and lazy (deferred) merging, how
+   close to `log(LDS)` can an online 2-stack policy get?**
