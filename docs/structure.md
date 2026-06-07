@@ -268,3 +268,48 @@ optimum `~0.8`. Your instinct points straight at the optimal constant.
    open Greene–Dilworth question. The fresh, concrete sub-question the transfer
    view poses: **with exactly two open piles and lazy (deferred) merging, how
    close to `log(LDS)` can an online 2-stack policy get?**
+
+## 10. The safe/forced boundary — when must a transfer happen?
+
+Before any lazy-merge policy, pin down when a transfer is *forced* vs *safely
+deferrable*. Setup (transfer view + settle-time lemma): cards depart the deck in
+order `σ`; each, as it departs, is placed on a buffer; the buffers are stacks; a
+transfer (bounce) moves a top across. Keep a buffer "sorted" = decreasing
+bottom-to-top (min on top), so it pours out increasing.
+
+**Boundary.** Placing the departing card `v` keeps a buffer sorted iff `v` goes
+*below a current top* (`v < top(A)` or `v < top(B)` — it becomes that pile's new,
+smaller top). So:
+
+- **Safely deferrable (free):** `v < max(top(A), top(B))` — `v` fits below a top,
+  extends that sorted pile, costs nothing. *While every arrival fits, both piles
+  stay sorted and you pay zero transfers.*
+- **Forced:** `v > top(A)` *and* `v > top(B)` — `v` exceeds both tops, the apex of
+  an increasing triple `(top, top, v)`. It cannot extend either sorted pile; it
+  *must* bury one (a future transfer); the only freedom is which pile to break and
+  where the displaced card goes.
+
+**Consequence.** Each pile in arrival order is a *decreasing* subsequence of `σ`,
+so "both piles stay sorted for the whole sort" (zero transfers) is possible **iff
+`σ` is a union of two decreasing subsequences, i.e. `LIS(σ) ≤ 2`** — exactly the
+`B = 0` class. The first arrival exceeding both tops is the first forced transfer:
+the event "the live arrival-stream's `LIS` reaches 3."
+
+**Dynamic form of the static condition.** Static `OCT` measures the `LIS ≤ 2`
+violation of the *whole* `σ`; the real cost is the *running* count of
+exceeds-both-tops events over the live stream — which is why static `OCT`
+under-counts (§5): global violation, not the integral of local ones.
+
+**The useful (and slightly deflating) precision:** the *deferral* freedom is
+narrow. A departing card is the deck top — you must place it *now*; you cannot
+hold a run "open" on the deck. So the policy best-fit-places until an
+exceeds-both event, and **all real decisions are concentrated at the forced
+events**: (i) which pile to break, (ii) where the displaced card is routed so it
+re-merges cheaply. That — not "when to merge" — is the optimization, and it *is*
+the cascade. "Lazy merge" therefore reduces to "forced-event resolution."
+
+**Precise open sub-questions.** (a) Is `min transfers` = the number of forced
+events under best placement, or strictly more (does resolving one force later
+ones)? (b) The optimal pile-to-break and displaced-card destination at a forced
+event. (c) Magnitude: the running-`LIS`-excess of `σ` vs `opt` — `Θ(n log n)` for
+random `σ`?
