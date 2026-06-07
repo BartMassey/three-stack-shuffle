@@ -338,7 +338,16 @@ pile, forcing more. So:
 > is the resolution of the deferred transfers, and it is **not local**: the comb
 > resolves globally (pile everything on `B`, reverse the whole pile onto `A`, each
 > card once), not bury-by-bury. **(a) answered: `min transfers` is strictly more
-> than `#forced events` once the cascade is nonzero — i.e. for `n ≳ 30`.**
+> than `#forced events` whenever the cascade is nonzero — which is already true at
+> small `n` (measured `opt − h_joint ≈ 1` even at `n ≤ 14`), growing from a
+> minority of the bounces to the dominant term asymptotically.**
+
+> **Observability caveat.** Exact `opt` is computable only to `n ≈ 14`; `OCT = n−a₂`
+> is poly at any `n`. So the cascade `= opt − OCT` is *measurable* only where it is
+> still small (`~1` at `n ≤ 14`) and is *unmeasured* where it dominates (`n ≳ 20`).
+> Its large-`n` magnitude is **inferred from proven asymptotics** (`opt = Θ(n log n)`
+> by counting-LB + merge-UB; `OCT = Θ(n)` by `a₂ = Θ(√n)`, Ulam–Hammersley), not
+> computed. Finite-`n` cascade values and any "crossover `n`" are extrapolation.
 
 So the object to understand is the **resolution schedule** of the deferred
 transfers (where each buried card goes when it must move), which is the cascade —
