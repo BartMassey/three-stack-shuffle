@@ -1,0 +1,18 @@
+[package]
+name = "splitmerge"
+version = "0.2.0"
+edition = "2021"
+description = "Heuristics, exact search, sorters, and a permutation-distance model for a three-stack split-merge card-sorting machine"
+license = "Apache-2.0 OR MIT"
+
+# std-only: no external dependencies (a small FxHash-style hasher and a
+# SplitMix64 RNG are inlined where needed). See docs/NOTES.md.
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.bench]
+lto = true

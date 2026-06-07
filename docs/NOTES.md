@@ -14,9 +14,16 @@ false), **[DEAD END]** (a route that does not work, kept so it is not retried),
 **[NOT VERIFIED]** (argued but never implemented or reproduced here).
 
 **What the committed code backs.** The operation-count machine, heuristics, exact
-OCT, IDA*/BFS search, the constructive merge sorters, and the whole-cycle model
-are all in `splitmerge/` and exercised by `tests/` (49 tests). Where a claim is
-reproducible, the relevant module/test is named inline.
+OCT, IDA*/BFS search, the constructive merge sorters, the whole-cycle model, and
+the inadmissible planner are all in the Rust crate (`src/`) and exercised by
+`cargo test` (validated against the reference Python implementation under
+`python/`). Where a claim is reproducible, the relevant module is named inline.
+
+> **Code references.** Inline names below use the module/function names shared by
+> the Rust crate (`src/<module>.rs`, canonical) and the reference Python
+> (`python/splitmerge/<module>.py`) — e.g. `h_joint`, `hutucker_sort`,
+> `iterated_local_search`. Experiments named `experiments/foo.py` are ported to
+> the `sm` CLI subcommands (`cargo run --release --bin sm -- foo`).
 
 ---
 
@@ -500,17 +507,20 @@ random access.
 
 ## Appendix — code map
 
+Rust crate (`src/`); the reference Python mirrors it module-for-module under
+`python/splitmerge/`.
+
 | module | backs |
 |--------|-------|
-| `splitmerge/machine.py` | §0, I.1, `comb_solution` = the I.5 reversal witness |
-| `splitmerge/search.py` | `bfs_dist` (verification), `ida_star` (I.5) |
-| `splitmerge/heuristics.py` | `h0`, `h_best`, `h_joint` (I.4) |
-| `splitmerge/oct.py` | exact constrained `OCT_pre` (I.4) |
-| `splitmerge/sorters.py` | `natural` / `top-down` / `Hu–Tucker` sorters (I.3) |
-| `splitmerge/cycle.py` | one-cycle reachability, `f`, diameter (Part II) |
-| `splitmerge/planner.py` | inadmissible rollout estimate + anytime local search (I.6 #5) |
-| `tests/` | admissibility, reversal, IDA*=BFS, OCT oracle, sorter replay, cycle, planner |
-| `experiments/` | `benchmark_heuristics`, `conjecture_Mn`, `benchmark_sorters`, `planner_search` |
+| `src/machine.rs` | §0, I.1, `comb_solution` = the I.5 reversal witness |
+| `src/search.rs` | `bfs_dist` (verification), `ida_star` (I.5) |
+| `src/heuristics.rs` | `h0`, `h_best`, `h_joint` (I.4) |
+| `src/oct.rs` | exact constrained `OCT_pre` (I.4) |
+| `src/sorters.rs` | `natural` / `top-down` / `Hu–Tucker` sorters (I.3) |
+| `src/cycle.rs` | one-cycle reachability, `f`, diameter (Part II) |
+| `src/planner.rs` | inadmissible rollout estimate + anytime local search (I.6 #5) |
+| `tests/validation.rs` | admissibility n≤8, OCT oracle, IDA*=BFS, reversed-52 = 204/204 |
+| `src/bin/sm.rs` | experiment runner: `heuristics`, `sorters`, `conjecture`, `planner`, `cascade`, `frontier` |
 
 **Provenance.** Earlier drafts (now in `docs/old/`) cited implementing code and
 "*N* checks pass" counts that had never been committed. The merge sorters and the

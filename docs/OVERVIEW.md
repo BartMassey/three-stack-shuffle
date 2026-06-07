@@ -32,19 +32,24 @@ moves. The headline target is `n = 52`.
   the Hu–Tucker sorter's proven worst case (600). A typical shuffled deck costs
   ~484 with that sorter.
 
+The code is **Rust** (a `std`-only crate, no dependencies). The original Python
+is kept under `python/` as a validated reference oracle.
+
 ## Layout
 
-    splitmerge/
-      machine.py      states, moves, successors, base, comb_solution
-      search.py       exact BFS (small n), IDA* (parametrized by heuristic)
-      heuristics.py   h0, h_best, h_joint  (+ the bounce / OCT internals)
-      oct.py          exact constrained OCT (odd-cycle branch-and-bound)
-      sorters.py      constructive merge sorters: natural / top-down / Hu-Tucker
-      cycle.py        whole-cycle model: one-cycle reachability, f, diameter
-      planner.py      inadmissible rollout estimate + anytime local search
-    tests/            admissibility (full BFS n<=7), dominance, reversal, IDA*==BFS,
-                      OCT oracle, sorter replay (all perms n<=7), cycle, planner
-    experiments/      heuristic benchmark, M(n) conjecture, sorter + planner search
+    src/
+      machine.rs      states, moves, successors, base, comb_solution
+      search.rs       exact BFS (small n), IDA* (generic over a heuristic)
+      heuristics.rs   h0, h_best, h_joint  (+ the bounce / soft-conflict graph)
+      oct.rs          exact constrained OCT (odd-cycle branch-and-bound)
+      sorters.rs      constructive merge sorters: natural / top-down / Hu-Tucker
+      cycle.rs        whole-cycle model: one-cycle reachability, f, diameter
+      planner.rs      inadmissible rollout estimate + anytime local search
+      util.rs         std-only FxHash-style hasher + SplitMix64 RNG
+      bin/sm.rs       experiment runner (heuristics / sorters / planner / frontier ...)
+    tests/            cross-validation vs the Python oracle (admissibility n<=8,
+                      OCT vs brute force, IDA*==BFS, reversed-52 = 204/204, ...)
+    python/           the reference Python implementation (run with pytest)
     docs/
       OVERVIEW.md           this file: orientation + run instructions
       NOTES.md              the full technical reference (start here for the science)
@@ -57,23 +62,27 @@ proofs and history.
 
 ## Usage
 
-```python
-from splitmerge import reversed_deck, ida_star, h_joint, comb_solution
+```rust
+use splitmerge::machine::State;
+use splitmerge::search::ida_star;
+use splitmerge::heuristics::h_joint;
+use splitmerge::sorters::hutucker_sort;
 
-cost, nodes = ida_star(reversed_deck(52), h_joint)   # -> (204, 204)
-moves = comb_solution(52)                             # explicit 204-move solution
+let (cost, nodes) = ida_star(&State::reversed_deck(52), &h_joint, 2_000_000);
+assert_eq!((cost, nodes), (Some(204), 204));
 
-# constructive sorter for any deck (replayable on the machine; <= 600 moves at n=52)
-from splitmerge import hutucker_sort, apply_moves, GOAL
-moves = hutucker_sort([5, 3, 1, 2, 4])
-assert apply_moves(([5, 3, 1, 2, 4], (), ()), moves) == GOAL(5)
+// constructive sorter for any deck (replayable on the machine; <= 600 moves at n=52)
+let deck = vec![5, 3, 1, 2, 4];
+let moves = hutucker_sort(&deck);
+assert_eq!(State::from_deck(deck).applied(&moves), State::goal(5));
 ```
 
 ```sh
-pip install -e .[test]
-pytest                                   # all proven facts, ~10s
-python -m experiments.benchmark_heuristics 10
-python -m experiments.conjecture_Mn 10
+cargo test --release            # all proven facts, validated vs the Python oracle
+cargo run --release --bin sm -- frontier      # opt vs merge vs ILS across n
+cargo run --release --bin sm -- planner 52    # planner at n=52
+cargo run --release --bin sm -- heuristics 10 # h_best vs h_joint node counts
+(cd python && pytest)           # the reference implementation
 ```
 
 ## The OCT computation
