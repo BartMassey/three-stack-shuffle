@@ -73,7 +73,9 @@ impl State {
         }
     }
 
-    /// The reversed deck `(n, n-1, ..., 1)` — the hardest known start.
+    /// The reversed deck `(n, n-1, ..., 1)`: the BFS diameter for `n <= 8` and an
+    /// exactly-solvable extreme (`opt = 4(n-1)`), but *not* the asymptotic worst
+    /// case (that is Theta(n log n); see docs/NOTES.md §I.2).
     pub fn reversed_deck(n: usize) -> State {
         State {
             d: (1..=n as Card).rev().collect(),

@@ -17,7 +17,8 @@ file summarizes the frontier and points there, it does not replace it.
 - `n` cards; `π` the deck (a permutation); `m` non-base cards.
 - `σ` — **departure order** = the deck read top-to-bottom (the sequence sorted away).
 - `a₂(σ)` — max #cards coverable by **two `σ`-decreasing subsequences**
-  (Greene–Kleitman, polynomial). `OCT = n − a₂` is the **static bounce lower bound**.
+  (Greene–Kleitman, polynomial). `OCT = m − a₂` is the **static bounce lower
+  bound** (`m = n` for a clean base-free deck, the case here, so `OCT = n − a₂` below).
 - `LIS` / `LDS` — longest increasing / decreasing subsequence of `σ` (`≈ 2√n` random).
 - `r` — number of **ascending runs** (the merge sorter's granularity); `LDS ≤ r`.
 - `OCT` is a bound on **bounces** `B`; `h_joint = h0 + 2·OCT` is the admissible
@@ -44,7 +45,7 @@ misses, which is where essentially all the difficulty is.
 - **Reduction:** `B` = number of **inter-buffer transfers** ⇒ "sort two stacks by
   transfers." (§8)
 - `σ` = departure order = deck top-to-bottom. **Single-arrival (bounce-free) ⟺ two
-  `σ`-decreasing subsequences**; static bound `B ≥ OCT = n − a₂(σ)`, polynomial
+  `σ`-decreasing subsequences**; static bound `B ≥ OCT = m − a₂(σ)`, polynomial
   (Greene–Kleitman). (§2–3)
 - **tangle** = increasing pair in `σ` (deck); **buried** = inversion in a buffer.
   Same inversion, two locations. (§3–4)

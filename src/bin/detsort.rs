@@ -372,9 +372,10 @@ fn split_ls_experiment() {
 }
 
 /// The "interleave" class: deck = [1, m+1, 2, m+2, ..., m, 2m] (riffle of the two
-/// halves). Departure order is a union of two decreasing subsequences, so B=0 and
-/// opt=2n (zero transfers) -- yet it has m = n/2 ascending runs, so the merge
-/// sorter pays ~log(n/2) passes. The transfer view sees 0; the run view sees log.
+/// halves). Departure order is a union of two decreasing subsequences, so B=0
+/// (zero transfers) and opt = 2(n-1) (card 1 is already based, so it costs 0) --
+/// yet it has n/2 ascending runs, so the merge sorter pays ~log(n/2) passes. The
+/// transfer view sees 0; the run view sees log.
 fn obvious_class() {
     println!("interleave deck (B=0 in transfer view): opt vs merge");
     println!(" n |  opt  h_joint  2n | hutucker  merge/opt");

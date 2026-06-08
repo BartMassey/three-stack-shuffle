@@ -21,10 +21,12 @@ moves. The headline target is `n = 52`.
   diameter (it is linear; the diameter is Θ(n log n)). An earlier "M(n) = 4(n-1)"
   conjecture is **retracted**; see `docs/NOTES.md`.
 - **Heuristics:** `h0 <= h_best <= h_joint`, all admissible lower bounds on the
-  optimal move count (the test suite asserts this by full BFS for n <= 7;
-  separately confirmed exhaustively at n = 8, 0 violations). `h_joint` is the
-  current best; in exact IDA* search it expands ~84% fewer nodes than `h_best`
-  at n=10.
+  optimal move count (the test suite asserts this by full BFS for n = 6, 7, 8 —
+  ~1.8M states at n = 8, 0 violations). `h_joint` is the current best; in exact
+  IDA* search it expands ~90% fewer nodes than `h_best` at n=10 (median
+  1122 → 97). The per-node OCT cost leaves it marginally slower in wall-clock at
+  n=10, but the node advantage widens with n (the wall-clock gap is near-even by
+  n=12).
 - **Complexity** of optimal sorting (P vs NP-hard) is open, as is the exact
   constant in Θ(n log n) and the exact diameter at finite n. At n=52 the diameter
   lies in **[204, 600]**: lower bound the reversed deck's exact optimum (204,
@@ -100,8 +102,9 @@ vertices on a small soft-conflict graph (`splitmerge/oct.py`). It is computed
 **exactly** by odd-cycle branch-and-bound: the soft graph is a comparability
 graph, so it is bipartite iff triangle-free, and the chain bound `clique - 2 <=
 OCT` prunes the clique case instantly (this is what avoids the `3^k` blowup).
-Validated against a brute-force oracle on all n <= 7 states (0 mismatches); the
-reversed-deck size-52 clique solves in ~0.2s.
+Validated against a brute-force oracle on every state at n <= 6 (0 mismatches),
+with a 3000-state sample at n = 7 in the Python reference; the reversed-deck
+size-52 clique solves in ~0.2s.
 
 A search budget makes it fall back to the admissible chain lower bound on large
 *far-from-clique* graphs — in practice essentially **every** scrambled `n >= ~30`

@@ -208,8 +208,8 @@ constructive sorter with constant `< 1.75` exists is **[OPEN]** (I.6).
 Beating the merge sort needs a handle on the *exact* optimum, i.e. on `R`. The
 program builds admissible lower bounds on `R` (equivalently `g`), all of the form
 `h = h₀ + 2·(lower bound on bounces)`, all admissible **[PROVEN]** and
-**[VERIFIED by full BFS n ≤ 7 in tests; n = 8 separately, 0 violations across
-1.8M states]**. Implemented in `splitmerge/heuristics.py` and `splitmerge/oct.py`.
+**[VERIFIED by full BFS at n = 6, 7, 8 in `tests/validation.rs`, 0 violations
+(~1.8M states at n = 8)]**. Implemented in `splitmerge/heuristics.py` and `splitmerge/oct.py`.
 
 **The lever — per-card decomposition.** Each move picks up exactly one card, so
 `|σ| = Σ_c μ_σ(c)`. *Principle:* if for every solution `μ_σ(c) ≥ m(c)`, then
@@ -270,8 +270,8 @@ triangle-free and its max clique equals its longest value-chain; the chain bound
 `clique − 2 ≤ OCT` prunes the otherwise-fatal clique case immediately (at a
 clique it equals the incumbent on the first descent — this defeats the `3^k`
 blowup). Pre-colouring is encoded with two undeletable terminal vertices.
-Validated against a brute-force oracle on all `n ≤ 7` states (0 mismatches) and
-~33k larger random graphs; the reversed-deck size-52 clique solves in ~0.2 s.
+Validated against a brute-force oracle on every state at `n ≤ 6` (0 mismatches),
+with a 3000-state sample at `n = 7`; the reversed-deck size-52 clique solves in ~0.2 s.
 A search budget makes it fall back to the admissible chain bound `clique − 2` on
 large *far-from-clique* graphs — in practice **essentially every scrambled
 `n ≥ ~30` start** (measured 20/20 at n = 30, 40, 52). On those it stays
@@ -301,9 +301,11 @@ exact optima (`splitmerge/search.py`).
 
 - **Validated [VERIFIED n ≤ 8]:** matches BFS optima on all tested decks;
   `h_best` and `h_joint` return identical optimal costs.
-- **`h_joint` pays for itself [VERIFIED n = 10]:** vs `h_best`, ~84% fewer node
-  expansions (median 810 → 111) and faster wall-clock despite the heavier
-  per-node cost (`experiments/benchmark_heuristics.py`).
+- **`h_joint` pays for itself [VERIFIED n = 10]:** vs `h_best`, ~90% fewer node
+  expansions (median 1122 → 97; the saving widens with `n` — ~93% at `n = 12`).
+  In the Rust crate node expansion is cheap enough that the per-node OCT cost
+  leaves `h_joint` marginally *slower* in wall-clock at `n = 10`, but the gap
+  closes as the node advantage grows (near-even by `n = 12`) (`sm heuristics`).
 - **Residual gap.** On random start decks at `n = 10`, `cost − h_joint ≈ 1.1`
   (robust across seeds); the all-states mean at `n = 7` is `1.42`. (An earlier
   "≈ 2.4 at n = 10" figure was an unreliable carry-over and does not reproduce.)
@@ -375,8 +377,8 @@ exact optima (`splitmerge/search.py`).
    `|σ| = h0 + 2·(bounces)` this *cascading charge* equals the settle-rollout's
    length (`planner.cascade_charge` = `h0 + 2·cascade_bounces`), so it is exact on
    the reversal (`n−2` bounces). But measured against the exact optimum on random
-   start decks (`experiments/cascade_eval.py`), it **overshoots**: cascade − opt
-   ≈ 4, 8, 13, 13 at `n = 8, 9, 10, 11` and growing, overshooting on ~26–39 of 40
+   start decks (`sm cascade`), it **overshoots**: cascade − opt
+   ≈ 5, 9, 13, 16 at `n = 8, 9, 10, 11` and growing, overshooting on ~32–38 of 40
    decks, whereas `h_joint` sits **within ~1–2 below** opt. The greedy cascade
    *overcounts* bounces relative to the optimal interleaving, so it is much
    *looser*, not tighter, than the static bound — and steering the search by it
@@ -431,8 +433,9 @@ Implemented in `splitmerge/cycle.py`, verified by `tests/test_cycle.py`.
   would.
 - **`f` is not a function of `LIS` [VERIFIED n ≤ 8].** `LIS ∈ {3, 4}` occurs at
   both distance 2 and 3 (e.g. at `n = 7`, the 225 distance-3 permutations all
-  have `LIS = 3`; at `n = 8`, distance-3 splits `LIS 3: 4537, LIS 4: 1225` —
-  asserted in `tests/test_cycle.py`). A genuine second-order correction lives on
+  have `LIS = 3`; at `n = 8`, distance-3 splits `LIS 3: 4537, LIS 4: 1225`). The
+  `n = 7` case is asserted in `tests/test_cycle.py`; the `n = 8` split is computed
+  by `cycle_distances`, not asserted. A genuine second-order correction lives on
   `LIS ∈ {3,4}`.
 - **[INVALID] `f ≥ log₂ LIS(π)`.** `LIS` is not submultiplicative under
   composition (16/4000 random pairs at `n = 6` violate `LIS(ab) ≤ LIS(a)·LIS(b)`),
@@ -479,9 +482,9 @@ Kept deliberately, clearly labeled, so they are not revisited.
 - Natural merge sort: `2n⌈log₂ r⌉` ops (closed form proven for all `n`; replay-
   verified to `n = 400`). **[PROVEN/VERIFIED]**
 - `h₀ ≤ h_best ≤ h_joint`, all admissible; `h_joint` dominates `h_best`.
-  **[PROVEN; VERIFIED n ≤ 7 in tests, n = 8 separately]**
-- Exact `OCT_pre` matches the brute-force oracle (`n ≤ 7` + ~33k random graphs);
-  admissible chain-bound fallback on large far-from-clique graphs. **[VERIFIED]**
+  **[PROVEN; VERIFIED by full BFS at n = 6, 7, 8 in tests]**
+- Exact `OCT_pre` matches the brute-force oracle (every state at `n ≤ 6`, sampled
+  at `n = 7`); admissible chain-bound fallback on large far-from-clique graphs. **[VERIFIED]**
 - `opt(reversed deck) = 4(n−1)` exactly, all `n`; IDA* certifies `204` at `n = 52`
   in `204` nodes. **[PROVEN]**
 - Operation diameter `= 4(n−1)` for `n ≤ 8` (reproducible here; `n = 9` per absent
