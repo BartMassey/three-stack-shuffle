@@ -233,13 +233,29 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   `484`, −24%, on 5000/5000 decks**, matching `2n·log₂LDS = 367` to the decimal, with the
   margin **growing in n** (16%→28% over n=16→120) — the first construction that would beat
   the merge constant on random (though still `~367` vs opt `~250`, so LDS-halving is not
-  the whole story; the full RSK shape is, per §I.4a). **Realizability is the open crux:**
-  merge sort is realizable because its splits are *positional* (contiguous blocks park as
-  inert stacked runs under "merge by exact count"); the LDS-halving split is
-  *non-positional* (interleaved subsequences), which cannot park that way — recursively
-  sorting one half appears to require storing the other, i.e. a 4th stack (the same
-  2-buffer wall). Open: a realizable *multi-pass* analog — a full-deck pass `D→{A,B}→D`
-  that halves LDS — would make the 24% real. Not yet move-emitted.
+  the whole story; the full RSK shape is, per §I.4a). **Realizability is the open crux —
+  but NOT for the reason first claimed (a "4th stack" — retracted).** A non-empty stack is
+  *not* an obstruction: you work on its top while lower cards sit inert, exactly as natural
+  merge uses `A` as a *parking stack* of stacked sorted runs (merge by exact count never
+  digs beneath). So sorting one half while the other half sits on a stack is fine via nested
+  parking. The real open question is whether realizing the *non-positional* (interleaved)
+  split — routing the two groups apart and remerging with the right orientation/parity —
+  costs the idealized `2·len`/level or inflates it; the recursive realization is **untested**.
+- *Realizable multi-pass — does a pass halve LDS?* **[ANSWERED NO, `src/bin/pass.rs`]**.
+  A realizable full-deck pass (distribute `D→{A,B}`, greedy-merge back to `D`; exactly `2n`
+  moves) reduces **LDS only additively, by 1 per pass**: the patience pass peels exactly one
+  decreasing layer (trajectory `[11,10,…,1]`, mean LDS `11.6→10.6→9.6→…`), so it needs ~LDS
+  passes (~1099 moves at n=52, far worse than merge `484`). The chain-parity pass — the
+  recpat split, which *does* halve each group's LDS as a subsequence — makes D's LDS
+  *worse* (11.6 → 12.4) after the realizable greedy-merge recombine, and iterating it does
+  not converge. So the split's `log LDS` benefit exists only if each half is **sorted
+  before merging** — i.e. it needs the *recursion*, not a single full-deck pass.
+  **Conclusion (narrow):** the multiplicative LDS reduction is intrinsically recursive, so
+  the iterated-*multi-pass* route is a dead end; recpat's 24% does *not* materialize as a
+  multi-pass. This does **not** show recpat is unrealizable — the *recursive* realization
+  (nested parking on the two stacks; see the recpat entry) is untested and is the open next
+  step. (An earlier draft here over-concluded "merge `log r` is the realizable floor"; that
+  conflated multi-pass with recursion and is retracted.)
 - *Block-selection* **[DEAD END]**: `Θ(n²/k)` re-handling, no random access to
   buried cards; structurally cannot beat the merge family.
 - *Two clean passes* (`g ≤ 4n`) **[RETRACTED]**: the one-pass set `{g ≤ 2n}` does

@@ -168,13 +168,21 @@ result (charges `2·len`/level; like revsort's free bound): random n=52 **367.6 
 Hu–Tucker 484 (−24%), winning on 5000/5000**, matching `2n·log₂LDS=367` exactly, and the
 **margin GROWS with n** (16%→28% over n=16→120) — the real `log r → log LDS` lever, the
 first construction that would beat the merge constant on random. Still ~`367` vs opt
-`~250`, so LDS-halving isn't the whole story (full RSK, per §I.4a). **Realizability is the
-open crux:** merge sort is realizable because its splits are *positional* (contiguous
-blocks park as inert stacked runs, "merge by exact count"); the LDS-halving split is
-*non-positional* (interleaved subsequences) and can't park that way — sorting one half
-seems to need to store the other, i.e. a 4th stack (the same 2-buffer wall). **Next:** is
-there a realizable *multi-pass* analog — a full-deck pass (D→A,B→D) that halves LDS — that
-would make the 24% real? That's the concrete open question.
+`~250`, so LDS-halving isn't the whole story (full RSK, per §I.4a). **Realizability —
+OPEN (earlier "4th stack" claim RETRACTED).** A non-empty stack is *not* an obstruction:
+you work on its **top** while lower cards sit inert (natural merge already does this — `A`
+is a *parking stack* of stacked sorted runs, "merge by exact count" never digs beneath). So
+"sort one half while the other half occupies a stack" is fine via **nested parking**; there
+is no 4th-stack barrier. The genuine open question is whether realizing the **non-positional**
+(interleaved) split — route the two groups apart, recurse, remerge with correct
+orientation/parity — costs the idealized `2·len`/level or inflates it with extra shuffles.
+**Multi-pass is a dead end [(d), `pass`]:** an iterated full-deck pass (distribute `D→{A,B}`
++ greedy-merge back, 2n) reduces LDS only **additively, −1/pass** (patience peels one
+decreasing layer `[11,…,1]`, ~LDS passes ≫ merge; the chain-parity pass even makes D's LDS
+*worse*, 11.6→12.4, and won't converge). But **multi-pass ≠ recursion** — the recursive
+realization (split → nested-park → sort halves → merge) is **untested** and is the live next
+experiment. (The earlier "merge `log r` is the realizable floor" was an overclaim from
+conflating multi-pass with recursion; retracted.)
 
 ## Guardrails (don't repeat)
 
