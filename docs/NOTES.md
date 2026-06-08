@@ -226,23 +226,45 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   (impossible here) or the **recursion** (sort the split-halves before merging — see the
   *Recursive patience* and *multi-pass* entries below: the multi-pass route is a dead end,
   the recursive realization is the open lead).
-- *Recursive patience* **[IDEALIZED win, realizability OPEN; `src/bin/recpat.rs`]**.
+- *Recursive patience* **[IDEALIZED win REFUTED by realization; `src/bin/recpat.rs`
+  (idealized), `src/bin/recreal.rs` (real, replay-verified)]**.
   Split the deck into two subsequences each with ~half the LDS (Dilworth cover into `LDS`
   increasing chains — count `= LDS`, verified — then 2-colour the chains), recurse, merge:
-  depth `~log₂LDS`, total `~2n·log₂LDS`, i.e. the `log r → log LDS` granularity. Idealized
-  cost (charges `2·len` per level and assumes the split is realizable in `len` moves — an
-  optimistic bracket, cf. revsort's free reversal): random **n=52 `367.6` vs Hu–Tucker
-  `484`, −24%, on 5000/5000 decks**, matching `2n·log₂LDS = 367` to the decimal, with the
-  margin **growing in n** (16%→28% over n=16→120) — the first construction that would beat
-  the merge constant on random (though still `~367` vs opt `~250`, so LDS-halving is not
-  the whole story; the full RSK shape is, per §I.4a). **Realizability is the open crux —
-  but NOT for the reason first claimed (a "4th stack" — retracted).** A non-empty stack is
-  *not* an obstruction: you work on its top while lower cards sit inert, exactly as natural
-  merge uses `A` as a *parking stack* of stacked sorted runs (merge by exact count never
-  digs beneath). So sorting one half while the other half sits on a stack is fine via nested
-  parking. The real open question is whether realizing the *non-positional* (interleaved)
-  split — routing the two groups apart and remerging with the right orientation/parity —
-  costs the idealized `2·len`/level or inflates it; the recursive realization is **untested**.
+  depth `~log₂LDS`, total `~2n·log₂LDS`, i.e. the `log r → log LDS` granularity. The
+  *idealized* cost (charges `2·len` per level, assumes the split is realizable in `len`
+  moves — an optimistic bracket, cf. revsort's free reversal) gave random **n=52 `367.6` vs
+  Hu–Tucker `484`, −24%, on 5000/5000**, matching `2n·log₂LDS = 367`, margin growing in n
+  (16%→28% over n=16→120). **The realization destroys that win.** The real move-emitting
+  sorter (`recreal`: distribute by chain-2-colour onto the two buffers — the non-positional
+  split — then nested-park + recurse each half + remerge, all by merge-by-exact-count;
+  exhaustively correct n≤8, replay-verified on 15 500 random decks) costs **n=52 `661.7` —
+  `+80%` over idealized, `+37%` over Hu–Tucker, beating Hu–Tucker on `0/5000` decks**, and
+  loses at *every* observable n (`real/hut` `1.42`@16 → `1.29`@120). **Root cause — the
+  single-hub tax the idealized model omits.** Each internal node really costs `~4·len`, not
+  `2·len`: `distribute` (`len`, separate the interleaved groups onto the buffers) + `bring
+  the two groups back to D` (`len`, to feed each recursion — cards live on buffers between
+  levels) + `merge two now-*stacked* sorted runs` (`2·len` — you cannot merge in place on a
+  LIFO hub: separate to A/B then pour). The idealized `2·len` = `distribute + merge`
+  *assuming the two sorted halves are pre-staged on the buffers*; the hub forces either a
+  stacked-run merge (`2·len`) or a result-park (`len`) **plus** the recursion-feed bring-back
+  (`len`) — and result-to-buffer reframings just move this cost around (a wash; `4·len` is
+  the floor for this family). This extra `2·len`/level is exactly the **non-positional split
+  tax**: merge splits *contiguously* (free — runs are already in place on D), recpat splits
+  by *value/chain* (interleaved), and routing interleaved groups apart and back through the
+  one hub `D` costs 2 moves/card/level that merge never pays. So the `log r → log LDS` lever
+  is *real* (fewer levels: `log₂LDS ≈ 3.5` vs `log₂r ≈ 4.7`) but the per-level cost
+  *doubles* (`4` vs `2` moves/card), and `2 × 0.75 > 1` ⇒ net loss. Asymptotically
+  `log₂LDS/log₂r → 0.5` while the cost ratio stays `~1.8`, so `real/hut → ~0.9` — recpat may
+  reach rough *parity* only at astronomical n, never a practical sub-merge sorter. The
+  **nested-parking realization itself is fine** (not the earlier-retracted "4th stack"
+  obstruction): you work on a buffer's top while lower cards sit inert, merge-by-exact-count
+  never digs beneath — that part works perfectly. It is the *hub routing of the interleaved
+  split* that inflates it. ⇒ the §I.4a "merge critique" (`log r → log LDS`, const
+  `1.75 → ~0.8`) is an idealized accounting that **does not survive the single hub**;
+  recursive patience is **not** a sub-merge sorter on random. Specialists unchanged: the
+  `LDS≤2` base case is exactly patience2 (interleave n=52 `104`, matches ideal, crushes
+  merge — but that is DOF 1, already known); `reversed` inflates catastrophically (`1120` vs
+  `600`, max depth × the split tax).
 - *Realizable multi-pass — does a pass halve LDS?* **[ANSWERED NO, `src/bin/pass.rs`]**.
   A realizable full-deck pass (distribute `D→{A,B}`, greedy-merge back to `D`; exactly `2n`
   moves) reduces **LDS only additively, by 1 per pass**: the patience pass peels exactly one
@@ -254,10 +276,13 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   before merging** — i.e. it needs the *recursion*, not a single full-deck pass.
   **Conclusion (narrow):** the multiplicative LDS reduction is intrinsically recursive, so
   the iterated-*multi-pass* route is a dead end; recpat's 24% does *not* materialize as a
-  multi-pass. This does **not** show recpat is unrealizable — the *recursive* realization
-  (nested parking on the two stacks; see the recpat entry) is untested and is the open next
-  step. (An earlier draft here over-concluded "merge `log r` is the realizable floor"; that
-  conflated multi-pass with recursion and is retracted.)
+  multi-pass. (An earlier draft here over-concluded "merge `log r` is the realizable floor";
+  that conflated multi-pass with recursion and is retracted.) The *recursive* realization is
+  now built and measured (`recreal`, see the recpat entry above): it **inflates the idealized
+  24% win into a 37% loss** vs Hu–Tucker — the single-hub non-positional-split tax (`4·len`
+  not `2·len` per level). So both routes to the `log LDS` granularity are now closed; the
+  multi-pass's "merge `log r` is the realizable floor" intuition turns out to be *right after
+  all* (recpat can't beat it), though for the recursion reason, not the multi-pass one.
 - *Block-selection* **[DEAD END]**: `Θ(n²/k)` re-handling, no random access to
   buried cards; structurally cannot beat the merge family.
 - *Two clean passes* (`g ≤ 4n`) **[RETRACTED]**: the one-pass set `{g ≤ 2n}` does

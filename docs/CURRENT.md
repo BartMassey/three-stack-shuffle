@@ -92,10 +92,13 @@ misses, which is where essentially all the difficulty is.
   `min-transfers > #forced` (the cascade) — deferred transfers re-bury, and the
   resolution schedule is **global** (comb reverses a whole pile), not per-event
   greedy. (I.4a)
-- **Merge critique:** ascending runs over-count; right granularity is the
-  increasing-subsequence cover `= LDS ≤ r`. `log r → log(LDS)` moves the constant
-  `1.75 → ~0.8` on random — but two buffers hold only 2 open piles (`LDS ≈ 2√n`),
-  and reversed shows `LDS` over-counts the *dual* way. (I.4a)
+- **Merge critique [granularity real, but NOT realizable as a sorter — `recreal`]:**
+  ascending runs over-count; right granularity is the increasing-subsequence cover
+  `= LDS ≤ r`. `log r → log(LDS)` moves the constant `1.75 → ~0.8` *in idealized counting*
+  — but realizing the `log LDS` split on the single hub costs `~4·len`/level (the
+  non-positional split tax), inflating it **past** merge (+37% on random); so the lever
+  does not survive (Constructive thread / Q4). Also: two buffers hold only 2 open piles
+  (`LDS ≈ 2√n`), and reversed shows `LDS` over-counts the *dual* way. (I.4a)
 
 ## Hard constraint — observability
 
@@ -122,17 +125,21 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
    (cheap) or irreducibly tangled?
 3. (magnitude half of 1–2) Does the running-`LIS`-excess of `σ` total `Θ(n log n)`,
    matching `opt`? — i.e. is the multi-scale sum the *right size*, not just a bound.
-4. Two-open-pile policy → how close to `log(LDS)`? *Partly answered (Constructive
-   thread):* single-pass patience needs `LDS≤2`; the **idealized** recursion hits
-   `log(LDS)` (−24% vs merge); its **realizable** recursion is the open lead.
+4. Two-open-pile policy → how close to `log(LDS)`? **[ANSWERED — not reachable on the single
+   hub.]** Single-pass patience needs `LDS≤2`; the **idealized** recursion hits `log(LDS)`
+   (−24% vs merge), but the **realized** recursion (`recreal`) inflates to `~4·len`/level (the
+   non-positional split tax) and **loses to merge by 37%** on random — see Constructive
+   thread. The `log(LDS)` granularity is not realizable as a sorter; merge's `~1.75` stands.
 
 ## Constructive thread — top-down mergesort degrees of freedom
 
 Top-down / Hu–Tucker adjacent-merge tree (`sorters.rs`, cost `2·W` over **ascending
 runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 const; avg
-~484, worst 600 at n=52). Two realizable DOFs aim to push the merge granularity from
-`r` (ascending runs) toward the LDS/RSK cover — the §I.4a "merge critique" lever
-(`log r → log LDS`, const `1.75 → ~0.8`):
+~484, worst 600 at n=52; it **remains the bar** — all three DOFs below now resolved, none
+beats it on random). Two realizable DOFs aimed to push the merge granularity from `r`
+(ascending runs) toward the LDS/RSK cover — the §I.4a "merge critique" lever (`log r → log
+LDS`, const `1.75 → ~0.8`); **that lever is now refuted as a sorter** (the `log LDS`
+granularity is not realizable on the single hub — DOF 1 / recpat below):
 
 1. **Value-fit two-open-piles [ANSWERED — experiment (b), `psort`; detail NOTES §I.3].**
    (Aside: in the merge-tree model the A/B label is a cost-neutral symmetry — `W` depends
@@ -147,9 +154,9 @@ runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 c
    interleave extreme (where reversal does nothing); the comb owns the reversed extreme
    (where patience is stuck, `LDS=n`). **Neither touches the random constant** — 2 piles
    overflow at `LDS≈2√n` (the §I.4a wall, now measured). ⇒ sub-merge on random needs the
-   **recursion** (sort the split-halves before merging): the *multi-pass* route is a dead
-   end (d); the **recursive** realization is the open lead — see *Recursive patience* below.
-   = Q4.
+   **recursion** (sort the split-halves before merging), but both routes there are now closed:
+   the *multi-pass* (d) and the *recursive* realization (c', `recreal`) — the latter **built,
+   verified, and REFUTED** (loses to merge by 37%; see *Recursive patience* below). = Q4.
 2. **Reversal [ANSWERED — experiment (a), `revsort`; detail NOTES §I.3].** Reverse-aware
    adjacent-merge bracketed by an optimal-alphabetic DP charging a size-`s` descending
    leaf `c` per card (`c=0` free LB; `c=∞` = ascending-only baseline; `c≈2` realizable,
@@ -164,36 +171,44 @@ runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 c
    numbers need a replay-verified bidirectional sorter; `c≈2` is comb-calibrated, not
    yet move-emitted.
 
-**Recursive patience [EXPERIMENT (c) — idealized, promising; `recpat`].** Split the deck
-into two subsequences each with ~half the LDS (Dilworth cover into `LDS` increasing
-chains, 2-color them), recurse, merge → depth `~log₂LDS`, cost `~2n·log₂(LDS)`. Idealized
-result (charges `2·len`/level; like revsort's free bound): random n=52 **367.6 vs
-Hu–Tucker 484 (−24%), winning on 5000/5000**, matching `2n·log₂LDS=367` exactly, and the
-**margin GROWS with n** (16%→28% over n=16→120) — the real `log r → log LDS` lever, the
-first construction that would beat the merge constant on random. Still ~`367` vs opt
-`~250`, so LDS-halving isn't the whole story (full RSK, per §I.4a). **Realizability —
-OPEN (earlier "4th stack" claim RETRACTED).** A non-empty stack is *not* an obstruction:
-you work on its **top** while lower cards sit inert (natural merge already does this — `A`
-is a *parking stack* of stacked sorted runs, "merge by exact count" never digs beneath). So
-"sort one half while the other half occupies a stack" is fine via **nested parking**; there
-is no 4th-stack barrier. The genuine open question is whether realizing the **non-positional**
-(interleaved) split — route the two groups apart, recurse, remerge with correct
-orientation/parity — costs the idealized `2·len`/level or inflates it with extra shuffles.
-**Multi-pass is a dead end [(d), `pass`]:** an iterated full-deck pass (distribute `D→{A,B}`
-+ greedy-merge back, 2n) reduces LDS only **additively, −1/pass** (patience peels one
-decreasing layer `[11,…,1]`, ~LDS passes ≫ merge; the chain-parity pass even makes D's LDS
-*worse*, 11.6→12.4, and won't converge). But **multi-pass ≠ recursion** — the recursive
-realization (split → nested-park → sort halves → merge) is **untested** and is the live next
-experiment. (The earlier "merge `log r` is the realizable floor" was an overclaim from
-conflating multi-pass with recursion; retracted.)
+**Recursive patience [EXPERIMENT (c) idealized `recpat`; (c') REAL `recreal` — DONE, idealized
+win REFUTED].** Split the deck into two subsequences each with ~half the LDS (Dilworth cover
+into `LDS` increasing chains, 2-color them), recurse, merge → depth `~log₂LDS`, cost
+`~2n·log₂(LDS)`. The **idealized** model (charges `2·len`/level) gave random n=52 `367.6` vs
+Hu–Tucker `484` (−24%, 5000/5000, margin growing 16→28% over n=16→120). **The real
+move-emitting sorter destroys that win.** `recreal` (distribute by chain-2-color onto the two
+buffers = the non-positional split; nested-park + recurse each half + remerge, all
+merge-by-exact-count; **exhaustively correct n≤8, replay-verified 15 500 random decks**) costs
+n=52 **`661.7` = +80% over idealized, +37% over Hu–Tucker, beating merge on `0/5000`**, and
+loses at *every* observable n (`real/hut` 1.42@16 → 1.29@120). **Root cause = the single-hub
+tax the idealized model omits:** each internal node really costs `~4·len`, not `2·len` —
+`distribute` (`len`, separate the interleaved groups) + `bring both groups back to D` (`len`,
+to feed each recursion — cards live on buffers between levels) + `merge two now-*stacked*
+sorted runs` (`2·len`; you can't merge in place on a LIFO hub — separate to A/B then pour).
+Result-to-buffer reframings just move this cost (a wash; `4·len` is the floor). That extra
+`2·len`/level is the **non-positional split tax**: merge splits *contiguously* (free), recpat
+by *value/chain* (interleaved), and routing interleaved groups apart and back through the one
+hub `D` costs 2 moves/card/level merge never pays. So the `log r → log LDS` lever is *real*
+(fewer levels, `log₂LDS≈3.5` < `log₂r≈4.7`) but per-level cost **doubles** (4 vs 2), and
+`2×0.75>1` ⇒ net loss; asymptotically `real/hut → ~0.9`, so rough *parity* only at
+astronomical n, never a practical sub-merge sorter. **Nested parking itself works fine** (not
+the retracted "4th stack" barrier) — it's the *hub routing of the interleaved split* that
+inflates. ⇒ the §I.4a "merge critique" (`log r → log LDS`, const `1.75→~0.8`) is idealized
+accounting that **does not survive the single hub**. Specialists unchanged: `LDS≤2` base =
+patience2 (interleave `104`, matches ideal, crushes merge — but that's DOF 1); `reversed`
+inflates catastrophically (`1120` vs `600`). **Multi-pass already a dead end [(d), `pass`]:**
+iterated full-deck pass reduces LDS only **additively, −1/pass** (≫ merge). With recursion now
+also refuted, **both routes to the `log LDS` granularity are closed**; the merge constant
+~1.75 stands as the constructive bar, and whether *any* constructive sorter beats it on random
+is back to **[OPEN]** (§I.6) with no live candidate.
 
-**NEXT (most actionable lead).** Build the **recursive recpat for real**: split → route the
-two groups apart → recursively sort each half (nested parking on the two stacks) → remerge,
-emit actual moves, **replay-verify it sorts**, and measure the true move count vs
-`2n·log₂(LDS)` and Hu–Tucker. That settles whether the idealized −24% is a real sub-merge
-sorter or whether parity/shuffle overhead inflates it back toward merge. Watch the **parity**
-tax (pours reverse; min-first runs can't park min-on-top — see DOF 2) and use **merge-by-
-exact-count** so nested parked layers stay inert.
+**NEXT.** The constructive thread's realizable DOFs are now exhausted — reversal (specialist),
+patience (specialist), recursion (refuted). No sub-merge-on-random construction is on the
+table. The frontier is back to the **main thread**: the instance-sensitive lower bound — a
+potential `Φ` pricing the LIFO scheduling/cascade (Q1), not a static function of σ's value
+structure (refuted). The single-hub tax that just sank recpat is itself a *positive* clue for
+the lower bound: it is a concrete, quantified cost the hub forces on any non-positional
+regrouping — the same dynamic, capacity-driven cost the cascade/hot-potato is made of.
 
 ## Guardrails (don't repeat)
 
@@ -230,5 +245,6 @@ exact-count** so nested parked layers stay inert.
   necessity check), `park` (parking is sometimes optimal), `phitest` (multi-scale
   OCT-sum refutation), `revsort` (reversal cost-bracket — experiment (a)), `psort`
   (value-fit 2-pile patience sorter — experiment (b)), `recpat` (recursive-patience
-  idealized cost model — experiment (c)), `pass` (multi-pass LDS-reduction test — (d),
-  the dead end).
+  idealized cost model — experiment (c)), `recreal` (the REAL move-emitting recursive
+  patience, replay-verified — experiment (c'); refutes the idealized −24%), `pass`
+  (multi-pass LDS-reduction test — (d), the dead end).
