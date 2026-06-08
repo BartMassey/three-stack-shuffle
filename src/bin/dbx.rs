@@ -2,6 +2,11 @@
 //! (enter D >= 3 times) in *every* optimal solution. A card's D-arrivals = its
 //! transfers + 1 (the settle); >= 3 arrivals = transferred twice. "Forced" =
 //! no optimal-length solution exists with every card arriving <= 2 times.
+//!
+//! NOTE: the n=9 search here is SAMPLED; `dbx9.rs` does it exhaustively. The true
+//! minimum is `[3,5,2,4,7,9,6,8,1]` (opt 22), not the sampled `[6,2,3,5,8,9,1,7,4]`
+//! (opt 24). dbx9/dbxshow also show a double can be forced WITHOUT re-burial
+//! (the "hot-potato" mechanism — e.g. card 1, the global min, which can't be buried).
 
 use splitmerge::heuristics::h_joint;
 use splitmerge::machine::{Card, Move, State};

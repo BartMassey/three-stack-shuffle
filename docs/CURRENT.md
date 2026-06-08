@@ -4,16 +4,28 @@
 about, terse but enough to restart cold without re-reading everything. **Read this
 first when resuming.**
 
-**Workflow (important).** `docs/NOTES.md` is the permanent record and is updated
-from this file **only when something is removed here** — i.e. when a question is
-settled, migrate its conclusion into NOTES/structure.md and delete it from
-CURRENT. The detailed formal record already lives in `docs/structure.md`; this
-file summarizes the frontier and points there, it does not replace it.
+**Workflow (important).** `docs/NOTES.md` is the **single** permanent record and is
+updated from this file **only when something is removed here** — i.e. when a
+question is settled, migrate its conclusion into NOTES (the bounce/cascade theory
+lives in **NOTES §I.4a**) and delete it from CURRENT. This file summarizes the
+frontier and points into NOTES; it does not replace it.
 
 ---
 
 ## Notation (so this file is standalone)
 
+- **Machine.** Three LIFO stacks: hub **deck** `D` (also the I/O port) and **buffers**
+  `A`, `B`. Four ops, each moves one top: `SA`/`SB` = `D→A`/`D→B`, `MA`/`MB` =
+  `A→D`/`B→D`. No direct `A↔B` (a cross-buffer move costs 2, via `D`). Sort a start
+  deck `π` (all in `D`, `A=B=∅`) to the identity `1..n`; cost = #ops. *Six-action
+  view (for reasoning about transfers):* add cost-2 macros `TA = MB,SA` (`B→A`) and
+  `TB = MA,SB` (`A→B`) — same machine, and **parking** is still allowed (a bare
+  `MA`/`MB` landing on a non-base `D`).
+- **settle / arrival / bounce.** A card *arrives* each time it enters `D` (`MA`/`MB`);
+  it *settles* on the arrival that seats it permanently onto the growing base
+  `1..i−1`. Each non-base card settles exactly once; any extra arrival is a
+  **bounce**. `B` = total bounces (`g = 2m + 2B`); a **transfer** = a bounce realized
+  as `A→D→B` (cost 2). A *double-transfer* card bounces twice (arrives ≥ 3×).
 - `n` cards; `π` the deck (a permutation); `m` non-base cards.
 - `σ` — **departure order** = the deck read top-to-bottom (the sequence sorted away).
 - `a₂(σ)` — max #cards coverable by **two `σ`-decreasing subsequences**
@@ -37,11 +49,11 @@ instance-sensitive lower bound **or** a sub-merge constructive algorithm. Curren
 focus: the **cascade** — the part of the bounce cost the static (tangle/OCT) bound
 misses, which is where essentially all the difficulty is.
 
-## Load-bearing facts (established; detail at `structure.md §`)
+## Load-bearing facts (established; detail at `NOTES.md §I.4a`)
 
-- Cost `g = 2m + 2B`; minimize **bounces** `B`. (§1)
+- Cost `g = 2m + 2B`; minimize **bounces** `B`. (I.1)
 - **Settle-time lemma:** at each settle the deck holds only the base; *all*
-  unsettled cards are in the two buffers. (§8)
+  unsettled cards are in the two buffers. (I.4a)
 - **Reduction (LOSSY — `park`):** "sort two stacks by transfers" treats D as a
   1-card transit slot, but that is **not** WLOG-optimal — *parking* a card in D
   (arriving it onto a deck still holding unsettled cards, using D as a 3rd LIFO)
@@ -49,33 +61,41 @@ misses, which is where essentially all the difficulty is.
   `B=2`, parking gives `B=1`); necessary in >50% of random decks by n=9–10. So
   true-`B` can be *below* the transit-only transfer minimum — use the transfer
   view only for the (still valid) `OCT` *lower* bound; reason about the real
-  4-move machine for opt. (§8)
-- **Re-burial atom (forced double-transfer) [`dbx`]:** a card transfers ≥2×
-  (enters D ≥3×) only by *re-burial* — evacuated from one buffer it lands on a
-  smaller unsettled card in the other. **Impossible for n≤8** (a double can occur
-  but is always re-splittable to all-singles); first *forced* at **n=9**
-  (`[6,2,3,5,8,9,1,7,4]`, opt=24, card 4). Distinct from cascade (which starts
-  smaller, as extra *single* bounces).
+  4-move machine for opt. (I.4a)
+- **Double-transfer atom — TWO mechanisms [`dbx`, `dbx9` exhaustive n=9, `dbxshow`]:**
+  a card transfers ≥2× (enters D ≥3×) by **(a) re-burial** — evacuated, it lands on a
+  *smaller* unsettled card in the other buffer (re-buried) — *or* **(b) hot-potato** —
+  a card that settles *before* everything currently staged must stay top-accessible,
+  freezing its buffer; with only two buffers it gets shuttled across to free each in
+  turn, landing only on *larger* cards (never re-buried). The earlier "only by
+  re-burial" claim is **refuted** (hot-potato is real: 55 of 287 n=9 forced decks,
+  incl. every deck whose doubler is card 1, the global min). **Impossible for n≤8**;
+  at **n=9 exactly 287 decks force a double** (all base-free), cheapest at **opt=22**.
+  Smallest/lex-first = **`[3,5,2,4,7,9,6,8,1]`** (opt 22), a hot-potato on card 1 with
+  *no* card-1-sparing optimum ⇒ necessarily hot-potato. (Old witness
+  `[6,2,3,5,8,9,1,7,4]`, opt 24, was a sampled re-burial, **not** minimal.) Distinct
+  from cascade (which starts smaller, as extra *single* bounces). Hot-potato is a
+  buffer-**capacity** forcing, not a σ-value-structure one — see Q1.
 - `σ` = departure order = deck top-to-bottom. **Single-arrival (bounce-free) ⟺ two
   `σ`-decreasing subsequences**; static bound `B ≥ OCT = m − a₂(σ)`, polynomial
-  (Greene–Kleitman). (§2–3)
+  (Greene–Kleitman). (I.4a)
 - **tangle** = increasing pair in `σ` (deck); **buried** = inversion in a buffer.
-  Same inversion, two locations. (§3–4)
+  Same inversion, two locations. (I.4a)
 - **Where the complexity is:** `OCT = Θ(n)` (`a₂ = Θ(√n)`, Ulam–Hammersley) but
   `opt = Θ(n log n)` (counting LB for almost-all + merge UB). The static bound is an
-  asymptotically vanishing fraction; the whole bulk is `cascade = opt − OCT`. (§5)
+  asymptotically vanishing fraction; the whole bulk is `cascade = opt − OCT`. (I.4a)
 - **Safe/forced boundary:** placing departing `v` keeps a pile sorted iff
   `v < top(A)` or `v < top(B)`; **forced** iff `v >` both tops. All-defer (`B=0`) ⟺
-  `LIS(σ) ≤ 2`. (§10)
+  `LIS(σ) ≤ 2`. (I.4a)
 - **At a forced event:** peel-to-fit = insertion sort = `O(n²)` (bad); **bury =
   O(1) deferred**, optimal on reversed (the comb). `#forced = OCT = Θ(n)` but
   `min-transfers > #forced` (the cascade) — deferred transfers re-bury, and the
   resolution schedule is **global** (comb reverses a whole pile), not per-event
-  greedy. (§10a)
+  greedy. (I.4a)
 - **Merge critique:** ascending runs over-count; right granularity is the
   increasing-subsequence cover `= LDS ≤ r`. `log r → log(LDS)` moves the constant
   `1.75 → ~0.8` on random — but two buffers hold only 2 open piles (`LDS ≈ 2√n`),
-  and reversed shows `LDS` over-counts the *dual* way. (§9)
+  and reversed shows `LDS` over-counts the *dual* way. (I.4a)
 
 ## Hard constraint — observability
 
@@ -95,6 +115,9 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
    `OCT = Θ(n)`. ⇒ **no static function of σ's value structure** reaches
    `Θ(n log n)` admissibly; the missing bulk is the *dynamic* cascade, so `Φ` must
    price the LIFO-scheduling (amortized/adversary), not be a graph parameter of σ.
+   Concrete witness this is real: the n=9 **hot-potato** double-transfer is a forced
+   bounce with *no* σ-value-conflict at all (card 1, the global min) — pure buffer
+   capacity. See the double-transfer atom in Load-bearing facts.
 2. **Resolution schedule** of deferred transfers (the cascade): global/comb-like
    (cheap) or irreducibly tangled?
 3. (magnitude half of 1–2) Does the running-`LIS`-excess of `σ` total `Θ(n log n)`,
@@ -117,14 +140,21 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
   conflicts, shared transfers), and telescoping collapses to the base. Don't retry
   static multi-scale-on-σ; the `Θ(n log n)` is dynamic, not a partition statistic.
 - **Don't assume D is transit-only / "bounces = transfers".** Parking is sometimes
-  optimal (`park`, forced at n=6); the six-action/transfer machine is lossy for the
-  *optimum*. `OCT ≤ B` is unaffected (the lower bound stands).
+  optimal (`park`, forced at n=6); the *transit-only transfer reduction* is lossy for
+  the *optimum* — **not** the six-action machine itself (4 base ops + the cost-2
+  macros `TA = MB,SA`, `TB = MA,SB`), which represents parking fine as a bare
+  `MA`/`MB` onto a non-base D. `OCT ≤ B` is unaffected (the lower bound stands).
 
 ## Pointers
 
-- `docs/structure.md` — the formal theory (the `§` numbers above).
-- `docs/NOTES.md` — full project record; `docs/drain-once-investigation.md` — the
+- `docs/NOTES.md` — full project record; **§I.4a** is the bounce/cascade theory (the
+  `I.4a` tags above point there). `docs/drain-once-investigation.md` — the
   (superseded) reverse-engineering log.
-- Tooling: `src/search.rs::ida_star_path`; `src/bin/analyze.rs` (`traces`, `stats`,
-  `bounces`); `src/bin/detsort.rs` (split harness; `obvious` = the interleave
-  class where merge is a `log` factor off).
+- Core: `src/search.rs::ida_star_path` (exact opt, IDA*); `src/heuristics.rs::h_joint`
+  (the `h0 + 2·OCT` admissible bound); `src/bin/analyze.rs` (`traces`, `stats`,
+  `bounces`); `src/bin/detsort.rs` (split harness; `obvious` = the interleave class
+  where merge is a `log` factor off).
+- Scratch bins (each backs a load-bearing fact): `dbx`/`dbx9`/`dbxshow`
+  (double-transfer atom; `dbx9` exhaustive n=9, `dbxshow` traces + the `hotpotato`
+  necessity check), `park` (parking is sometimes optimal), `phitest` (multi-scale
+  OCT-sum refutation).

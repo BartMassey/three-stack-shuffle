@@ -294,6 +294,140 @@ is to seed from the pre-coloured vertices first. Greedy descent on `h` is a poor
 *sorter* (it cascades and often fails to terminate): `h` is a good floor but does
 not price the relocations a move creates downstream.
 
+## I.4a Structure of the bounce-minimization problem (tangle, buried, cascade)
+
+I.1–I.4 give the floors and the admissible bound `h_joint`; this section is the
+conceptual map of *where the remaining difficulty lives* — the live research
+frontier. (Consolidated from the former `docs/structure.md`; it cross-references
+the proofs in I.1/I.4/I.5 and Part III rather than repeat them. The volatile
+day-to-day frontier notes are in `docs/CURRENT.md`, which points here.)
+
+**Tangle and buried are one relation read in two places [PROVEN].** Let `σ` = the
+deck top-to-bottom = the **departure order**. A set `U` of cards can all be
+*single-arrival* (`e_c = 1`, no bounce) **iff `U` partitions into two
+`σ`-decreasing subsequences** (each buffer pops in increasing order, so its cards
+decrease in `σ`; two buffers, two runs). So the largest single-arrival set is
+`a₂(σ)` = max union of two `σ`-decreasing subsequences, and `B ≥ m − a₂(σ)`. The
+**tangle graph** `T` has an edge for each *increasing* pair of `σ` (the
+comparability graph of the (position, value) dominance order — perfect); a
+single-arrival set induces a bipartite subgraph, so the bound is an **odd-cycle
+transversal** `B ≥ OCT(T) = m − a₂`, polynomial by Greene–Kleitman (`a₂` = sum of
+the two longest RSK columns). This is exactly `h_joint`'s bounce term (I.4).
+**buried** (a smaller card under a larger one in a *buffer*) is the *same
+inversion* as a **tangle** (an increasing pair of `σ`, in the *deck*) — read in
+placement order vs departure order. A clean start deck is all tangle; buried is
+what tangle turns into when a card is placed on a smaller one.
+
+**The static bound is an asymptotically vanishing fraction of the work.** For a
+uniform-random deck `a₂(σ) = Θ(√n)` (Ulam–Hammersley: longest decreasing
+subsequence `~2√n`), so `B_static = m − a₂ = Θ(n)`. But `B_opt = Θ(n log n)` for
+**almost every** deck (the I.2 counting bound holds for all but a vanishing
+fraction; merge gives the match). So `B_static / B_opt = Θ(n)/Θ(n log n) → 0` —
+tangle/buried prove only that *almost every card bounces ≳ once*, and are blind to
+the average card bouncing `Θ(log n)` times. The decomposition:
+
+```
+B_opt  =  OCT(T)              +     cascade(π)
+          static, poly, Θ(n)        dynamic, Θ(n log n), the open core
+```
+
+The **cascade** is the dynamic cost of *LIFO-scheduling* the 2-colouring:
+evacuating a buried card re-enters it into `D`, where re-placing it can create new
+buried cards, recursively — `T` has no edges for "bounces created by handling
+other bounces." This is why `h_joint` is tight at small `n` and a vanishing
+fraction asymptotically, and why the merge sorter (which is *entirely* cascade —
+every card re-handled `⌈log₂ r⌉` times) is within a constant of optimal while the
+static bound is a `log n` factor below it.
+
+**Do not presume the optimum is pass/recursion-structured.** The merge sorter's
+uniform `⌈log₂ r⌉`-deep re-handling is exactly its `~1.75` waste; the optimum may
+spread the `Θ(log n)`-average re-entries *unevenly* (most cards once, a few many
+times), cards settling opportunistically. `opt` is uncomputable past `n ≈ 14`, so
+clean global structure there is unfalsifiable and not to be assumed. (Direct
+evidence it is scheduling, not a graph parameter: the I.5 double-transfer atom's
+*hot-potato* mechanism is a pure buffer-**capacity** forcing — card 1, the global
+minimum, has no value-conflict at all yet is forced to transfer twice.)
+
+**The missing keystone: an instance-sensitive `Ω(n log n)` lower bound.** `OCT =
+Θ(n)` is the only instance-sensitive bound and is a `log n` factor short; the
+counting `Θ(n log n)` is uniform (same for every deck), so it cannot see that
+reversed is `Θ(n)` while random is `Θ(n log n)`. Pursue this bound **before** any
+steering potential `Φ` (an ungrounded `Φ` was the prior rollout's failure, and the
+lower-bound potential and the steering potential are plausibly the same object).
+Tellingly the cascade is **not monotone in `a₂`**: it is `0` at both extremes —
+reversed (`a₂ = 2`, fully tangled but *regular*, the comb pays no cascade) and
+sorted (`a₂ = n`) — and `Θ(n log n)` in the middle for generic permutations. So the
+right bound is **entropy / incompressibility-flavoured** (a random `π` carries
+`Θ(n log n)` bits to pay off; structured families are cheap), instance-sensitive,
+and *unrelated to OCT*. Candidate tools (unmined): buffer occupancy `|A|+|B|` over
+departure time is a **cut/separation profile** (cutwidth / minimum-linear-
+arrangement / pathwidth is the natural home for an `Ω(n log n)` bound); and the
+**full Greene–Kleitman hierarchy** `a₁,a₂,…` (the whole RSK shape), not just `a₂`
+(the "2" is the two buffers; the missing `log` should come from iterating the
+chain/antichain structure). The 2-stack-sorting literature does **not** transfer
+(I.2 citations: different machines — complete networks, or a direct `A↔B` edge).
+
+**The transfer reduction, and why single cuts fail.** By the checkpoint invariant
+(I.4), when card `i` settles `D = (1,…,i−1)` exactly and all `n−i` unsettled cards
+are in the two buffers — `D` is an I/O port, not storage. So (modulo parking)
+every non-settling deck entry is a **transfer** `A→D→B` of a stack top, and the
+problem reads as *sort two stacks by transfers, minimise transfers*. **[LOSSY for
+the optimum — see I.5 (parking) and Part III; the reduction survives only as the
+source of `OCT ≤ B`.]** Why a single value-cut proves nothing: project values to
+`{≤k, >k}` and the instance needs **zero** transfers (one class per stack), so
+`B ≥ 0` — vacuous. Bounces need a **3-way** distinction (three values can have
+`LIS = 3 >` two buffers); the cost lives in the *fine, multi-scale* order, not any
+single cut, which is why no single cutwidth-type quantity captures it. The natural
+fix — a dyadic-refinement sum of 3-way OCTs — is **[REFUTED, Part III, `phitest`]**:
+value-coarsened `OCT^(ℓ)` is monotone in scale, so scales share transfers and the
+telescoped sum collapses to the base `OCT^(0) = Θ(n)`. **No static value-partition
+statistic of `σ` reaches `Θ(n log n)` admissibly** — the bound must be amortised
+over the schedule.
+
+**Runs over-count; the right granularity is the increasing-subsequence cover.** The
+merge sorter pays `2·W(T)` over `r` ascending runs, but ascending runs are a
+*positional* artifact. The minimum increasing-subsequence cover is `LDS` (Dilworth
+dual: longest *decreasing* subsequence), and `LDS ≤ r` always, often `≪`
+(interleave: `LDS=2` vs `r=n/2`). **"Leave a run for later" = keep an increasing
+subsequence intact** — within one, no card sits above a smaller one, so it pours
+out sorted for free; the cost is *cross-subsequence* blocking. Swapping
+`log r → log(LDS)` moves the constant from `~1.75` toward `log(2√n) =
+½log₂n+O(1)` — into the neighbourhood of the measured optimum `~0.8`. Two caveats:
+(1) `LDS` over-counts the *dual* way (reversed has `LDS=n` yet `opt=Θ(n)` — one
+decreasing run, sorted by reversal-by-pour); the true governor is the full RSK
+shape, not `LDS` alone. (2) Realisation: two buffers keep only **two** increasing
+subsequences open at once, but a random deck has `≈2√n` of them — whether the rest
+merge in `~log(LDS)` rounds *without* patience's random access is open.
+
+**The safe/forced boundary, and why resolution is global [boundary PROVEN; (a)
+answered].** In the transfer view, placing the departing `v` keeps a pile sorted
+**iff `v < top(A)` or `v < top(B)`** (it becomes a smaller new top); **forced iff
+`v >` both tops** (the apex of an increasing triple — it must bury one pile). So
+"both piles stay sorted, zero transfers" is possible **iff `LIS(σ) ≤ 2`** (the
+`B=0` class); the first forced transfer is the first time the live arrival stream's
+`LIS` reaches 3. Deferral freedom is *narrow* — a departing card is the deck top,
+placed now — so all real decisions concentrate at the forced events: which pile to
+break, and where the displaced card goes. At a forced event, **peel-to-fit =
+insertion sort = `O(n²)`** (bad); **bury = `O(1)` deferred**, and exactly optimal on
+reversed (the comb, each card once). But `min transfers ≠ #forced events`:
+`#forced = OCT = n − a₂ = Θ(n)`, yet `opt = Θ(n log n)`. **(a) answered: min
+transfers is strictly more than `#forced` whenever the cascade is nonzero** (already
+true at small `n`: `opt − h_joint ≈ 1` at `n ≤ 14`). The gap is the deferred
+transfer re-burying on the other pile when it executes; its resolution is **global**
+(the comb reverses a whole pile at once), not per-event greedy. So the open object
+is the **resolution schedule** of the deferred transfers. Remaining sub-questions:
+**(b)** the optimal pile-to-break and displaced-card destination at a forced event;
+**(c)** magnitude — does the running-`LIS`-excess of `σ` total `Θ(n log n)`?
+
+> **Observability caveat (governs every large-`n` claim here).** Exact `opt` is
+> computable only to `n ≈ 14` (IDA*); `OCT = n − a₂` is poly at any `n`. So the
+> cascade `= opt − OCT` is *measurable* only where it is `~1` (`n ≤ 14`) and
+> *unmeasured* where it dominates (`n ≳ 20`). All large-`n` cascade / crossover
+> figures are **extrapolation** from proven asymptotics (`opt = Θ(n log n)` by
+> counting-LB + merge-UB; `OCT = Θ(n)` by `a₂ = Θ(√n)`), not computed — and no `n`
+> is both solvable and cascade-rich, so the cascade cannot be reverse-engineered
+> from optimal traces. This is a theory problem.
+
 ## I.5 Exact search, and the exact value of the reversal
 
 IDA* on `f = g + h` (pathmax, parent-move pruning, on-path cycle detection) finds
@@ -309,23 +443,40 @@ exact optima (`splitmerge/search.py`).
 - **Residual gap.** On random start decks at `n = 10`, `cost − h_joint ≈ 1.1`
   (robust across seeds); the all-states mean at `n = 7` is `1.42`. (An earlier
   "≈ 2.4 at n = 10" figure was an unreliable carry-over and does not reproduce.)
-- **Re-burial atom [VERIFIED, `src/bin/dbx.rs`].** A card *transfers twice* (enters
-  D ≥ 3 times) only by re-burial: evacuated from one buffer it lands on a smaller
-  unsettled card in the other. Strictly stronger than cascade (which begins as
-  merely *more cards bouncing once* than `OCT`). Exhaustively, **no optimum forces a
-  double transfer for n ≤ 8** (a double can occur but is always re-splittable to
-  all-single-bounce); smallest *forced* case **n = 9** (`[6,2,3,5,8,9,1,7,4]`,
-  opt = 24, card 4; rare). Checked by confirming no optimal-length solution has all
-  per-card D-arrivals ≤ 2.
+- **Double-transfer atom — TWO mechanisms [VERIFIED, `src/bin/dbx.rs`,
+  `src/bin/dbx9.rs` (exhaustive n=9), `src/bin/dbxshow.rs`].** A card *transfers
+  twice* (enters D ≥ 3 times) by one of two distinct forcings — the earlier "only
+  by re-burial" claim is **refuted**:
+  - **re-burial:** evacuated from one buffer the card lands on a *smaller* unsettled
+    card in the other, so it is buried again and must move once more. (232 of the
+    287 forced n=9 decks, classified on a representative optimum.)
+  - **hot-potato (capacity/scheduling):** a card that must stay top-accessible —
+    it settles *before* everything currently staged, so anything stacked on it
+    would have to settle first, which it can't — *freezes* its buffer. With only
+    two buffers, when each must be loaded in turn the card is shuttled across to
+    free them. It **lands only on larger cards**, so it is never re-buried. (55 of
+    287; in particular any deck whose doubler is card 1 — the global minimum, which
+    *cannot* land on a smaller card.)
+  Strictly stronger than cascade (which begins as merely *more cards bouncing once*
+  than `OCT`). Exhaustively (real, parking-capable machine): **no optimum forces a
+  double for n ≤ 8**; at **n = 9 exactly 287 decks force one** (all base-free),
+  cheapest at **opt = 22** (12 decks). Genuine smallest/lex-first witness:
+  **`[3,5,2,4,7,9,6,8,1]`** (opt 22), a hot-potato on card 1 — and *no* optimum of
+  it spares card 1 (`dbxshow hotpotato`), so its forced double is *necessarily*
+  hot-potato, not re-burial. (The previously recorded `[6,2,3,5,8,9,1,7,4]`, opt 24,
+  card 4, was a re-burial example found by sampling, **not** minimal.) Verdict:
+  "forced" = no optimal-length solution has all per-card D-arrivals ≤ 2. Depends on
+  `h_joint` admissibility (used for both the opt and the pruning).
 - **Parking is necessary — "B = inter-buffer transfers" is LOSSY [VERIFIED n ≤ 8,
-  `src/bin/park.rs`].** Treating D as a one-card transit slot (the
-  six-action/transfer model) is **not** WLOG-optimal: some optima must *park* a card
-  in D — arrive it onto a deck that still holds unsettled cards, using D as a third
-  LIFO. First forced at **n = 6** (`[1,3,5,6,4,2]`, opt = 12: transit-only needs
+  `src/bin/park.rs`].** Treating D as a one-card transit slot (the *transit-only
+  transfer reduction* — **not** the six-action machine, which represents parking
+  fine as a bare `MA`/`MB` onto a non-base D) is **not** WLOG-optimal: some optima
+  must *park* a card in D — arrive it onto a deck that still holds unsettled cards,
+  using D as a third LIFO. First forced at **n = 6** (`[1,3,5,6,4,2]`, opt = 12: transit-only needs
   `B = 2`, parking achieves `B = 1`); necessary in >50% of random decks by n = 9–10.
   So the true minimum bounce count can be *below* the transit-only transfer minimum —
   the reduction over-counts the optimum. (`OCT ≤ B` is unaffected; the admissible
-  lower bound stands.) This corrects `structure.md` §8.
+  lower bound stands.) This corrects the transfer-reduction claim in §I.4a.
 - **Exact value of the reversal [PROVEN]:** `opt(reversed deck) = 4(n−1)` for all
   `n`. *Upper bound:* the explicit `comb_solution` (`machine.comb_solution`)
   sorts the reversed deck in exactly `4(n−1)` moves (per-card profile
@@ -488,7 +639,7 @@ Kept deliberately, clearly labeled, so they are not revisited.
   from the **LIFO** machine studied here. The three are genuinely different;
   small-`n` reachable-set sizes separate them.
 - **[DEAD END] Multi-scale value-coarsening OCT sum** as an instance-sensitive
-  `Ω(n log n)` lower bound (the `structure.md` §8 proposal). Summing the static
+  `Ω(n log n)` lower bound (the §I.4a multi-scale proposal). Summing the static
   `OCT^(ℓ) = m − a₂` of the departure order σ coarsened to value-blocks of size
   `2^ℓ`, over all scales `ℓ`, **over-counts**: `OCT^(ℓ)` is monotone
   non-increasing in `ℓ` (coarsening only merges adjacent values, which can only

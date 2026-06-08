@@ -55,8 +55,8 @@ is kept under `old/` as a validated reference oracle.
     docs/
       CURRENT.md            active working context (READ FIRST when resuming work)
       OVERVIEW.md           this file: orientation + run instructions
-      NOTES.md              the full technical reference (start here for the science)
-      structure.md          the live lower-bound / cascade theory (CURRENT points in)
+      NOTES.md              the full technical reference (start here for the science;
+                            §I.4a is the lower-bound / cascade theory)
       old/                  the original write-ups, superseded by NOTES.md (archive)
 
 `docs/NOTES.md` is the single coherent account of the whole project (both cost

@@ -1,8 +1,8 @@
 //! Scratch: test a candidate lower-bound potential Phi(sigma) against the exact
 //! bounce optimum B_opt = (opt - 2m)/2. Admissibility requires Phi <= B_opt for
 //! every deck. Candidate: the dyadic value-refinement sum -- sum over scales of
-//! the static OCT of the value-coarsened departure order. See docs/structure.md
-//! sec 8 (the "multi-scale" proposal; validity of the *sum* is the open core).
+//! the static OCT of the value-coarsened departure order. See docs/NOTES.md
+//! sec I.4a (the "multi-scale" proposal) and Part III (its refutation).
 
 use splitmerge::heuristics::h_joint;
 use splitmerge::machine::{base_len, Card, State};

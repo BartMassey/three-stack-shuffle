@@ -1,8 +1,8 @@
 //! Scratch: is "D as transit only" (every MA/MB arrival lands on the pure base —
-//! the faithful six-action/transfer model) WLOG-optimal, or does some deck force
-//! *parking* (an arrival onto a deck that still holds unsettled cards)? If no
-//! length-opt solution is "faithful", the transfer reduction is LOSSY for that
-//! deck. Checks exhaustively n<=8, samples n=9,10.
+//! the transit-only *transfer reduction*; NOT the six-action machine, which allows
+//! parking) WLOG-optimal, or does some deck force *parking* (an arrival onto a deck
+//! that still holds unsettled cards)? If no length-opt solution is "faithful", the
+//! transfer reduction is LOSSY for that deck. Checks exhaustively n<=8, samples n=9,10.
 
 use splitmerge::heuristics::h_joint;
 use splitmerge::machine::{base_len, Card, Move, State};
