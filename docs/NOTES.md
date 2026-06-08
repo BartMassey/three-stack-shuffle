@@ -224,6 +224,22 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   constant**, because two piles overflow at `LDS ≈ 2√n`. This is the §I.4a two-open-piles
   realizability wall, now measured. Beating merge on random needs > 2 open piles
   (impossible here) or the recursive/multi-pass resolution of the cascade (open).
+- *Recursive patience* **[IDEALIZED win, realizability OPEN; `src/bin/recpat.rs`]**.
+  Split the deck into two subsequences each with ~half the LDS (Dilworth cover into `LDS`
+  increasing chains — count `= LDS`, verified — then 2-colour the chains), recurse, merge:
+  depth `~log₂LDS`, total `~2n·log₂LDS`, i.e. the `log r → log LDS` granularity. Idealized
+  cost (charges `2·len` per level and assumes the split is realizable in `len` moves — an
+  optimistic bracket, cf. revsort's free reversal): random **n=52 `367.6` vs Hu–Tucker
+  `484`, −24%, on 5000/5000 decks**, matching `2n·log₂LDS = 367` to the decimal, with the
+  margin **growing in n** (16%→28% over n=16→120) — the first construction that would beat
+  the merge constant on random (though still `~367` vs opt `~250`, so LDS-halving is not
+  the whole story; the full RSK shape is, per §I.4a). **Realizability is the open crux:**
+  merge sort is realizable because its splits are *positional* (contiguous blocks park as
+  inert stacked runs under "merge by exact count"); the LDS-halving split is
+  *non-positional* (interleaved subsequences), which cannot park that way — recursively
+  sorting one half appears to require storing the other, i.e. a 4th stack (the same
+  2-buffer wall). Open: a realizable *multi-pass* analog — a full-deck pass `D→{A,B}→D`
+  that halves LDS — would make the 24% real. Not yet move-emitted.
 - *Block-selection* **[DEAD END]**: `Θ(n²/k)` re-handling, no random access to
   buried cards; structurally cannot beat the merge family.
 - *Two clean passes* (`g ≤ 4n`) **[RETRACTED]**: the one-pass set `{g ≤ 2n}` does

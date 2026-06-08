@@ -161,6 +161,21 @@ runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 c
    numbers need a replay-verified bidirectional sorter; `c≈2` is comb-calibrated, not
    yet move-emitted.
 
+**Recursive patience [EXPERIMENT (c) — idealized, promising; `recpat`].** Split the deck
+into two subsequences each with ~half the LDS (Dilworth cover into `LDS` increasing
+chains, 2-color them), recurse, merge → depth `~log₂LDS`, cost `~2n·log₂(LDS)`. Idealized
+result (charges `2·len`/level; like revsort's free bound): random n=52 **367.6 vs
+Hu–Tucker 484 (−24%), winning on 5000/5000**, matching `2n·log₂LDS=367` exactly, and the
+**margin GROWS with n** (16%→28% over n=16→120) — the real `log r → log LDS` lever, the
+first construction that would beat the merge constant on random. Still ~`367` vs opt
+`~250`, so LDS-halving isn't the whole story (full RSK, per §I.4a). **Realizability is the
+open crux:** merge sort is realizable because its splits are *positional* (contiguous
+blocks park as inert stacked runs, "merge by exact count"); the LDS-halving split is
+*non-positional* (interleaved subsequences) and can't park that way — sorting one half
+seems to need to store the other, i.e. a 4th stack (the same 2-buffer wall). **Next:** is
+there a realizable *multi-pass* analog — a full-deck pass (D→A,B→D) that halves LDS — that
+would make the 24% real? That's the concrete open question.
+
 ## Guardrails (don't repeat)
 
 - "Drain-once / ≤1 bounce per card" is a **small-n artifact** — multi-bounce is
@@ -195,4 +210,5 @@ runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 c
   (double-transfer atom; `dbx9` exhaustive n=9, `dbxshow` traces + the `hotpotato`
   necessity check), `park` (parking is sometimes optimal), `phitest` (multi-scale
   OCT-sum refutation), `revsort` (reversal cost-bracket — experiment (a)), `psort`
-  (value-fit 2-pile patience sorter — experiment (b)).
+  (value-fit 2-pile patience sorter — experiment (b)), `recpat` (recursive-patience
+  idealized cost model — experiment (c)).
