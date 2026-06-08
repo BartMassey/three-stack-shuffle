@@ -182,16 +182,48 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   `~1.0` constant needs a true triangle (direct `A↔B`). We argued this but never
   implemented it here; the earlier "measured constant ~2.2" came from uncommitted
   code and is not reproduced.
-- *Bidirectional merge* **[NOT VERIFIED]**: free reversal-by-pour would let
-  *monotone* (not just ascending) runs count — a big win on descending-structured
-  input (reversed `624 → 156 = 3n`, a clean hand calculation) but **no
-  typical-case win** (monotone runs are only ~0.83× ascending, rarely crossing a
-  power-of-two pass boundary). It **assumes a modified machine** with a direct
-  `A↔B` edge, so it cannot run on this machine at all; not implemented here.
-- *Patience / LIS sorting* **[DEAD END]**: `LIS ≈ 12 < 16` at `n = 52` would save
-  a pass, but forming the ~12 non-contiguous piles needs random access (binary
-  search over pile tops) the machine lacks; formation costs more than the pass
-  saved.
+- *Reversal / bidirectional merge* **[ANSWERED via cost-bracket, `src/bin/revsort.rs`]**.
+  Reversal-by-pour is **native** to this machine (through `D`); the earlier "needs a
+  modified `A↔B` machine" applies only to a *simultaneous* bidirectional merge, not to
+  reversing a run. A reverse-aware adjacent-merge may use **descending** runs as leaves.
+  Bracket its cost with an optimal-alphabetic DP charging a descending leaf `c` per
+  card (`c=0` = free lower bound; `c=∞` = ascending-only baseline = Hu–Tucker, sanity
+  `=hutucker_cost`): a size-`s` descending run reverses in `≈2s` moves (comb-calibrated —
+  the whole reversed deck gives `2·2·52 = 208 ≈ opt 204`), so `c≈2` is realizable.
+  Results (`n=52`, `2W`):
+  - **random:** free LB `457.7` vs baseline `484.1` = 5.4% headroom, but at realizable
+    `c=2` the gap is **0.0%** (41/3000 decks benefit at all). The headroom is an artifact
+    of free reversal: a random deck's descending runs are too short — reversing costs
+    `≈2s`, shred-and-merge costs `≈2s·log₂s`, so reversal wins only for `s ≳ 3`. This is
+    the old "no typical-case win," now **rigorous** (a bracket, not a sample, and
+    mechanistic) — and it corrects the old entry's `156=3n` (below the proven `204`) and
+    "monotone ~0.83× ascending" (it is *more*: `E[mono]=(2n−1)/3 > E[asc]=(n+1)/2`).
+  - **interleave / `obvious`:** gap **exactly 0 at every charge** — no descending
+    structure; reversal is orthogonal to the class where merge is a `log` factor off
+    (that gap is the *concatenation / two-open-piles* lever, not reversal).
+  - **descending-structured:** wins big and realizably — reversed `600 → 208` (≈ comb),
+    two long embedded descending blocks `380 → 318`; benefit scales with run length.
+  Conclusion: reversal helps **only** genuinely descending-structured decks (where it
+  ~recovers the comb), and does nothing for random or the interleave class. Exact
+  realizable numbers await a replay-verified bidirectional sorter; the `c≈2` charge is
+  comb-calibrated, not yet move-emitted.
+- *Patience / LIS sorting* **[DEAD END for general n; 2-pile specialist measured,
+  `src/bin/psort.rs`]**: `LIS ≈ 12 < 16` at `n = 52` would save a pass, but forming
+  the ~12 non-contiguous piles needs random access (binary search over pile tops) the
+  machine lacks. The machine *can*, however, run **2-pile** patience (both tops are
+  visible): place each departing card on the pile it fits under (top > card), one pass +
+  one merge = `2n` moves. It sorts **iff `LDS(deck) ≤ 2`** (the pop-order needs ≤ 2
+  decreasing piles) — exactly the `obvious`/interleave class, where it crushes merge
+  (`n = 52`: **`104` vs Hu–Tucker `496`**, replay-verified, 4.8×). But `LDS ≤ 2` is a
+  **vanishing fraction** (57% of decks at n=4, 3.5% at n=8, ~0% by n ≥ 14; a random deck
+  has `LDS ≈ 2√n`), so 2-pile patience is a *specialist* — it never applies to random,
+  and its flat `2n` even loses on low-run decks (`0` on already-sorted). It is
+  **complementary to reversal**: patience wins on the interleave extreme (where reversal
+  does nothing) and is stuck on the reversed deck (`LDS = n`, where the comb wins). The
+  two stack freedoms each crack one structured extreme; **neither touches the random
+  constant**, because two piles overflow at `LDS ≈ 2√n`. This is the §I.4a two-open-piles
+  realizability wall, now measured. Beating merge on random needs > 2 open piles
+  (impossible here) or the recursive/multi-pass resolution of the cascade (open).
 - *Block-selection* **[DEAD END]**: `Θ(n²/k)` re-handling, no random access to
   buried cards; structurally cannot beat the merge family.
 - *Two clean passes* (`g ≤ 4n`) **[RETRACTED]**: the one-pass set `{g ≤ 2n}` does

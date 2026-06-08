@@ -124,6 +124,43 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
    matching `opt`? — i.e. is the multi-scale sum the *right size*, not just a bound.
 4. Two-open-pile lazy policy: how close to `log(LDS)` rounds can it get?
 
+## Constructive thread — top-down mergesort degrees of freedom
+
+Top-down / Hu–Tucker adjacent-merge tree (`sorters.rs`, cost `2·W` over **ascending
+runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 const; avg
+~484, worst 600 at n=52). Two realizable DOFs aim to push the merge granularity from
+`r` (ascending runs) toward the LDS/RSK cover — the §I.4a "merge critique" lever
+(`log r → log LDS`, const `1.75 → ~0.8`):
+
+1. **Value-fit two-open-piles [ANSWERED — experiment (b), `psort`; detail NOTES §I.3].**
+   (Aside: in the merge-tree model the A/B label is a cost-neutral symmetry — `W` depends
+   only on leaf depths — and tree shape is already optimal via Hu–Tucker; the real freedom
+   is value-aware *non-adjacent* combination.) Use the 2 stacks as 2 **patience piles**
+   (place each departing card on the pile it fits under). Sorts in `2n` (one pass + merge)
+   **iff `LDS(deck) ≤ 2`** = the `obvious`/interleave class, where it **crushes merge**
+   (n=52: `104` vs Hu–Tucker `496`, replay-verified, 4.8×). But `LDS≤2` is a **vanishing
+   fraction** (57% of decks at n=4 → 3.5% at n=8 → ~0% by n≥14; random `LDS≈2√n≈14`), so
+   it's a **specialist**: never applies to random, and its flat `2n` even *loses* on
+   low-run decks (`0` on sorted). **Complementary to reversal:** patience owns the
+   interleave extreme (where reversal does nothing); the comb owns the reversed extreme
+   (where patience is stuck, `LDS=n`). **Neither touches the random constant** — 2 piles
+   overflow at `LDS≈2√n` (the §I.4a wall, now measured). ⇒ sub-merge on random needs >2
+   open piles (impossible) or the cascade (recursive/multi-pass patience = the open hard
+   problem). = Q4.
+2. **Reversal [ANSWERED — experiment (a), `revsort`; detail NOTES §I.3].** Reverse-aware
+   adjacent-merge bracketed by an optimal-alphabetic DP charging a size-`s` descending
+   leaf `c` per card (`c=0` free LB; `c=∞` = ascending-only baseline; `c≈2` realizable,
+   comb-calibrated: whole reversed deck → `208 ≈ opt 204`). Verdict: **reversal helps
+   only genuinely descending-structured decks** (reversed `600→208`, embedded long
+   descending blocks `380→318`). On **random** the 5.4% free headroom collapses to
+   **0.0% at `c=2`** (reverse costs `≈2s`, shred+merge `≈2s·log s`, so reversal wins only
+   for runs `s≳3`, which random lacks). On **interleave/`obvious`** the gap is **exactly
+   0 at every charge** — reversal is orthogonal to the class where merge is a `log`
+   factor off (that's DOF 1, concatenation). The single-hub **parity** (a min-first run
+   can't park min-on-top) is why reversal isn't free. *Residual:* exact realizable
+   numbers need a replay-verified bidirectional sorter; `c≈2` is comb-calibrated, not
+   yet move-emitted.
+
 ## Guardrails (don't repeat)
 
 - "Drain-once / ≤1 bounce per card" is a **small-n artifact** — multi-bounce is
@@ -157,4 +194,5 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
 - Scratch bins (each backs a load-bearing fact): `dbx`/`dbx9`/`dbxshow`
   (double-transfer atom; `dbx9` exhaustive n=9, `dbxshow` traces + the `hotpotato`
   necessity check), `park` (parking is sometimes optimal), `phitest` (multi-scale
-  OCT-sum refutation).
+  OCT-sum refutation), `revsort` (reversal cost-bracket — experiment (a)), `psort`
+  (value-fit 2-pile patience sorter — experiment (b)).
