@@ -223,7 +223,9 @@ bound Hu–Tucker's proven worst case `600`. The gap is wide because our best
   two stack freedoms each crack one structured extreme; **neither touches the random
   constant**, because two piles overflow at `LDS ≈ 2√n`. This is the §I.4a two-open-piles
   realizability wall, now measured. Beating merge on random needs > 2 open piles
-  (impossible here) or the recursive/multi-pass resolution of the cascade (open).
+  (impossible here) or the **recursion** (sort the split-halves before merging — see the
+  *Recursive patience* and *multi-pass* entries below: the multi-pass route is a dead end,
+  the recursive realization is the open lead).
 - *Recursive patience* **[IDEALIZED win, realizability OPEN; `src/bin/recpat.rs`]**.
   Split the deck into two subsequences each with ~half the LDS (Dilworth cover into `LDS`
   increasing chains — count `= LDS`, verified — then 2-colour the chains), recurse, merge:

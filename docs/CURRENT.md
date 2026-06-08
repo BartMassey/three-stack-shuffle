@@ -122,7 +122,9 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
    (cheap) or irreducibly tangled?
 3. (magnitude half of 1–2) Does the running-`LIS`-excess of `σ` total `Θ(n log n)`,
    matching `opt`? — i.e. is the multi-scale sum the *right size*, not just a bound.
-4. Two-open-pile lazy policy: how close to `log(LDS)` rounds can it get?
+4. Two-open-pile policy → how close to `log(LDS)`? *Partly answered (Constructive
+   thread):* single-pass patience needs `LDS≤2`; the **idealized** recursion hits
+   `log(LDS)` (−24% vs merge); its **realizable** recursion is the open lead.
 
 ## Constructive thread — top-down mergesort degrees of freedom
 
@@ -144,9 +146,10 @@ runs**, `W = Σ sᵢ·depthᵢ`) is the best constructive sorter so far (~1.75 c
    low-run decks (`0` on sorted). **Complementary to reversal:** patience owns the
    interleave extreme (where reversal does nothing); the comb owns the reversed extreme
    (where patience is stuck, `LDS=n`). **Neither touches the random constant** — 2 piles
-   overflow at `LDS≈2√n` (the §I.4a wall, now measured). ⇒ sub-merge on random needs >2
-   open piles (impossible) or the cascade (recursive/multi-pass patience = the open hard
-   problem). = Q4.
+   overflow at `LDS≈2√n` (the §I.4a wall, now measured). ⇒ sub-merge on random needs the
+   **recursion** (sort the split-halves before merging): the *multi-pass* route is a dead
+   end (d); the **recursive** realization is the open lead — see *Recursive patience* below.
+   = Q4.
 2. **Reversal [ANSWERED — experiment (a), `revsort`; detail NOTES §I.3].** Reverse-aware
    adjacent-merge bracketed by an optimal-alphabetic DP charging a size-`s` descending
    leaf `c` per card (`c=0` free LB; `c=∞` = ascending-only baseline; `c≈2` realizable,
@@ -184,6 +187,14 @@ realization (split → nested-park → sort halves → merge) is **untested** an
 experiment. (The earlier "merge `log r` is the realizable floor" was an overclaim from
 conflating multi-pass with recursion; retracted.)
 
+**NEXT (most actionable lead).** Build the **recursive recpat for real**: split → route the
+two groups apart → recursively sort each half (nested parking on the two stacks) → remerge,
+emit actual moves, **replay-verify it sorts**, and measure the true move count vs
+`2n·log₂(LDS)` and Hu–Tucker. That settles whether the idealized −24% is a real sub-merge
+sorter or whether parity/shuffle overhead inflates it back toward merge. Watch the **parity**
+tax (pours reverse; min-first runs can't park min-on-top — see DOF 2) and use **merge-by-
+exact-count** so nested parked layers stay inert.
+
 ## Guardrails (don't repeat)
 
 - "Drain-once / ≤1 bounce per card" is a **small-n artifact** — multi-bounce is
@@ -219,4 +230,5 @@ conflating multi-pass with recursion; retracted.)
   necessity check), `park` (parking is sometimes optimal), `phitest` (multi-scale
   OCT-sum refutation), `revsort` (reversal cost-bracket — experiment (a)), `psort`
   (value-fit 2-pile patience sorter — experiment (b)), `recpat` (recursive-patience
-  idealized cost model — experiment (c)).
+  idealized cost model — experiment (c)), `pass` (multi-pass LDS-reduction test — (d),
+  the dead end).
