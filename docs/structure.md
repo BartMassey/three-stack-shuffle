@@ -210,6 +210,19 @@ inter-buffer transfers**, and the whole problem reduces to:
 This is *sorting two stacks by transfers* — a cleaner object than the full machine,
 for both the bound and the policy.
 
+> **[CORRECTION — the reduction is LOSSY] (`src/bin/park.rs`, exhaustive n ≤ 8).**
+> The "one-card transit slot" claim is **false**: `D` is itself a LIFO stack, and
+> some optima must *park* a card in it — arrive a buffer card onto a `D` that still
+> holds unsettled cards (using `D` as a third stack), then carry on. First forced
+> at **n = 6** (`[1,3,5,6,4,2]`, opt = 12: the transit-only model needs `B = 2`, but
+> parking sorts it in `B = 1`); parking is necessary in >50% of random decks by
+> n = 9–10. So `B_true` can be **strictly below** the minimum inter-buffer transfer
+> count of the two-stack model — the reduction *over-counts* and is not a faithful
+> model of the optimum. It survives only as the source of the `OCT` **lower** bound
+> (`OCT ≤ B_true`, proven and tested); use it only that way. The settle-time lemma
+> itself (`D = (1,…,i−1)` at the settle instant) is unaffected — parking happens
+> *between* settles.
+
 **Why a single value-cut proves nothing.** Project values to two classes
 (`≤ k`, `> k`). The projected instance has only two distinct values, so it needs
 **zero** transfers (push one class to each stack; equal values never bury). So

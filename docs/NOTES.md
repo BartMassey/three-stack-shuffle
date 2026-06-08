@@ -309,6 +309,23 @@ exact optima (`splitmerge/search.py`).
 - **Residual gap.** On random start decks at `n = 10`, `cost − h_joint ≈ 1.1`
   (robust across seeds); the all-states mean at `n = 7` is `1.42`. (An earlier
   "≈ 2.4 at n = 10" figure was an unreliable carry-over and does not reproduce.)
+- **Re-burial atom [VERIFIED, `src/bin/dbx.rs`].** A card *transfers twice* (enters
+  D ≥ 3 times) only by re-burial: evacuated from one buffer it lands on a smaller
+  unsettled card in the other. Strictly stronger than cascade (which begins as
+  merely *more cards bouncing once* than `OCT`). Exhaustively, **no optimum forces a
+  double transfer for n ≤ 8** (a double can occur but is always re-splittable to
+  all-single-bounce); smallest *forced* case **n = 9** (`[6,2,3,5,8,9,1,7,4]`,
+  opt = 24, card 4; rare). Checked by confirming no optimal-length solution has all
+  per-card D-arrivals ≤ 2.
+- **Parking is necessary — "B = inter-buffer transfers" is LOSSY [VERIFIED n ≤ 8,
+  `src/bin/park.rs`].** Treating D as a one-card transit slot (the
+  six-action/transfer model) is **not** WLOG-optimal: some optima must *park* a card
+  in D — arrive it onto a deck that still holds unsettled cards, using D as a third
+  LIFO. First forced at **n = 6** (`[1,3,5,6,4,2]`, opt = 12: transit-only needs
+  `B = 2`, parking achieves `B = 1`); necessary in >50% of random decks by n = 9–10.
+  So the true minimum bounce count can be *below* the transit-only transfer minimum —
+  the reduction over-counts the optimum. (`OCT ≤ B` is unaffected; the admissible
+  lower bound stands.) This corrects `structure.md` §8.
 - **Exact value of the reversal [PROVEN]:** `opt(reversed deck) = 4(n−1)` for all
   `n`. *Upper bound:* the explicit `comb_solution` (`machine.comb_solution`)
   sorts the reversed deck in exactly `4(n−1)` moves (per-card profile

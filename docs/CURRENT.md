@@ -42,8 +42,20 @@ misses, which is where essentially all the difficulty is.
 - Cost `g = 2m + 2B`; minimize **bounces** `B`. (§1)
 - **Settle-time lemma:** at each settle the deck holds only the base; *all*
   unsettled cards are in the two buffers. (§8)
-- **Reduction:** `B` = number of **inter-buffer transfers** ⇒ "sort two stacks by
-  transfers." (§8)
+- **Reduction (LOSSY — `park`):** "sort two stacks by transfers" treats D as a
+  1-card transit slot, but that is **not** WLOG-optimal — *parking* a card in D
+  (arriving it onto a deck still holding unsettled cards, using D as a 3rd LIFO)
+  can lower `B`. First forced at **n=6** (`[1,3,5,6,4,2]`: transit-only needs
+  `B=2`, parking gives `B=1`); necessary in >50% of random decks by n=9–10. So
+  true-`B` can be *below* the transit-only transfer minimum — use the transfer
+  view only for the (still valid) `OCT` *lower* bound; reason about the real
+  4-move machine for opt. (§8)
+- **Re-burial atom (forced double-transfer) [`dbx`]:** a card transfers ≥2×
+  (enters D ≥3×) only by *re-burial* — evacuated from one buffer it lands on a
+  smaller unsettled card in the other. **Impossible for n≤8** (a double can occur
+  but is always re-splittable to all-singles); first *forced* at **n=9**
+  (`[6,2,3,5,8,9,1,7,4]`, opt=24, card 4). Distinct from cascade (which starts
+  smaller, as extra *single* bounces).
 - `σ` = departure order = deck top-to-bottom. **Single-arrival (bounce-free) ⟺ two
   `σ`-decreasing subsequences**; static bound `B ≥ OCT = m − a₂(σ)`, polynomial
   (Greene–Kleitman). (§2–3)
@@ -104,6 +116,9 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
   measured n ≤ 11): the scales double-count (`OCT^(ℓ)` monotone in scale ⇒ nested
   conflicts, shared transfers), and telescoping collapses to the base. Don't retry
   static multi-scale-on-σ; the `Θ(n log n)` is dynamic, not a partition statistic.
+- **Don't assume D is transit-only / "bounces = transfers".** Parking is sometimes
+  optimal (`park`, forced at n=6); the six-action/transfer machine is lossy for the
+  *optimum*. `OCT ≤ B` is unaffected (the lower bound stands).
 
 ## Pointers
 
