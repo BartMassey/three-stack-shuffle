@@ -76,9 +76,13 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
 ## Open (active) sub-questions
 
 1. **Potential `Φ`** with `|ΔΦ| = O(1)`/move and `Φ(random) = Θ(n log n)` ⇒ the
-   missing instance-sensitive lower bound. Single value-cuts are *vacuous* (a
-   binary projection needs 0 transfers); the bound must be **multi-scale** (≥3-way
-   distinctions force transfers).
+   missing instance-sensitive lower bound. Single value-cuts are *vacuous*, and
+   the multi-scale **value-coarsening OCT sum is now refuted** (`phitest`): any
+   sum of value-scale OCTs over-counts (`OCT^(ℓ)` is monotone in scale ⇒ the
+   scales share transfers) and the telescoping fix collapses to the base
+   `OCT = Θ(n)`. ⇒ **no static function of σ's value structure** reaches
+   `Θ(n log n)` admissibly; the missing bulk is the *dynamic* cascade, so `Φ` must
+   price the LIFO-scheduling (amortized/adversary), not be a graph parameter of σ.
 2. **Resolution schedule** of deferred transfers (the cascade): global/comb-like
    (cheap) or irreducibly tangled?
 3. (magnitude half of 1–2) Does the running-`LIS`-excess of `σ` total `Θ(n log n)`,
@@ -96,6 +100,10 @@ Exact `opt` computable only to **n ≈ 14** (IDA*); `OCT = n − a₂` is poly a
 - Pursue the **lower bound before** a heuristic `Φ` (an ungrounded `Φ` was the
   rollout's failure).
 - **Can't solve n ≳ 15 optimally** — don't propose tracing large-`n` optima.
+- **Value-coarsening / dyadic OCT sums are refuted as a lower bound** (`phitest`,
+  measured n ≤ 11): the scales double-count (`OCT^(ℓ)` monotone in scale ⇒ nested
+  conflicts, shared transfers), and telescoping collapses to the base. Don't retry
+  static multi-scale-on-σ; the `Θ(n log n)` is dynamic, not a partition statistic.
 
 ## Pointers
 

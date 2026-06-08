@@ -229,6 +229,19 @@ showing transfers at different levels cannot be shared — is the open core; it 
 where an entropy / amortized-potential argument, not a static graph parameter,
 seems required. The reduction above is the right arena to attempt it.
 
+> **[REFUTED — the value-coarsening instantiation] (`src/bin/phitest.rs`, n ≤ 11).**
+> The transfers *are* shared, so the naive sum fails. `OCT^(ℓ) = m − a₂` of σ
+> value-coarsened to blocks of size `2^ℓ` is **monotone non-increasing in `ℓ`**
+> (coarsening only merges adjacent values, which can only enlarge the
+> two-decreasing cover), so coarse-scale conflicts are a *nested subset* of fine
+> ones and the sum charges each transfer once per surviving scale. Measured: it
+> overshoots `B_opt` by ~2× on the reversed deck at every n and on 39/40 random
+> decks by n = 11. The telescoping repair `Σ(OCT^(ℓ) − OCT^(ℓ+1))` collapses to the
+> base `OCT^(0)`. Since `OCT^(0)` already exhausts σ's static conflicts, **no
+> value-partition hierarchy reaches `Θ(n log n)` admissibly**: the missing bulk is
+> wholly the *dynamic* cascade, and the bound must be amortized over the schedule,
+> not a static parameter of σ at any resolution. (Recorded in NOTES Part III.)
+
 ## 9. Runs vs. increasing-subsequence cover — "leave a run for later"
 
 The merge sorter pays `2·W(T)` for a binary tree `T` over the `r` **ascending

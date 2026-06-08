@@ -470,6 +470,19 @@ Kept deliberately, clearly labeled, so they are not revisited.
   with clean polynomial (`⌈log₂(rising sequences)⌉`, Bayer–Diaconis) theory —
   from the **LIFO** machine studied here. The three are genuinely different;
   small-`n` reachable-set sizes separate them.
+- **[DEAD END] Multi-scale value-coarsening OCT sum** as an instance-sensitive
+  `Ω(n log n)` lower bound (the `structure.md` §8 proposal). Summing the static
+  `OCT^(ℓ) = m − a₂` of the departure order σ coarsened to value-blocks of size
+  `2^ℓ`, over all scales `ℓ`, **over-counts**: `OCT^(ℓ)` is monotone
+  non-increasing in `ℓ` (coarsening only merges adjacent values, which can only
+  enlarge the two-decreasing cover), so coarse-scale conflicts are a *nested
+  subset* of fine ones and a single transfer is charged at every scale it
+  survives. Measured (`src/bin/phitest.rs`, n ≤ 11): the sum overshoots `B_opt` by
+  ~2× on the reversed deck at every n, and on 39/40 random decks by n = 11 (gap
+  growing). The telescoping repair `Σ(OCT^(ℓ) − OCT^(ℓ+1))` collapses to the base
+  `OCT^(0) = Θ(n)`. Since `OCT^(0)` already exhausts σ's static conflicts, **no
+  value-partition hierarchy reaches `Θ(n log n)` admissibly** — the missing bulk
+  is the dynamic cascade, invisible to any static function of σ.
 
 ---
 
