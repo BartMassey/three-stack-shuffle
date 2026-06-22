@@ -174,6 +174,8 @@ pub type Plan = Vec<Move>;
 /// Errors produced by validation or illegal simulation.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum MachineError {
+    /// An algorithm configuration is outside its documented domain.
+    InvalidAlgorithmParameter(&'static str),
     /// The cards are not exactly one copy of each label in `1..=n`.
     InvalidCards,
     /// A move was attempted from an empty stack.
@@ -185,6 +187,7 @@ pub enum MachineError {
 impl fmt::Display for MachineError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::InvalidAlgorithmParameter(message) => f.write_str(message),
             Self::InvalidCards => f.write_str("cards must be a permutation of 1..=n"),
             Self::EmptySource(stack) => write!(f, "cannot move from empty stack {stack:?}"),
             Self::NotSorted(state) => write!(f, "plan ended in non-goal state {state:?}"),

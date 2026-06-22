@@ -19,14 +19,8 @@ pub enum Algorithm {
     AdaptiveSelection,
     /// Gene Welborn's selection sort that stages consecutive future targets.
     LookaheadSelection,
-    /// Value presort followed by Gene Welborn's lookahead selection.
-    LookaheadPresortAdaptiveSelection,
-    /// Two-level value presort followed by lookahead selection.
-    FourPartitionLookaheadSearch,
-    /// Six balanced value buckets followed by lookahead selection.
-    SixPartitionLookaheadSearch,
-    /// Eight balanced value buckets followed by lookahead selection.
-    EightPartitionLookaheadSearch,
+    /// Gene Welborn's lookahead selection over `2 * k` balanced value buckets.
+    TwoKPartitionLookaheadSelection(usize),
     /// Adaptive selection preceded by one binary value partition.
     BinaryPresortAdaptiveSelection,
     /// Literal top-down merge sort.
@@ -48,15 +42,16 @@ pub enum Algorithm {
 }
 
 impl Algorithm {
-    /// All implemented algorithms in stable display order.
+    /// All implemented algorithms and standard parameter configurations in
+    /// stable display order.
     pub const ALL: [Self; 16] = [
         Self::Selection,
         Self::AdaptiveSelection,
         Self::LookaheadSelection,
-        Self::LookaheadPresortAdaptiveSelection,
-        Self::FourPartitionLookaheadSearch,
-        Self::SixPartitionLookaheadSearch,
-        Self::EightPartitionLookaheadSearch,
+        Self::TwoKPartitionLookaheadSelection(1),
+        Self::TwoKPartitionLookaheadSelection(2),
+        Self::TwoKPartitionLookaheadSelection(3),
+        Self::TwoKPartitionLookaheadSelection(4),
         Self::BinaryPresortAdaptiveSelection,
         Self::Merge,
         Self::MsbRadix,
@@ -70,24 +65,23 @@ impl Algorithm {
 
     /// Returns the stable command-line name.
     #[must_use]
-    pub const fn name(self) -> &'static str {
+    pub fn name(self) -> String {
         match self {
-            Self::Selection => "selection",
-            Self::AdaptiveSelection => "adaptive-selection",
-            Self::LookaheadSelection => "lookahead-selection",
-            Self::LookaheadPresortAdaptiveSelection => "lookahead-presort-adaptive-selection",
-            Self::FourPartitionLookaheadSearch => "four-partition-lookahead-search",
-            Self::SixPartitionLookaheadSearch => "six-partition-lookahead-search",
-            Self::EightPartitionLookaheadSearch => "eight-partition-lookahead-search",
-            Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection",
-            Self::Merge => "merge",
-            Self::MsbRadix => "msb-radix",
-            Self::LsbRadix => "lsb-radix",
-            Self::Natural => "natural",
-            Self::HuTuckerNaturalMerge => "hu-tucker-natural-merge",
-            Self::SignedNaturalExperimental => "signed-natural-experimental",
-            Self::SplitMerge => "split-merge",
-            Self::ReversingSplitMergeExperimental => "reversing-split-merge-experimental",
+            Self::Selection => "selection".into(),
+            Self::AdaptiveSelection => "adaptive-selection".into(),
+            Self::LookaheadSelection => "lookahead-selection".into(),
+            Self::TwoKPartitionLookaheadSelection(k) => {
+                format!("2k-partition-lookahead-selection:{k}")
+            }
+            Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection".into(),
+            Self::Merge => "merge".into(),
+            Self::MsbRadix => "msb-radix".into(),
+            Self::LsbRadix => "lsb-radix".into(),
+            Self::Natural => "natural".into(),
+            Self::HuTuckerNaturalMerge => "hu-tucker-natural-merge".into(),
+            Self::SignedNaturalExperimental => "signed-natural-experimental".into(),
+            Self::SplitMerge => "split-merge".into(),
+            Self::ReversingSplitMergeExperimental => "reversing-split-merge-experimental".into(),
         }
     }
 
@@ -103,6 +97,13 @@ impl Algorithm {
     /// Parses a stable command-line name.
     #[must_use]
     pub fn from_name(name: &str) -> Option<Self> {
+        if let Some(k) = name.strip_prefix("2k-partition-lookahead-selection:") {
+            return k
+                .parse::<usize>()
+                .ok()
+                .filter(|&k| k > 0)
+                .map(Self::TwoKPartitionLookaheadSelection);
+        }
         Self::ALL
             .into_iter()
             .find(|algorithm| algorithm.name() == name)
@@ -145,6 +146,11 @@ impl SortResult {
 
 /// Runs a constructive sorter after validating the input permutation.
 pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, MachineError> {
+    if matches!(algorithm, Algorithm::TwoKPartitionLookaheadSelection(0)) {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "2k-partition lookahead selection requires k >= 1",
+        ));
+    }
     // The free sorted-input check is shared by every implementation.
     let initial = State::initial(deck)?;
     if initial == State::goal(deck.len()) {
@@ -162,12 +168,14 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
         Algorithm::Selection => selection(deck, algorithm),
         Algorithm::AdaptiveSelection => adaptive_selection(deck, algorithm),
         Algorithm::LookaheadSelection => lookahead_selection(deck, algorithm),
-        Algorithm::LookaheadPresortAdaptiveSelection => {
-            lookahead_presort_adaptive_selection(deck, algorithm)
+        Algorithm::TwoKPartitionLookaheadSelection(k) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "2k-partition lookahead selection bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(deck, algorithm, buckets)
         }
-        Algorithm::FourPartitionLookaheadSearch => four_partition_lookahead_search(deck, algorithm),
-        Algorithm::SixPartitionLookaheadSearch => partition_lookahead_search(deck, algorithm, 6),
-        Algorithm::EightPartitionLookaheadSearch => partition_lookahead_search(deck, algorithm, 8),
         Algorithm::BinaryPresortAdaptiveSelection => binary_presort(deck, algorithm),
         Algorithm::Merge => merge_sort(deck, algorithm),
         Algorithm::MsbRadix => msb_radix(deck, algorithm),
@@ -342,28 +350,6 @@ fn lookahead_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResul
     Ok(finish(&mut machine, algorithm, stats))
 }
 
-fn lookahead_presort_adaptive_selection(
-    deck: &[usize],
-    algorithm: Algorithm,
-) -> Result<SortResult, MachineError> {
-    let mut machine = Machine::new(deck)?;
-    let m = active_prefix(deck);
-    let split = m / 2;
-    for _ in 0..m {
-        let destination = if machine.state().d[0] <= split {
-            StackId::A
-        } else {
-            StackId::B
-        };
-        move_cards(&mut machine, 1, StackId::D, destination)?;
-    }
-
-    let mut stats = SortStats::default();
-    extract_with_lookahead(&mut machine, m, 0, &mut stats)?;
-
-    Ok(finish(&mut machine, algorithm, stats))
-}
-
 fn repartition_endpoint(
     machine: &mut Machine,
     count: usize,
@@ -380,13 +366,6 @@ fn repartition_endpoint(
         move_cards(machine, 1, StackId::D, destination)?;
     }
     Ok(())
-}
-
-fn four_partition_lookahead_search(
-    deck: &[usize],
-    algorithm: Algorithm,
-) -> Result<SortResult, MachineError> {
-    partition_lookahead_search(deck, algorithm, 4)
 }
 
 fn lower_partition_size(card_count: usize, bucket_count: usize, lower_buckets: usize) -> usize {
@@ -418,7 +397,7 @@ fn extract_partition_tree(
     extract_partition_tree(machine, low, split, lower_buckets, StackId::A, stats)
 }
 
-fn partition_lookahead_search(
+fn partition_lookahead_selection(
     deck: &[usize],
     algorithm: Algorithm,
     requested_buckets: usize,
@@ -977,42 +956,20 @@ mod tests {
                     validate_sort_plan(permutation, &result.plan).unwrap_or_else(|error| {
                         panic!("{} invalid on {permutation:?}: {error}", algorithm.name())
                     });
-                    if matches!(
-                        algorithm,
-                        Algorithm::LookaheadSelection
-                            | Algorithm::LookaheadPresortAdaptiveSelection
-                    ) {
+                    if algorithm == Algorithm::LookaheadSelection {
                         let m = active_prefix(permutation);
                         assert_eq!(result.cost(), 2 * m + 2 * result.stats.bypasses);
                         assert!(result.cost() <= m * m + m);
                     }
-                    if algorithm == Algorithm::LookaheadPresortAdaptiveSelection {
+                    if algorithm == Algorithm::TwoKPartitionLookaheadSelection(1) {
                         let m = active_prefix(permutation);
                         let a = m / 2;
                         let b = m - a;
+                        assert_eq!(result.cost(), 2 * m + 2 * result.stats.bypasses);
                         assert!(
                             result.cost()
                                 <= 2 * m + a * a.saturating_sub(1) + b * b.saturating_sub(1)
                         );
-                    }
-                    if algorithm == Algorithm::FourPartitionLookaheadSearch {
-                        let m = active_prefix(permutation);
-                        if m >= 4 {
-                            assert_eq!(result.cost(), 4 * m + 2 * result.stats.bypasses);
-                        }
-                        let half = m / 2;
-                        let bucket_sizes = [
-                            half / 2,
-                            half - half / 2,
-                            (m - half) / 2,
-                            (m - half) - (m - half) / 2,
-                        ];
-                        let bound = 4 * m
-                            + bucket_sizes
-                                .into_iter()
-                                .map(|size| size * size.saturating_sub(1))
-                                .sum::<usize>();
-                        assert!(result.cost() <= bound);
                     }
                 }
             });
@@ -1035,14 +992,25 @@ mod tests {
     }
 
     #[test]
-    fn lookahead_presort_freezes_suffix_and_keeps_buckets_separate() {
-        let sorted = solve(Algorithm::LookaheadPresortAdaptiveSelection, &[1, 2, 3, 4]).unwrap();
+    fn two_k_partition_lookahead_freezes_suffix_and_keeps_buckets_separate() {
+        let algorithm = Algorithm::TwoKPartitionLookaheadSelection(1);
+        let sorted = solve(algorithm, &[1, 2, 3, 4]).unwrap();
         assert!(sorted.plan.is_empty());
 
-        let result = solve(Algorithm::LookaheadPresortAdaptiveSelection, &[2, 1, 3, 4]).unwrap();
+        let result = solve(algorithm, &[2, 1, 3, 4]).unwrap();
         validate_sort_plan(&[2, 1, 3, 4], &result.plan).unwrap();
         assert_eq!(result.stats.bypasses, 0);
         assert_eq!(result.cost(), 4);
+    }
+
+    #[test]
+    fn two_k_partition_name_round_trips() {
+        let algorithm = Algorithm::TwoKPartitionLookaheadSelection(17);
+        assert_eq!(Algorithm::from_name(&algorithm.name()), Some(algorithm));
+        assert_eq!(
+            Algorithm::from_name("2k-partition-lookahead-selection:0"),
+            None
+        );
     }
 
     #[test]

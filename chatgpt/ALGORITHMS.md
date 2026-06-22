@@ -558,17 +558,15 @@ remain on separate endpoints rather than being consolidated.
 
 ---
 
-## 6. LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT
+## 6. `2K`-PARTITION LOOKAHEAD SELECTION SORT
 
 ### Motivation
 
-This algorithm combines two ideas due to **Gene Welborn**: partitioning the
-active values into low and high buckets before adaptive selection, and staging
-consecutive future targets while searching for the current target. It retains
-the buckets on separate endpoints. Gene's literal program temporarily used the
-middle stack for one bucket and then consolidated the buckets to clear the
-middle for output; our initial configuration permits direct partitioning from
-`D` to `A` and `B`, so that consolidation is unnecessary.
+This single parameterized algorithm combines two ideas due to **Gene
+Welborn**: balanced value partitioning and staging consecutive future targets
+while searching for the current target. Its positive integer parameter `K`
+selects `2K` value buckets. The former 2-, 4-, 6-, and 8-partition algorithms
+are exactly the configurations `K=1`, `K=2`, `K=3`, and `K=4`.
 
 First perform the free sorted-input test and freeze the maximal correct suffix.
 Only the active prefix of length `m` is partitioned or moved.
@@ -582,54 +580,35 @@ m := largest value such that
 if m = 0:
     stop
 
-split := floor(m/2)
+buckets := min(2K, m)
 
-repeat m times:
-    if top(D) <= split:
-        D → A
-    else:
-        D → B
+recursively divide [1, m] into `buckets` balanced value intervals:
+    split the current interval's buckets into lower and upper groups
+    partition its cards by value onto A and B
+    process the upper group recursively
+    process the lower group recursively
 
-current := m
-
-while current > 0:
-    source := the endpoint containing current
-    destination := the other endpoint
-    lookahead := current - 1
-    held := 0
-
-    while top(source) != current:
-        if top(source) = lookahead:
-            source → D
-            lookahead := lookahead - 1
-            held := held + 1
-        else:
-            source → D
-            D → destination
-
-    repeat held times:
-        D → destination
-
-    source → D
-    current := current - 1
+at each one-bucket leaf:
+    extract its interval in descending order with LOOKAHEAD SELECTION SORT
 ```
 
-The extraction phase is exactly LOOKAHEAD SELECTION SORT. The high bucket is
-completed before the low bucket because targets are selected in descending
-order. High cards temporarily moved onto the low bucket remain above and do
-not disturb it.
+The root partition starts on `D` and costs one move per card. Every deeper
+partition moves its group from an endpoint through `D` and back to the two
+endpoints, costing two moves per card. Upper groups are completed before lower
+groups. Higher cards temporarily moved onto a protected lower group remain
+above it and are removed before that group is refined.
 
 ### Legal-move accounting and bounds
 
-Let `Q` count all nonfinal endpoint-to-endpoint relocations, including staged
-lookahead cards. Partitioning costs `m`, final placement costs `m`, and every
-relocation costs two legal moves:
+Let `P(m,K)` be the fixed partition-tree and final-placement cost, and let `Q`
+count all nonfinal endpoint-to-endpoint relocations, including staged
+lookahead cards. The exact cost is
 
 ```text
-C = 2m + 2Q.
+C = P(m,K) + 2Q.
 ```
 
-Let
+For `K=1`, only the root partition is needed, so `P(m,1)=2m`. Let
 
 ```text
 a = floor(m/2)
@@ -642,14 +621,20 @@ is
 
 ```text
 Q <= a(a-1)/2 + b(b-1)/2
-C <= 2m + a(a-1) + b(b-1).
+C <= 2m + a(a-1) + b(b-1)                 (K=1).
 ```
 
-Best case with suffix freezing is zero. For a fixed active size, the
-no-relocation best case is `2m`. The exact expected cost and exact worst case
-remain open.
+In general, set `b=min(2K,m)`. If the balanced leaf bucket sizes are
+`s1, ..., sb`, then
 
-### `n = 52`
+```text
+C <= P(m,K) + sum(si(si-1)).
+```
+
+Best case with suffix freezing is zero. The exact expected cost and exact
+worst case remain open.
+
+### `K=1`, `n=52`
 
 A deterministic benchmark over 20,000 random permutations with seed `24301`
 measured:
@@ -662,11 +647,11 @@ maximum:           644
 certified bound:  1404
 ```
 
-This validates the earlier prototype estimate of approximately `458` legal
-moves. On the identical inputs:
+On the identical inputs:
 
 ```text
 LOOKAHEAD SELECTION SORT:                 810.5857
+2K-PARTITION LOOKAHEAD SELECTION, K=1:    457.6273
 BINARY-PRESORT ADAPTIVE SELECTION SORT:   553.8948
 ADAPTIVE SELECTION SORT:                  952.5079
 ```
@@ -675,13 +660,13 @@ The measured values are experimental estimates, not calculated expectations.
 
 ---
 
-## 6.1 4-PARTITION LOOKAHEAD SEARCH
+## 6.1 Choosing `K`
 
 ### Motivation and operation
 
-This algorithm applies a second level of value partitioning before lookahead
-selection. Because only two endpoint stacks are available, four buckets cannot
-all be refined independently at once. Instead, refinement is just in time:
+For `K=2`, a second level of value partitioning precedes lookahead selection.
+Because only two endpoint stacks are available, four buckets cannot all be
+refined independently at once. Instead, refinement is just in time:
 
 1. Partition the active values into low and high halves on `A` and `B`.
 2. Move the high half back to `D`, partition it into two quarters, and extract
@@ -725,13 +710,12 @@ certified bound:   832
 ```
 
 The corresponding mean relocation count is about `88.671`, compared with
-`176.814` for the one-level lookahead-presort algorithm. The extra partition
+`176.814` for the `K=1` configuration. The extra partition
 level costs 104 moves but saves about 176.285 relocation moves, a net mean
 improvement of about 72.285 moves.
 
-The implementation generalizes this construction to any number of balanced
-value buckets by using a binary partition tree. Bucket counts need not be
-powers of two, or even be even. For 52 cards, six buckets have sizes
+The binary partition tree works for every positive `K`; `2K` need not be a
+power of two. For 52 cards, six buckets have sizes
 `9, 9, 9, 9, 8, 8`; eight have sizes `7, 7, 7, 7, 6, 6, 6, 6`.
 
 On the same 20,000 permutations, deeper partitioning did not improve on four
@@ -739,14 +723,16 @@ buckets:
 
 | Buckets | Fixed partition and placement cost | Mean relocations | Mean moves | Certified bound |
 |---:|---:|---:|---:|---:|
-| 4 | 208 | 88.671 | 385.342 | 832 |
-| 6 | 276 | 59.200 | 394.401 | 676 |
-| 8 | 312 | 44.534 | 401.068 | 600 |
+| `K=1` (2) | 104 | 176.814 | 457.627 | 1404 |
+| `K=2` (4) | 208 | 88.671 | 385.342 | 832 |
+| `K=3` (6) | 276 | 59.200 | 394.401 | 676 |
+| `K=4` (8) | 312 | 44.534 | 401.068 | 600 |
 
 The smaller buckets continue to reduce both relocations and the certified
 bound, but their extra endpoint-to-`D`-to-endpoint partition levels cost more
 than they save on average. Four buckets are therefore the measured optimum
-among the one-, two-, four-, six-, and eight-bucket variants tested here.
+among the one-, two-, four-, six-, and eight-bucket configurations tested
+here (where one bucket is standalone LOOKAHEAD SELECTION SORT).
 
 ---
 
@@ -1681,10 +1667,7 @@ All figures count legal adjacent-stack moves.
 | SELECTION SORT | 0 | 1854.961 | 2756 exact | — |
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
-| LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT | 0 | unknown; measured 457.627 | <=1404 certified | Gene Welborn's combined ideas |
-| 4-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 385.342 | <=832 certified | Two-level value partition |
-| 6-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 394.401 | <=676 certified | Six balanced value buckets |
-| 8-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 401.068 | <=600 certified | Eight balanced value buckets |
+| `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -2028,7 +2011,7 @@ the `f=g+h` value from decreasing along the current search path.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
 4. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT
-   and LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT.
+   and `2K`-PARTITION LOOKAHEAD SELECTION SORT.
 5. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
 6. Determine or tightly approximate the random-input expectation of HU–TUCKER
    NATURAL MERGE SORT.
