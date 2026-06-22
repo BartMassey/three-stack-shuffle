@@ -529,11 +529,15 @@ partitioning.
 
 ### Expected case
 
-The relative order within each bucket is uniformly random. Therefore
+The relative order within each bucket is uniformly random. For a bucket of
+size `s`, reaching its maximum from the exposed top after partitioning has an
+expected `(s-1)/2` bypasses. The subsequent distances between required cards
+contribute `(s-1)(s-2)/6` expected bypasses. Therefore
 
 ```text
 E[Q]
-  = [(a-1)(a-2) + (b-1)(b-2)] / 6
+  = (a-1)/2 + (b-1)/2
+    + [(a-1)(a-2) + (b-1)(b-2)] / 6
 ```
 
 and
@@ -541,8 +545,13 @@ and
 ```text
 E[C]
   = 2n
+    + (a-1) + (b-1)
     + [(a-1)(a-2) + (b-1)(b-2)] / 3.
 ```
+
+The earlier value that omitted `(a-1)/2 + (b-1)/2` implicitly assumed that
+each bucket maximum was already exposed after partitioning. The literal
+partition pseudocode above does not guarantee that orientation.
 
 This remains quadratic, but its leading expected adaptive term is halved.
 Recursively adding more value partitions leads toward radix sort.
@@ -553,8 +562,8 @@ Recursively adding more value partitions leads toward radix sort.
 a = b = 26
 best with free sorted detection:  0
 baseline best:                    104
-expected bypasses:                200
-expected legal cost:              504
+expected bypasses:                225
+expected legal cost:              554
 exact worst:                      1404
 ```
 
@@ -864,7 +873,132 @@ reversal:   624
 
 ---
 
-## 10. SIGNED NATURAL SORT — EXPERIMENTAL
+## 10. HU–TUCKER NATURAL MERGE SORT
+
+### Motivation
+
+NATURAL SORT discovers useful ascending runs, but then merges them in uniform
+full passes. A card in a long run consequently pays for every pass even when
+that run should be kept near the root of the merge schedule.
+
+HU–TUCKER NATURAL MERGE SORT retains the same maximal ascending runs and chooses
+a minimum-cost binary merge tree subject to preserving their physical order.
+This is an **alphabetic merge tree**: its leaves, read left-to-right, remain in
+the original top-to-bottom run order. The name describes the optimization
+problem; the implementation solves it directly with an interval dynamic
+program rather than the asymptotically faster Hu–Tucker construction.
+
+### Tree construction
+
+Let the initial ascending-run lengths be
+
+```text
+s1, s2, ..., sR
+```
+
+and let `C(i,j)` be the minimum weighted path length of an alphabetic binary
+tree spanning runs `i` through `j`. Then
+
+```text
+C(i,i) = 0
+
+C(i,j)
+  = (si + ... + sj)
+    + min over i <= k < j of
+      (C(i,k) + C(k+1,j)).
+```
+
+Recording the minimizing split reconstructs an optimal tree. The direct
+implementation uses `O(R^3)` time and `O(R^2)` memory; `R <= n <= 52` makes
+that cost negligible under the machine accounting convention.
+
+### Machine realization
+
+For each internal node, let `upper` and `lower` be its two consecutive child
+segments in top-to-bottom order on `D`:
+
+```text
+REALIZE(node):
+    if node is one ascending-run leaf:
+        return
+
+    REALIZE(upper)
+    move the sorted upper segment D → A
+
+    REALIZE(lower)
+    move the sorted lower segment D → B
+
+    while both endpoint segments are nonempty:
+        move the larger exposed card to D
+
+    move the remaining endpoint segment to D
+```
+
+Moving an ascending segment from `D` to an endpoint exposes its maximum.
+Returning the larger exposed card first therefore constructs one ascending
+segment on `D`. Exact child sizes delimit every operation, so segments parked
+below the active node are never consumed.
+
+Correctness follows by induction on the tree. Leaves are ascending initially;
+an internal node merges two correctly sorted consecutive children into one
+ascending segment; the root covers the complete deck.
+
+### Exact cost for a given input
+
+At an internal node containing `s` cards, moving both children to the endpoints
+costs `s`, and merging them back costs another `s`. Thus the node costs exactly
+
+```text
+2s.
+```
+
+If leaf `i` has depth `di`, the complete exact algorithm cost is
+
+```text
+C = 2W
+W = sum from i=1 to R of si di.
+```
+
+The dynamic program minimizes `W` over every order-preserving binary merge
+tree. Consequently this algorithm is never more expensive than a balanced
+full-pass merge tree over the same runs, although its cost remains an upper
+bound on the unrestricted machine optimum rather than a claim of global
+optimality.
+
+### Best and worst cases
+
+One ascending run requires no moves, so the best case is zero.
+
+Refining runs into singleton leaves cannot reduce the minimum alphabetic-tree
+cost. The maximum is therefore attained by the decreasing input, whose `n`
+unit-weight leaves have minimum total depth `E(n)`. Hence
+
+```text
+worst = 2E(n).
+```
+
+For powers of two this is `2n lg n`, improving NATURAL SORT only on inputs
+whose run lengths permit a better unbalanced schedule; for non-powers of two
+it also improves the certified worst-case constant term.
+
+No closed form for the random-permutation expectation is established here.
+
+### `n = 52`
+
+```text
+best:                         0
+measured random mean:         484.1695
+measured standard error:      0.0893
+samples / seed:               20,000 / 0x5eed
+worst:                        2E(52) = 600
+reversal:                     600
+```
+
+The measured value is an experimental estimate, not a calculated expectation.
+
+---
+
+## 11. SIGNED NATURAL SORT — EXPERIMENTAL
 
 ### Motivation
 
@@ -931,7 +1065,7 @@ safe-hybrid bound:  at most 624
 
 ---
 
-## 11. SPLIT-MERGE SORT
+## 12. SPLIT-MERGE SORT
 
 ### Motivation
 
@@ -1029,7 +1163,7 @@ has yet been derived.
 
 ---
 
-## 12. REVERSING SPLIT-MERGE SORT — EXPERIMENTAL
+## 13. REVERSING SPLIT-MERGE SORT — EXPERIMENTAL
 
 ### Motivation
 
@@ -1169,7 +1303,7 @@ true worst case:              unknown
 
 ---
 
-## 13. General lower bounds
+## 14. General lower bounds
 
 Let `M(n)` be the maximum, over all input permutations, of the minimum legal
 move count needed to sort that permutation.
@@ -1221,7 +1355,7 @@ M(n) = Omega(n lg n).
 
 ---
 
-## 14. `n = 52` comparison
+## 15. `n = 52` comparison
 
 All figures count legal adjacent-stack moves.
 
@@ -1229,11 +1363,12 @@ All figures count legal adjacent-stack moves.
 |---|---:|---:|---:|---:|
 | SELECTION SORT | 0 | 1854.961 | 2756 exact | — |
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
-| BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 504 baseline | 1404 exact | — |
+| BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
 | LSB RADIX SORT | 0 | 624 baseline | 624 exact | — |
 | NATURAL SORT | 0 | 520.196 | 624 exact | reversal: 624 |
+| HU–TUCKER NATURAL MERGE SORT | 0 | unknown; measured 484.170 | 600 exact | reversal: 600 |
 | SIGNED NATURAL SORT | 0 | unknown | pure worst unknown; safe hybrid <=624 | reversal: 204 |
 | SPLIT-MERGE SORT | 0 | unknown | 624 exact | reversal: 624 |
 | REVERSING SPLIT-MERGE SORT | 0 | unknown | certified <=1872 | reversal: 206 |
@@ -1255,7 +1390,7 @@ reversible structure.
 
 ---
 
-## 15. A* PLANNING: TRANSPORT HEURISTIC
+## 16. A* PLANNING: TRANSPORT HEURISTIC
 
 The first per-instance planner will search the complete machine state graph
 with A*. A state is
@@ -1272,7 +1407,7 @@ TRANSPORT HEURISTIC combines three unavoidable-movement bounds:
 2. endpoint cards that cannot reach the goal in one move;
 3. active `D` cards that cannot reach the goal in exactly two moves.
 
-### 15.1 Frozen suffix
+### 16.1 Frozen suffix
 
 The **frozen suffix** is the longest bottom segment of `D` equal to the
 corresponding suffix of the goal:
@@ -1300,7 +1435,7 @@ Hence the baseline transportation bound is
 h0(S) = 2|X| + |A| + |B|.
 ```
 
-### 15.2 Endpoint surcharge
+### 16.2 Endpoint surcharge
 
 A card initially on `A` or `B` needs at least one move to enter `D`. If it
 cannot finish in one move, it needs at least three, so the next possible cost
@@ -1323,7 +1458,7 @@ The endpoint surcharge is
 2(|A| - LDS(A)) + 2(|B| - LDS(B)).
 ```
 
-### 15.3 Active-`D` surcharge
+### 16.3 Active-`D` surcharge
 
 A card initially in `X` has baseline cost two:
 
@@ -1357,7 +1492,7 @@ At least
 
 active `D` cards require four or more moves, adding two moves each.
 
-### 15.4 Complete heuristic
+### 16.4 Complete heuristic
 
 Stacks are sequences written top-to-bottom. Standard notation such as `|S|`,
 `S[i]`, prefixes, map lookup, and map update is used directly.
@@ -1382,7 +1517,7 @@ TRANSPORT_HEURISTIC(A, D, B):
     return base + endpoint_extra + center_extra
 ```
 
-### 15.5 Supporting pseudocode
+### 16.5 Supporting pseudocode
 
 Only the nontrivial helpers are defined explicitly.
 
@@ -1454,7 +1589,7 @@ MAX_TWO_INCREASING_COVER(X):
 The straightforward implementation has `O(|X|^2)` possible tail pairs and
 therefore uses `O(|X|^3)` time and `O(|X|^2)` memory.
 
-### 15.6 Admissibility proof
+### 16.6 Admissibility proof
 
 The cards initially in `A`, `B`, `X`, and the frozen suffix are disjoint.
 
@@ -1485,7 +1620,7 @@ h = 2n + 2(n-2) = 4n - 4.
 
 The heuristic exactly recognizes the optimal reversal cost.
 
-### 15.7 Consistency: disproved
+### 16.7 Consistency: disproved
 
 A unit-cost heuristic is consistent when every legal move `S → S'` satisfies
 
@@ -1565,26 +1700,28 @@ the `f=g+h` value from decreasing along the current search path.
 
 ---
 
-## 16. Open questions and bookkeeping rules
+## 17. Open questions and bookkeeping rules
 
 1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
 4. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
-5. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
-6. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
-7. Audit whether the mixed and double-descending normalization macros can be
+5. Determine or tightly approximate the random-input expectation of HU–TUCKER
+   NATURAL MERGE SORT.
+6. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
+7. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
+8. Audit whether the mixed and double-descending normalization macros can be
    fused further.
-8. Improve the orientation-aware implementation of MSB RADIX SORT.
-9. Search optimal programs for small `n` and use them as block macros or
+9. Improve the orientation-aware implementation of MSB RADIX SORT.
+10. Search optimal programs for small `n` and use them as block macros or
    pattern databases.
-10. Improve the lower bound beyond
+11. Improve the lower bound beyond
 
     ```text
     max(ceil(log_3(n!)), 4n-4).
     ```
 
-11. Continue to distinguish rigorously among:
+12. Continue to distinguish rigorously among:
     - exact optimal costs;
     - exact costs of a specified algorithm;
     - certified upper bounds;
