@@ -675,6 +675,81 @@ The measured values are experimental estimates, not calculated expectations.
 
 ---
 
+## 6.1 4-PARTITION LOOKAHEAD SEARCH
+
+### Motivation and operation
+
+This algorithm applies a second level of value partitioning before lookahead
+selection. Because only two endpoint stacks are available, four buckets cannot
+all be refined independently at once. Instead, refinement is just in time:
+
+1. Partition the active values into low and high halves on `A` and `B`.
+2. Move the high half back to `D`, partition it into two quarters, and extract
+   all high cards with lookahead.
+3. The untouched low half is now exposed on `A`. Move it back to `D`, partition
+   it into two quarters, and extract it with lookahead.
+
+Higher-valued cards temporarily placed on `A` remain above the protected low
+half. Descending extraction removes all of them before low-half refinement.
+
+### Accounting and bound
+
+For an active prefix of length `m`, the first partition costs `m`, the two
+second-level partitions together cost `2m`, and final placement costs `m`.
+If `Q` counts nonfinal endpoint relocations, including staged lookahead cards,
+the exact cost is
+
+```text
+C = 4m + 2Q.
+```
+
+Let `k1, ..., k4` be the four bucket sizes, differing by at most one. Cards in
+different buckets never need to be traversed together, giving the certified
+bound
+
+```text
+C <= 4m + sum(ki(ki-1)).
+```
+
+For `m=52`, all four buckets contain 13 cards, so the certified bound is 832.
+
+A deterministic benchmark over 20,000 random permutations with seed `24301`
+measured:
+
+```text
+mean:             385.3420
+standard error:     0.1531
+minimum:           308
+maximum:           472
+certified bound:   832
+```
+
+The corresponding mean relocation count is about `88.671`, compared with
+`176.814` for the one-level lookahead-presort algorithm. The extra partition
+level costs 104 moves but saves about 176.285 relocation moves, a net mean
+improvement of about 72.285 moves.
+
+The implementation generalizes this construction to any number of balanced
+value buckets by using a binary partition tree. Bucket counts need not be
+powers of two, or even be even. For 52 cards, six buckets have sizes
+`9, 9, 9, 9, 8, 8`; eight have sizes `7, 7, 7, 7, 6, 6, 6, 6`.
+
+On the same 20,000 permutations, deeper partitioning did not improve on four
+buckets:
+
+| Buckets | Fixed partition and placement cost | Mean relocations | Mean moves | Certified bound |
+|---:|---:|---:|---:|---:|
+| 4 | 208 | 88.671 | 385.342 | 832 |
+| 6 | 276 | 59.200 | 394.401 | 676 |
+| 8 | 312 | 44.534 | 401.068 | 600 |
+
+The smaller buckets continue to reduce both relocations and the certified
+bound, but their extra endpoint-to-`D`-to-endpoint partition levels cost more
+than they save on average. Four buckets are therefore the measured optimum
+among the one-, two-, four-, six-, and eight-bucket variants tested here.
+
+---
+
 ## 7. BINARY-PRESORT ADAPTIVE SELECTION SORT
 
 ### Motivation
@@ -1607,6 +1682,9 @@ All figures count legal adjacent-stack moves.
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
 | LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT | 0 | unknown; measured 457.627 | <=1404 certified | Gene Welborn's combined ideas |
+| 4-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 385.342 | <=832 certified | Two-level value partition |
+| 6-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 394.401 | <=676 certified | Six balanced value buckets |
+| 8-PARTITION LOOKAHEAD SEARCH | 0 | unknown; measured 401.068 | <=600 certified | Eight balanced value buckets |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |

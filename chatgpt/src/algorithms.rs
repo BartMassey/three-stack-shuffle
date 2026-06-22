@@ -21,6 +21,12 @@ pub enum Algorithm {
     LookaheadSelection,
     /// Value presort followed by Gene Welborn's lookahead selection.
     LookaheadPresortAdaptiveSelection,
+    /// Two-level value presort followed by lookahead selection.
+    FourPartitionLookaheadSearch,
+    /// Six balanced value buckets followed by lookahead selection.
+    SixPartitionLookaheadSearch,
+    /// Eight balanced value buckets followed by lookahead selection.
+    EightPartitionLookaheadSearch,
     /// Adaptive selection preceded by one binary value partition.
     BinaryPresortAdaptiveSelection,
     /// Literal top-down merge sort.
@@ -43,11 +49,14 @@ pub enum Algorithm {
 
 impl Algorithm {
     /// All implemented algorithms in stable display order.
-    pub const ALL: [Self; 13] = [
+    pub const ALL: [Self; 16] = [
         Self::Selection,
         Self::AdaptiveSelection,
         Self::LookaheadSelection,
         Self::LookaheadPresortAdaptiveSelection,
+        Self::FourPartitionLookaheadSearch,
+        Self::SixPartitionLookaheadSearch,
+        Self::EightPartitionLookaheadSearch,
         Self::BinaryPresortAdaptiveSelection,
         Self::Merge,
         Self::MsbRadix,
@@ -67,6 +76,9 @@ impl Algorithm {
             Self::AdaptiveSelection => "adaptive-selection",
             Self::LookaheadSelection => "lookahead-selection",
             Self::LookaheadPresortAdaptiveSelection => "lookahead-presort-adaptive-selection",
+            Self::FourPartitionLookaheadSearch => "four-partition-lookahead-search",
+            Self::SixPartitionLookaheadSearch => "six-partition-lookahead-search",
+            Self::EightPartitionLookaheadSearch => "eight-partition-lookahead-search",
             Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection",
             Self::Merge => "merge",
             Self::MsbRadix => "msb-radix",
@@ -153,6 +165,9 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
         Algorithm::LookaheadPresortAdaptiveSelection => {
             lookahead_presort_adaptive_selection(deck, algorithm)
         }
+        Algorithm::FourPartitionLookaheadSearch => four_partition_lookahead_search(deck, algorithm),
+        Algorithm::SixPartitionLookaheadSearch => partition_lookahead_search(deck, algorithm, 6),
+        Algorithm::EightPartitionLookaheadSearch => partition_lookahead_search(deck, algorithm, 8),
         Algorithm::BinaryPresortAdaptiveSelection => binary_presort(deck, algorithm),
         Algorithm::Merge => merge_sort(deck, algorithm),
         Algorithm::MsbRadix => msb_radix(deck, algorithm),
@@ -285,9 +300,10 @@ fn endpoint_top(machine: &Machine, endpoint: StackId) -> usize {
 fn extract_with_lookahead(
     machine: &mut Machine,
     mut current: usize,
+    stop_after: usize,
     stats: &mut SortStats,
 ) -> Result<(), MachineError> {
-    while current > 0 {
+    while current > stop_after {
         let source = endpoint_containing(machine, current);
         let destination = if source == StackId::A {
             StackId::B
@@ -298,7 +314,7 @@ fn extract_with_lookahead(
         let mut held = 0;
 
         while endpoint_top(machine, source) != current {
-            if lookahead > 0 && endpoint_top(machine, source) == lookahead {
+            if lookahead > stop_after && endpoint_top(machine, source) == lookahead {
                 move_cards(machine, 1, source, StackId::D)?;
                 lookahead -= 1;
                 held += 1;
@@ -321,7 +337,7 @@ fn lookahead_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResul
     move_cards(&mut machine, m, StackId::D, StackId::A)?;
 
     let mut stats = SortStats::default();
-    extract_with_lookahead(&mut machine, m, &mut stats)?;
+    extract_with_lookahead(&mut machine, m, 0, &mut stats)?;
 
     Ok(finish(&mut machine, algorithm, stats))
 }
@@ -343,7 +359,109 @@ fn lookahead_presort_adaptive_selection(
     }
 
     let mut stats = SortStats::default();
-    extract_with_lookahead(&mut machine, m, &mut stats)?;
+    extract_with_lookahead(&mut machine, m, 0, &mut stats)?;
+
+    Ok(finish(&mut machine, algorithm, stats))
+}
+
+fn repartition_endpoint(
+    machine: &mut Machine,
+    count: usize,
+    source: StackId,
+    split: usize,
+) -> Result<(), MachineError> {
+    move_cards(machine, count, source, StackId::D)?;
+    for _ in 0..count {
+        let destination = if machine.state().d[0] <= split {
+            StackId::A
+        } else {
+            StackId::B
+        };
+        move_cards(machine, 1, StackId::D, destination)?;
+    }
+    Ok(())
+}
+
+fn four_partition_lookahead_search(
+    deck: &[usize],
+    algorithm: Algorithm,
+) -> Result<SortResult, MachineError> {
+    partition_lookahead_search(deck, algorithm, 4)
+}
+
+fn lower_partition_size(card_count: usize, bucket_count: usize, lower_buckets: usize) -> usize {
+    let minimum_bucket_size = card_count / bucket_count;
+    let larger_buckets = card_count % bucket_count;
+    lower_buckets * minimum_bucket_size + larger_buckets.min(lower_buckets)
+}
+
+fn extract_partition_tree(
+    machine: &mut Machine,
+    low: usize,
+    high: usize,
+    bucket_count: usize,
+    source: StackId,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    let card_count = high - low + 1;
+    if bucket_count == 1 {
+        return extract_with_lookahead(machine, high, low - 1, stats);
+    }
+
+    let lower_buckets = bucket_count / 2;
+    let upper_buckets = bucket_count - lower_buckets;
+    let lower_cards = lower_partition_size(card_count, bucket_count, lower_buckets);
+    let split = low + lower_cards - 1;
+
+    repartition_endpoint(machine, card_count, source, split)?;
+    extract_partition_tree(machine, split + 1, high, upper_buckets, StackId::B, stats)?;
+    extract_partition_tree(machine, low, split, lower_buckets, StackId::A, stats)
+}
+
+fn partition_lookahead_search(
+    deck: &[usize],
+    algorithm: Algorithm,
+    requested_buckets: usize,
+) -> Result<SortResult, MachineError> {
+    let mut machine = Machine::new(deck)?;
+    let m = active_prefix(deck);
+    let bucket_count = requested_buckets.min(m);
+    debug_assert!(
+        bucket_count >= 2,
+        "non-sorted active prefixes have at least two cards"
+    );
+    let lower_buckets = bucket_count / 2;
+    let upper_buckets = bucket_count - lower_buckets;
+    let lower_cards = lower_partition_size(m, bucket_count, lower_buckets);
+
+    // The root partition starts on D, so it costs one move per card rather
+    // than the two moves needed to repartition an endpoint below.
+    for _ in 0..m {
+        let destination = if machine.state().d[0] <= lower_cards {
+            StackId::A
+        } else {
+            StackId::B
+        };
+        move_cards(&mut machine, 1, StackId::D, destination)?;
+    }
+
+    let mut stats = SortStats::default();
+    extract_partition_tree(
+        &mut machine,
+        lower_cards + 1,
+        m,
+        upper_buckets,
+        StackId::B,
+        &mut stats,
+    )?;
+    extract_partition_tree(
+        &mut machine,
+        1,
+        lower_cards,
+        lower_buckets,
+        StackId::A,
+        &mut stats,
+    )?;
 
     Ok(finish(&mut machine, algorithm, stats))
 }
@@ -876,6 +994,25 @@ mod tests {
                             result.cost()
                                 <= 2 * m + a * a.saturating_sub(1) + b * b.saturating_sub(1)
                         );
+                    }
+                    if algorithm == Algorithm::FourPartitionLookaheadSearch {
+                        let m = active_prefix(permutation);
+                        if m >= 4 {
+                            assert_eq!(result.cost(), 4 * m + 2 * result.stats.bypasses);
+                        }
+                        let half = m / 2;
+                        let bucket_sizes = [
+                            half / 2,
+                            half - half / 2,
+                            (m - half) / 2,
+                            (m - half) - (m - half) / 2,
+                        ];
+                        let bound = 4 * m
+                            + bucket_sizes
+                                .into_iter()
+                                .map(|size| size * size.saturating_sub(1))
+                                .sum::<usize>();
+                        assert!(result.cost() <= bound);
                     }
                 }
             });

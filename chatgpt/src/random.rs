@@ -191,7 +191,7 @@ mod tests {
     fn random_framework_replays_plans() {
         let report = random_test(20, 50, 7, &Algorithm::ALL).unwrap();
         assert_eq!(report.samples, 50);
-        assert_eq!(report.plans_checked, 650);
+        assert_eq!(report.plans_checked, 800);
     }
 
     #[test]
@@ -201,6 +201,9 @@ mod tests {
             Algorithm::AdaptiveSelection,
             Algorithm::LookaheadSelection,
             Algorithm::LookaheadPresortAdaptiveSelection,
+            Algorithm::FourPartitionLookaheadSearch,
+            Algorithm::SixPartitionLookaheadSearch,
+            Algorithm::EightPartitionLookaheadSearch,
             Algorithm::BinaryPresortAdaptiveSelection,
             Algorithm::Natural,
         ];
@@ -214,6 +217,9 @@ mod tests {
             952.980_384_458_2,
             810.586,
             457.627,
+            385.342,
+            394.401,
+            401.068,
             554.0,
             520.195_560_629_6,
         ];
