@@ -1,0 +1,1592 @@
+# Three-Stack Sorting Algorithms
+
+This document is a living specification and analysis of sorting algorithms for
+the three-stack card machine. The algorithms are ordered approximately from
+simplest and least effective to more adaptive, specialized, or complicated.
+That ordering is necessarily a judgment call: some later algorithms have
+better behavior only on particular input structures, and some remain
+experimental.
+
+## 1. Machine model and accounting conventions
+
+The stacks form a path:
+
+```text
+A — D — B
+```
+
+A legal machine operation moves the top card between adjacent stacks:
+
+```text
+A → D    D → A    D → B    B → D
+```
+
+A direct `A ↔ B` transfer is **not** one operation. It is shorthand for two
+legal moves through `D`:
+
+```text
+A → D → B
+```
+
+or symmetrically:
+
+```text
+B → D → A
+```
+
+For a deck of size `n`, the initial state is
+
+```text
+A = []
+D = [p1, p2, ..., pn]      # top to bottom
+B = []
+```
+
+where `p1, ..., pn` is a permutation of `1, ..., n`. The goal is
+
+```text
+A = []
+D = [1, 2, ..., n]         # top to bottom
+B = []
+```
+
+Only machine moves are charged. Inspection of the complete permutation,
+comparisons, bookkeeping, and arbitrarily expensive offline planning are free.
+
+Consequences of that convention:
+
+- Every algorithm may return immediately on an already sorted input, so the
+  global best case is normally zero.
+- A fixed-schedule algorithm may still have a nonzero *baseline* cost on a
+  sorted input if that free early-exit test is omitted.
+- A result is labeled as an **exact algorithm cost**, **certified bound**, or
+  **experimental estimate**. These categories must not be conflated.
+
+Notation:
+
+- `lg n = log2 n`.
+- Card sequences are written top-to-bottom.
+- An ascending sequence increases top-to-bottom on `D`.
+- A descending sequence decreases top-to-bottom on `D`.
+- For divide-and-conquer recurrences, let
+
+  ```text
+  L = ceil(lg n)
+  E(n) = nL - (2^L - n).
+  ```
+
+  `E(n)` is the minimum total leaf depth of a balanced binary tree with `n`
+  leaves. For `n = 52`:
+
+  ```text
+  E(52) = 52·6 - (64 - 52) = 300.
+  ```
+
+## 2. Common reversal macros
+
+### 2.1 Optimal reversal in `D`
+
+Input:
+
+```text
+D = [1, 2, ..., n]
+```
+
+Output:
+
+```text
+D = [n, n-1, ..., 1]
+```
+
+For `n >= 2`:
+
+```text
+repeat n-1 times: D → A
+D → B
+
+repeat n-2 times:
+    A → D
+    D → B
+
+A → D
+repeat n-1 times: B → D
+```
+
+Exact cost:
+
+```text
+4n - 4.
+```
+
+This is optimal. Every card must leave `D` and return. At most two cards can
+make the round trip in two moves without retaining the wrong relative order;
+the other `n-2` cards require at least four moves each.
+
+For `n = 52`:
+
+```text
+204 moves.
+```
+
+### 2.2 Segment-reversal macros
+
+For a top segment of length `k`:
+
+```text
+reverse D onto A or B       3k - 2
+reverse A or B onto D       3k - 2
+reverse A onto B, or B→A    2k
+reverse in place on A or B  4k - 2
+```
+
+Example: reverse a descending segment from `D` onto `A`:
+
+```text
+repeat k-1 times: D → B
+D → A
+repeat k-1 times:
+    B → D
+    D → A
+```
+
+Example: reverse a descending segment from `A` onto `D`:
+
+```text
+repeat k-1 times:
+    A → D
+    D → B
+A → D
+repeat k-1 times: B → D
+```
+
+Protected cards below the active segments are not disturbed.
+
+---
+
+## 3. SELECTION SORT
+
+### Motivation
+
+This is the simplest complete algorithm. It repeatedly sweeps all unsorted
+cards from one endpoint to the other, leaving the next required output card on
+`D` whenever it is encountered.
+
+The output is constructed from the bottom upward, so cards are selected in the
+order
+
+```text
+n, n-1, ..., 1.
+```
+
+A useful optimization is to freeze the largest suffix already in its final
+position.
+
+### Pseudocode
+
+```text
+m := largest value such that
+     D = [p1, ..., pm, m+1, m+2, ..., n]
+
+if m = 0:
+    stop
+
+move the top m cards D → A
+
+source := A
+destination := B
+next := m
+
+while next > 0:
+    while source contains active cards:
+        if top(source) = next:
+            source → D
+            next := next - 1
+        else:
+            source → D
+            D → destination
+
+    swap(source, destination)
+```
+
+A sweep may place several consecutive required cards on `D`.
+
+### Exact cost for a given active prefix
+
+Let `m` be the unfrozen prefix length and let `Q` be the number of bypassed
+cards. Each active card is moved once from `D` to `A` and eventually once from
+an endpoint to its final position on `D`. Each bypass costs two moves.
+
+```text
+C = 2m + 2Q.
+```
+
+### Best and worst cases
+
+Best case:
+
+```text
+0
+```
+
+because a completely sorted deck is entirely frozen.
+
+For fixed `m`, the no-bypass best case is `2m`.
+
+In the worst case, a sweep with `r` remaining cards selects only one and
+bypasses the other `r-1`. Therefore
+
+```text
+Q_max = (m-1) + (m-2) + ... + 1
+      = m(m-1)/2
+```
+
+and
+
+```text
+C_max(m) = m^2 + m.
+```
+
+The global exact worst case is therefore
+
+```text
+C_worst(n) = n^2 + n.
+```
+
+### Expected case
+
+Without suffix freezing, let `x1, ..., xn` be the original positions of cards
+
+```text
+n, n-1, ..., 1.
+```
+
+A new sweep is required before `x2` with probability `1/2`. Thereafter, a new
+sweep occurs when `xi` is a local extremum of three random distinct positions,
+which has probability `2/3`. The exact expected bypass count is
+
+```text
+E[Q] = (n-1)(2n-1)/6
+```
+
+and hence
+
+```text
+E[C] = 2n + 2E[Q]
+     = (n+1)(2n+1)/3.
+```
+
+Suffix freezing changes the expectation only slightly. If `M` is the active
+prefix length, then
+
+```text
+P(M = 0) = 1/n!
+P(M = m) = (m-1)(m-1)! / n!       for 2 <= m <= n.
+```
+
+Conditioned on `M = m`, the expected cost is
+
+```text
+H(m) = (2m^3 + m^2 + 2m - 6) / (3(m-1)).
+```
+
+Thus the frozen-suffix expectation is the exact finite sum
+
+```text
+E[C_frozen]
+  = sum from m=2 to n of P(M=m) H(m).
+```
+
+### `n = 52`
+
+```text
+best:                         0
+expected without freezing:   1855
+expected with freezing:      1854.9607689164
+worst:                        2756
+```
+
+---
+
+## 4. ADAPTIVE SELECTION SORT
+
+### Motivation
+
+Ordinary SELECTION SORT finishes each sweep even after finding a required card.
+ADAPTIVE SELECTION SORT turns around immediately. The unsorted cards remain
+split between `A` and `B`, and the algorithm moves directly toward the next
+required card.
+
+This is Gene Welborn's adaptive selection algorithm.
+
+### Pseudocode
+
+```text
+freeze the maximal correct suffix
+move the active prefix D → A
+
+next := largest active value
+
+while next > 0:
+    source := the endpoint stack containing card next
+    destination := the other endpoint
+
+    while top(source) != next:
+        source → D
+        D → destination
+
+    source → D
+    next := next - 1
+```
+
+The location of every card is known from free offline planning. This is not an
+online search algorithm.
+
+### Exact cost
+
+Let `Q` be the number of cards bypassed between successive required cards.
+Then
+
+```text
+C = 2m + 2Q
+```
+
+for an active prefix of length `m`.
+
+Gene's original count treated each direct `A ↔ B` transfer as cost one and
+often counted only `Q`. On this machine, every such transfer costs two legal
+moves.
+
+### Best and worst cases
+
+Best case with suffix freezing:
+
+```text
+0.
+```
+
+Without freezing, the no-bypass best case is `2n`.
+
+Successive required cards can alternate between opposite ends of the
+remaining order, giving
+
+```text
+Q_max = n(n-1)/2
+```
+
+and the exact global worst case
+
+```text
+C_worst(n) = n^2 + n.
+```
+
+Thus adaptivity greatly improves the average case but not the worst case.
+
+### Expected case
+
+When `m` cards remain, the ranks `R` and `S` of two successive required cards
+are uniformly random distinct positions. The expected number of cards strictly
+between them is
+
+```text
+E[|R-S|-1] = (m-2)/3.
+```
+
+Without suffix freezing:
+
+```text
+E[Q] = sum from m=2 to n of (m-2)/3
+     = (n-1)(n-2)/6
+```
+
+and
+
+```text
+E[C] = 2n + (n-1)(n-2)/3.
+```
+
+With suffix freezing, use the same distribution of `M` as for SELECTION SORT.
+Conditioned on `M=m`, the exact expected cost is
+
+```text
+A(m) = m(m^2 + 2m - 2) / (3(m-1)).
+```
+
+Therefore
+
+```text
+E[C_frozen]
+  = sum from m=2 to n of P(M=m) A(m).
+```
+
+### `n = 52`
+
+```text
+Gene's expected bypass count Q:       425
+expected legal cost, no freezing:     954
+expected legal cost, with freezing:   952.9803844582
+best:                                 0
+worst:                                2756
+```
+
+The reported value `425` is therefore exactly explained by counting a direct
+endpoint-to-endpoint bypass as one step and omitting setup and final placement.
+
+---
+
+## 5. BINARY-PRESORT ADAPTIVE SELECTION SORT
+
+### Motivation
+
+One value-partition pass reduces the distances traversed by ADAPTIVE SELECTION
+SORT. This is Gene's “presort into two piles” idea.
+
+For `n = 52`, the buckets are
+
+```text
+low:   1..26
+high: 27..52
+```
+
+corresponding to Gene's zero-based `0..25` and `26..51`.
+
+### Pseudocode
+
+Let
+
+```text
+a := floor(n/2)
+```
+
+Partition once:
+
+```text
+while D is nonempty:
+    if top(D) <= a:
+        D → A
+    else:
+        D → B
+```
+
+Then run adaptive extraction on the high bucket:
+
+```text
+next := n
+
+while next > a:
+    source := endpoint containing next
+    destination := other endpoint
+
+    while top(source) != next:
+        source → D
+        D → destination
+
+    source → D
+    next := next - 1
+```
+
+The low bucket remains protected below any temporary high cards placed on its
+endpoint. Once the high bucket is exhausted, run the same adaptive extraction
+for
+
+```text
+a, a-1, ..., 1.
+```
+
+No literal “stack low on high” transfer is needed.
+
+### Exact baseline costs
+
+Let
+
+```text
+a = floor(n/2)
+b = ceil(n/2).
+```
+
+Partitioning costs `n`; final placements cost another `n`.
+
+Best case without a free sorted-input exit:
+
+```text
+C_best = 2n.
+```
+
+The exact worst bypass count is
+
+```text
+Q_max = a(a-1)/2 + b(b-1)/2
+```
+
+so
+
+```text
+C_worst
+  = 2n + a(a-1) + b(b-1).
+```
+
+The global best case is zero if the already-sorted input is detected before
+partitioning.
+
+### Expected case
+
+The relative order within each bucket is uniformly random. Therefore
+
+```text
+E[Q]
+  = [(a-1)(a-2) + (b-1)(b-2)] / 6
+```
+
+and
+
+```text
+E[C]
+  = 2n
+    + [(a-1)(a-2) + (b-1)(b-2)] / 3.
+```
+
+This remains quadratic, but its leading expected adaptive term is halved.
+Recursively adding more value partitions leads toward radix sort.
+
+### `n = 52`
+
+```text
+a = b = 26
+best with free sorted detection:  0
+baseline best:                    104
+expected bypasses:                200
+expected legal cost:              504
+exact worst:                      1404
+```
+
+Gene's reported value near `320` is compatible with a different step
+convention plus extra pile-stacking overhead; it is not our legal-move count.
+
+---
+
+## 6. MERGE SORT
+
+### Motivation
+
+This is conventional top-down merge sort translated literally to the stack
+machine. It is asymptotically good but pays substantial positioning overhead.
+
+### Pseudocode
+
+```text
+MERGE_SORT(k):
+    if k <= 1:
+        return
+
+    a := ceil(k/2)
+    b := floor(k/2)
+
+    move top a cards D → A
+    move next b cards D → B
+
+    move a cards A → D
+    MERGE_SORT(a)
+    move a cards D → A
+
+    move b cards B → D
+    MERGE_SORT(b)
+    move b cards D → B
+
+    while both sorted halves are nonempty:
+        move the larger exposed card to D
+
+    move the remaining half to D
+```
+
+After a sorted half is moved to an endpoint, its maximum is exposed. Moving
+larger cards first to `D` produces an ascending sequence top-to-bottom.
+
+### Exact cost
+
+At an internal node of size `k`:
+
+```text
+split:                    k
+position recursive halves: 2k
+merge:                    k
+```
+
+Therefore
+
+```text
+T(k)
+  = T(ceil(k/2)) + T(floor(k/2)) + 4k
+T(0) = T(1) = 0.
+```
+
+The exact balanced-tree solution is
+
+```text
+T(n) = 4E(n).
+```
+
+For powers of two:
+
+```text
+T(n) = 4n lg n.
+```
+
+The fixed implementation is input-independent. A free sorted-input check gives
+best case zero; otherwise best, expected, and worst costs all equal `T(n)`.
+
+### `n = 52`
+
+```text
+baseline / expected / worst:  4E(52) = 1200
+best with sorted detection:   0
+```
+
+---
+
+## 7. MSB RADIX SORT
+
+### Motivation
+
+MSB RADIX SORT partitions by value range rather than by physical position.
+Unlike MERGE SORT, the two recursive results need only be concatenated, not
+comparison-merged.
+
+### Pseudocode
+
+For an active consecutive value interval of size `k`:
+
+```text
+MSB_SORT(low, high):
+    k := high - low + 1
+
+    if k <= 1:
+        return
+
+    a := floor(k/2)
+    split_value := low + a - 1
+
+    while active D segment is nonempty:
+        if top(D) <= split_value:
+            D → A
+        else:
+            D → B
+
+    move a-card lower bucket A → D
+    MSB_SORT(low, split_value)
+    move lower bucket D → A
+
+    move upper bucket B → D
+    MSB_SORT(split_value+1, high)
+
+    move sorted lower bucket A → D
+```
+
+The lower values finish above the upper values.
+
+### Exact cost
+
+For lower size `a = floor(k/2)` and upper size `b = k-a`:
+
+```text
+T(k) = T(a) + T(b) + 2k + 2a.
+```
+
+The extra round trip is assigned to the smaller bucket.
+
+For powers of two:
+
+```text
+T(n) = 3n lg n.
+```
+
+This fixed implementation is input-independent. A sorted-input exit gives best
+case zero; otherwise its cost is exact for every input.
+
+### `n = 52`
+
+```text
+baseline / expected / worst:  880
+best with sorted detection:   0
+```
+
+This is a straightforward implementation, not a claim of optimality among all
+orientation-aware MSB radix schemes.
+
+---
+
+## 8. LSB RADIX SORT
+
+### Motivation
+
+LSB RADIX SORT is one of the cleanest reliable `O(n lg n)` algorithms on this
+machine. It performs stable binary bucket passes from the least significant
+bit upward.
+
+### Pseudocode
+
+Sort by the bits of `card-1`:
+
+```text
+for bit := 0 to ceil(lg n)-1:
+    while D is nonempty:
+        if bit of (top(D)-1) is 0:
+            D → A
+        else:
+            D → B
+
+    while B is nonempty:
+        B → D
+
+    while A is nonempty:
+        A → D
+```
+
+Each bucket is reversed going out and reversed again coming back, preserving
+its internal order. Returning `B` before `A` leaves the zero bucket above the
+one bucket.
+
+### Correctness invariant
+
+After pass `j`, the deck is stably sorted by the low `j+1` bits of `card-1`.
+
+### Exact cost
+
+Each pass moves every card out and back:
+
+```text
+2n moves per pass.
+```
+
+For the fixed schedule:
+
+```text
+T(n) = 2n ceil(lg n).
+```
+
+This is exact and input-independent. A free sorted-input check changes the
+global best case to zero and changes the random-input expectation only by the
+negligible factor `1 - 1/n!`.
+
+### `n = 52`
+
+```text
+baseline / expected / worst:  624
+best with sorted detection:   0
+```
+
+---
+
+## 9. NATURAL SORT
+
+### Motivation
+
+NATURAL SORT exploits ascending runs already present in the input. It retains
+the same worst-case bound as LSB RADIX SORT but is substantially better on
+typical random inputs and on nearly sorted decks.
+
+### Pseudocode
+
+At the start of a pass, regard `D` as a concatenation of maximal ascending
+runs.
+
+```text
+while D contains more than one ascending run:
+    move whole runs alternately D → A and D → B
+
+    while A and B both contain runs:
+        merge the topmost run from A
+        with the topmost run from B onto D:
+            repeatedly move the larger exposed card
+            then move the remainder
+
+    if one endpoint has an unmatched run:
+        move that run to D
+```
+
+Moving an ascending run to an endpoint exposes its maximum. The merge emits
+cards in decreasing order onto `D`, producing one ascending run.
+
+For a deliberately simple full-pass implementation, every pass moves every
+card out of `D` and back once.
+
+### Exact cost in terms of initial runs
+
+Let `R` be the number of maximal ascending runs initially. Each pass replaces
+at most two runs by one, so the full-pass implementation uses exactly
+
+```text
+ceil(lg R)
+```
+
+passes and
+
+```text
+C(n,R) = 2n ceil(lg R).
+```
+
+Thus:
+
+```text
+best:   0                  when R = 1
+worst:  2n ceil(lg n).
+```
+
+The decreasing deck has `R=n` and attains the worst case.
+
+### Expected case
+
+For a uniformly random permutation,
+
+```text
+R = 1 + number of descents.
+```
+
+If `A(n,k)` is the Eulerian number counting permutations with exactly `k`
+descents, then the exact expected cost is
+
+```text
+E[C]
+  = (2n / n!)
+    · sum from k=0 to n-1 of
+      A(n,k) ceil(lg(k+1)).
+```
+
+This expectation is inexpensive to compute exactly using the Eulerian
+recurrence.
+
+### `n = 52`
+
+```text
+best:       0
+expected:   520.1955606296
+worst:      624
+reversal:   624
+```
+
+---
+
+## 10. SIGNED NATURAL SORT — EXPERIMENTAL
+
+### Motivation
+
+Ordinary NATURAL SORT recognizes only ascending runs. SIGNED NATURAL SORT also
+recognizes descending runs and reverses them before merging. Its principal
+motivation is to avoid treating a reversed deck as `n` singleton runs.
+
+### Conceptual pseudocode
+
+```text
+repeat until D is sorted:
+    decompose the active deck into maximal monotone runs
+
+    for each run, in order:
+        if run is ascending:
+            move it directly to the assigned endpoint
+        else:
+            reverse it onto the assigned endpoint
+
+    merge adjacent normalized ascending runs back onto D
+```
+
+A descending run of length `k` can be reversed from `D` onto an endpoint in
+
+```text
+3k - 2
+```
+
+moves. Ascending runs cost `k` to transfer.
+
+### What is established
+
+- Correct normalization and merge macros exist.
+- A completely reversed deck can be handled by the optimal central reversal
+  primitive in exactly
+
+  ```text
+  4n - 4
+  ```
+
+  moves.
+- For `n=52`, that score is `204`.
+
+### What remains unresolved
+
+A fully satisfactory phase rule must specify how maximal monotone runs interact
+with ascending sequences produced by earlier phases, and its exact worst and
+expected cases have not been proved.
+
+A safe implementation may always compare its planned signed treatment with
+ordinary NATURAL SORT and execute the cheaper complete plan; that hybrid has
+the certified NATURAL SORT worst-case bound but is not the pure algorithm
+whose optimal structure remains under study.
+
+### `n = 52`
+
+```text
+best:               0
+reversal:           204
+expected:           unknown
+pure worst case:    unknown
+safe-hybrid bound:  at most 624
+```
+
+---
+
+## 11. SPLIT-MERGE SORT
+
+### Motivation
+
+NATURAL SORT respects existing contiguous runs. SPLIT-MERGE SORT searches for
+a longer prefix that can be partitioned, while preserving card order, into two
+ascending subsequences. This can combine structure that is interleaved rather
+than contiguous.
+
+### Phase blocks
+
+At the beginning of a phase, identify the maximal ascending sequences on `D`.
+These are the **phase blocks**. A split prefix must contain whole phase blocks;
+it may not stop inside one.
+
+### Pseudocode
+
+```text
+while D has more than one phase block:
+    identify the ascending phase blocks
+
+    while unprocessed cards remain in D:
+        among prefixes made of whole phase blocks, find the longest
+        prefix partitionable into:
+
+            ↑
+            ↑ ↑
+
+        prefer one sequence when prefix lengths tie
+        use a fixed deterministic tie-break thereafter
+
+        if one sequence is selected:
+            move it to the endpoint with fewer recorded sequences
+        else:
+            split the prefix between A and B, preserving order
+
+    repeatedly merge the topmost A sequence
+    with the topmost B sequence onto D
+
+    if one endpoint has one unmatched sequence:
+        move it onto D last
+```
+
+Every split output is ascending logically and therefore merge-ready on its
+endpoint.
+
+### Correctness and phase bound
+
+A one-sequence selection that leaves another phase block cannot be maximal:
+the next complete ascending block could serve as a second sequence. Therefore
+every nonfinal split iteration emits two sequences.
+
+A two-sequence iteration consumes at least two phase blocks. If it consumed
+only one ascending block, the preferred one-sequence decomposition would use
+the same prefix.
+
+Thus a phase beginning with `r` blocks emits at most `r` sequences. Pairwise
+merging leaves at most
+
+```text
+ceil(r/2)
+```
+
+new blocks. The algorithm terminates in at most `ceil(lg r)` phases.
+
+### Exact costs
+
+Every phase moves each card from `D` to an endpoint once and back to `D` once:
+
+```text
+2n moves per phase.
+```
+
+Therefore:
+
+```text
+best:   0
+worst:  2n ceil(lg n).
+```
+
+The reversed deck realizes the worst case: at every level it is a descending
+sequence of ascending value intervals, and two ascending subsequences can
+cover at most two such intervals.
+
+### `n = 52`
+
+```text
+best:       0
+worst:      624
+reversal:   624
+expected:   unknown
+```
+
+The expectation is plausibly below NATURAL SORT's, but no exact distribution
+has yet been derived.
+
+---
+
+## 12. REVERSING SPLIT-MERGE SORT — EXPERIMENTAL
+
+### Motivation
+
+This extends SPLIT-MERGE SORT by allowing selected subsequences to be
+descending and then normalizing them. It is designed to exploit long reversed
+structure without giving up the logarithmic phase bound.
+
+### Phase blocks and legal candidate forms
+
+As in SPLIT-MERGE SORT, a selected prefix must consist of whole ascending phase
+blocks.
+
+For each such prefix, consider decompositions preserving card order into one
+of:
+
+```text
+↑
+↓
+↑ ↑
+↑ ↓
+↓ ↑
+↓ ↓
+```
+
+A singleton is classified as ascending. A genuine descending subsequence has
+length at least two.
+
+### Candidate selection rule
+
+Among all legal candidates, choose lexicographically by:
+
+1. maximum prefix length;
+2. minimum exact split-and-normalization cost;
+3. minimum number of output sequences;
+4. minimum number of cards assigned to descending subsequences;
+5. a fixed lexicographic membership-bitstring tie-break.
+
+This removes the obsolete fixed minimum descending length of five. Whether a
+short descending subsequence is worthwhile is decided by its exact cost and by
+how much prefix it enables the phase to consume.
+
+### Pseudocode
+
+```text
+while D has more than one phase block:
+    identify the ascending phase blocks
+
+    while unprocessed cards remain:
+        enumerate legal candidates of the six forms
+        whose prefix consists of whole phase blocks
+
+        choose by the lexicographic rule above
+        execute the corresponding split/normalization macro
+        record the resulting ascending endpoint sequence(s)
+
+    merge endpoint sequences pairwise back onto D
+    move one unmatched sequence onto D last, if present
+```
+
+### Exact split-and-normalization costs
+
+The costs below include removing the selected prefix from `D` and leaving its
+output sequences ascending on the endpoints. They exclude the later merge.
+
+| Case | Exact cost |
+|---|---:|
+| `↑a` | `a` |
+| `↓a` | `3a - 2` |
+| `↑a ↑b` | `a + b` |
+| `↑a ↓b` | `a + 5b - 2` |
+| `↓a ↑b` | `5a + b - 2` |
+| `↓m ↓M`, `m <= M` | `5m + 3M - 2` |
+
+For `↓↓`, put the shorter descending sequence on `A` and the longer on `B`:
+
+```text
+reverse A → D
+reverse B → A
+move the protected D segment → B
+```
+
+### Correctness and phase bound
+
+The whole-phase-block restriction gives the same counting argument as
+SPLIT-MERGE SORT:
+
+- one output consumes at least one phase block;
+- two outputs consume at least two phase blocks;
+- the split emits no more sequences than the number of input blocks;
+- pairwise merging at least halves the block count.
+
+Hence there are at most
+
+```text
+ceil(lg n)
+```
+
+phases.
+
+Every split case costs at most five moves per selected card, and the merge
+costs `n`. Therefore a simple certified worst-case upper bound is
+
+```text
+C(n) <= 6n ceil(lg n).
+```
+
+This is only a coarse bound, not a claim about the true worst case.
+
+### Reversal score
+
+For a fully reversed deck, the maximum prefix is the entire deck as one
+descending sequence. Reversing `D` onto an endpoint costs `3n-2`; moving the
+unmatched ascending sequence back to `D` costs `n`.
+
+```text
+C_reversal(n) = 4n - 2.
+```
+
+For `n=52`:
+
+```text
+206 moves.
+```
+
+The standalone optimal reversal primitive is two moves better, but reversal is
+handled naturally rather than as a special case.
+
+### `n = 52`
+
+```text
+best:                         0
+reversal:                     206
+expected:                     unknown
+certified worst-case bound:   1872
+true worst case:              unknown
+```
+
+---
+
+## 13. General lower bounds
+
+Let `M(n)` be the maximum, over all input permutations, of the minimum legal
+move count needed to sort that permutation.
+
+### Counting bound
+
+Moves are reversible. A shortest program never immediately undoes its previous
+move. The first move has at most two choices and each later reduced move has at
+most three choices, so programs of length at most `m` are bounded by `3^m` up
+to an inessential constant.
+
+Therefore:
+
+```text
+M(n) >= ceil(log_3(n!)).
+```
+
+For `n=52`:
+
+```text
+ceil(log_3(52!)) = 143.
+```
+
+### Reversal bound
+
+Reversal requires exactly `4n-4`, so:
+
+```text
+M(n) >= 4n - 4.
+```
+
+For `n=52`:
+
+```text
+M(52) >= 204.
+```
+
+The current elementary bound is therefore:
+
+```text
+M(52) >= max(143, 204) = 204.
+```
+
+Asymptotically, the counting argument gives:
+
+```text
+M(n) = Omega(n lg n).
+```
+
+---
+
+## 14. `n = 52` comparison
+
+All figures count legal adjacent-stack moves.
+
+| Algorithm | Best | Expected random input | Worst / certified bound | Special structured score |
+|---|---:|---:|---:|---:|
+| SELECTION SORT | 0 | 1854.961 | 2756 exact | — |
+| ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
+| BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 504 baseline | 1404 exact | — |
+| MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
+| MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
+| LSB RADIX SORT | 0 | 624 baseline | 624 exact | — |
+| NATURAL SORT | 0 | 520.196 | 624 exact | reversal: 624 |
+| SIGNED NATURAL SORT | 0 | unknown | pure worst unknown; safe hybrid <=624 | reversal: 204 |
+| SPLIT-MERGE SORT | 0 | unknown | 624 exact | reversal: 624 |
+| REVERSING SPLIT-MERGE SORT | 0 | unknown | certified <=1872 | reversal: 206 |
+
+Reference values:
+
+```text
+optimal reversal:                  204
+general counting lower bound:      143
+current general lower bound:       204
+```
+
+The table is not a total ranking. For example, fixed LSB RADIX SORT has a
+better certified worst case than the current bound for REVERSING SPLIT-MERGE
+SORT, while the latter is dramatically better on reversed or highly
+reversible structure.
+
+---
+
+---
+
+## 15. A* PLANNING: TRANSPORT HEURISTIC
+
+The first per-instance planner will search the complete machine state graph
+with A*. A state is
+
+```text
+S = (A, D, B)
+```
+
+with every stack represented top-to-bottom. Every legal edge has cost one.
+
+TRANSPORT HEURISTIC combines three unavoidable-movement bounds:
+
+1. baseline transportation to and from the three stacks;
+2. endpoint cards that cannot reach the goal in one move;
+3. active `D` cards that cannot reach the goal in exactly two moves.
+
+### 15.1 Frozen suffix
+
+The **frozen suffix** is the longest bottom segment of `D` equal to the
+corresponding suffix of the goal:
+
+```text
+[k, k+1, ..., n].
+```
+
+Let
+
+```text
+D = X ++ F
+```
+
+where `F` is the frozen suffix and `X` is the active prefix.
+
+Any card initially in `X` must leave `D` and later return. If a card in `D`
+never moves, every card below it also remains in place, so all unmoved cards
+form a bottom suffix. For that suffix to occur in the goal, it must be
+contained in `F`.
+
+Hence the baseline transportation bound is
+
+```text
+h0(S) = 2|X| + |A| + |B|.
+```
+
+### 15.2 Endpoint surcharge
+
+A card initially on `A` or `B` needs at least one move to enter `D`. If it
+cannot finish in one move, it needs at least three, so the next possible cost
+adds two moves.
+
+Consider the cards on `A` that finish with one move each. They leave `A` in
+current top-to-bottom order and are pushed onto `D`, reversing that order.
+Consequently their current values must form a decreasing subsequence.
+Therefore at most
+
+```text
+LDS(A)
+```
+
+cards on `A` can finish in one move. The same applies to `B`.
+
+The endpoint surcharge is
+
+```text
+2(|A| - LDS(A)) + 2(|B| - LDS(B)).
+```
+
+### 15.3 Active-`D` surcharge
+
+A card initially in `X` has baseline cost two:
+
+```text
+D → endpoint → D.
+```
+
+Partition the cards that actually attain this two-move cost according to
+whether they visit `A` or `B`.
+
+Within either endpoint class, their order in `X` must be increasing. They
+leave `D` in top-to-bottom order, are reversed on the endpoint stack, and are
+reversed again when returned to `D`, restoring their original relative order.
+That relative order must agree with the ascending goal.
+
+Thus all exactly-two-move cards in `X` must be coverable by two increasing
+subsequences. Define
+
+```text
+L2(X)
+```
+
+as the maximum number of cards in a subsequence of `X` that can be partitioned
+into at most two increasing subsequences.
+
+At least
+
+```text
+|X| - L2(X)
+```
+
+active `D` cards require four or more moves, adding two moves each.
+
+### 15.4 Complete heuristic
+
+Stacks are sequences written top-to-bottom. Standard notation such as `|S|`,
+`S[i]`, prefixes, map lookup, and map update is used directly.
+
+```text
+TRANSPORT_HEURISTIC(A, D, B):
+    n := |A| + |D| + |B|
+
+    frozen := FROZEN_SUFFIX_LENGTH(D, n)
+    X := D[0 .. |D|-frozen)       # active prefix of D
+
+    base :=
+        2|X| + |A| + |B|
+
+    endpoint_extra :=
+        2(|A| - LDS_LENGTH(A))
+        + 2(|B| - LDS_LENGTH(B))
+
+    center_extra :=
+        2(|X| - MAX_TWO_INCREASING_COVER(X))
+
+    return base + endpoint_extra + center_extra
+```
+
+### 15.5 Supporting pseudocode
+
+Only the nontrivial helpers are defined explicitly.
+
+#### Frozen suffix
+
+```text
+FROZEN_SUFFIX_LENGTH(D, n):
+    expected := n
+    i := |D| - 1
+
+    while i >= 0 and D[i] = expected:
+        i := i - 1
+        expected := expected - 1
+
+    return |D| - 1 - i
+```
+
+#### Longest decreasing subsequence
+
+A simple quadratic dynamic program is adequate for `n <= 52`.
+
+```text
+LDS_LENGTH(S):
+    if |S| = 0:
+        return 0
+
+    for i := 0 to |S|-1:
+        best[i] := 1
+
+        for j := 0 to i-1:
+            if S[j] > S[i]:
+                best[i] := max(best[i], best[j] + 1)
+
+    return max_i best[i]
+```
+
+This uses `O(|S|^2)` time and `O(|S|)` memory.
+
+#### Maximum cover by two increasing subsequences
+
+A state `(u,v)` records the final values of two increasing subsequences,
+canonically ordered so that `u <= v`. Zero denotes an empty subsequence,
+since all card labels are positive. The map value is the greatest number of
+selected cards achieving those tails.
+
+```text
+MAX_TWO_INCREASING_COVER(X):
+    states := {(0,0) ↦ 0}
+
+    for x in X:
+        next := copy(states)       # skipping x changes nothing
+
+        for ((u,v), count) in states:
+            if x > u:
+                pair := sorted pair (x,v)
+                next[pair] :=
+                    max(next.get(pair, -∞), count + 1)
+
+            if x > v:
+                pair := (u,x)
+                next[pair] :=
+                    max(next.get(pair, -∞), count + 1)
+
+        states := next
+
+    return max(states.values)
+```
+
+The straightforward implementation has `O(|X|^2)` possible tail pairs and
+therefore uses `O(|X|^3)` time and `O(|X|^2)` memory.
+
+### 15.6 Admissibility proof
+
+The cards initially in `A`, `B`, `X`, and the frozen suffix are disjoint.
+
+- Every card in `A` or `B` costs at least one move.
+- Every card in `X` costs at least two moves.
+- At least `|A|-LDS(A)` cards initially in `A` cost at least three moves.
+- At least `|B|-LDS(B)` cards initially in `B` cost at least three moves.
+- At least `|X|-L2(X)` cards initially in `X` cost at least four moves.
+
+The surcharge terms add two only to cards already charged their smaller
+baseline cost. Because the four starting regions are disjoint, none of these
+charges overlap improperly. Therefore TRANSPORT HEURISTIC never exceeds the
+true remaining cost and is admissible.
+
+For a completely reversed deck:
+
+```text
+A = []
+D = [n, n-1, ..., 1]
+B = []
+```
+
+the frozen suffix is empty and `L2(D)=2`, so
+
+```text
+h = 2n + 2(n-2) = 4n - 4.
+```
+
+The heuristic exactly recognizes the optimal reversal cost.
+
+### 15.7 Consistency: disproved
+
+A unit-cost heuristic is consistent when every legal move `S → S'` satisfies
+
+```text
+h(S) <= 1 + h(S').
+```
+
+TRANSPORT HEURISTIC is not consistent. The smallest counterexample has three
+cards:
+
+```text
+S:
+    A = []
+    D = [3, 2, 1]
+    B = []
+```
+
+There is no frozen suffix. Since a decreasing sequence of length three has
+`L2=2`:
+
+```text
+h(S)
+  = 2·3 + 2(3-2)
+  = 8.
+```
+
+Make the legal move
+
+```text
+D → A
+```
+
+moving card `3`:
+
+```text
+S':
+    A = [3]
+    D = [2, 1]
+    B = []
+```
+
+Now:
+
+```text
+LDS(A) = 1
+L2(D)  = 2
+```
+
+so
+
+```text
+h(S')
+  = 2·2 + 1
+  = 5.
+```
+
+Therefore:
+
+```text
+h(S) = 8 > 1 + 5 = 6.
+```
+
+One legal move decreases the heuristic by three. The disappearing
+two-increasing-cover surcharge causes the violation.
+
+A* must consequently either:
+
+- reopen a state when a cheaper path to it is found; or
+- apply pathmax along generated edges:
+
+  ```text
+  h(child) := max(h(child), h(parent) - 1).
+  ```
+
+Pathmax does not make the raw heuristic globally consistent, but it prevents
+the `f=g+h` value from decreasing along the current search path.
+
+---
+
+## 16. Open questions and bookkeeping rules
+
+1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
+2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
+3. Add disjoint additive pattern databases for exact small-card abstractions.
+4. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
+5. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
+6. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
+7. Audit whether the mixed and double-descending normalization macros can be
+   fused further.
+8. Improve the orientation-aware implementation of MSB RADIX SORT.
+9. Search optimal programs for small `n` and use them as block macros or
+   pattern databases.
+10. Improve the lower bound beyond
+
+    ```text
+    max(ceil(log_3(n!)), 4n-4).
+    ```
+
+11. Continue to distinguish rigorously among:
+    - exact optimal costs;
+    - exact costs of a specified algorithm;
+    - certified upper bounds;
+    - expected values;
+    - heuristic or experimental estimates.
