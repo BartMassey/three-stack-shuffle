@@ -17,6 +17,10 @@ pub enum Algorithm {
     Selection,
     /// Selection sort that turns around after every selected card.
     AdaptiveSelection,
+    /// Gene Welborn's selection sort that stages consecutive future targets.
+    LookaheadSelection,
+    /// Value presort followed by Gene Welborn's lookahead selection.
+    LookaheadPresortAdaptiveSelection,
     /// Adaptive selection preceded by one binary value partition.
     BinaryPresortAdaptiveSelection,
     /// Literal top-down merge sort.
@@ -39,9 +43,11 @@ pub enum Algorithm {
 
 impl Algorithm {
     /// All implemented algorithms in stable display order.
-    pub const ALL: [Self; 11] = [
+    pub const ALL: [Self; 13] = [
         Self::Selection,
         Self::AdaptiveSelection,
+        Self::LookaheadSelection,
+        Self::LookaheadPresortAdaptiveSelection,
         Self::BinaryPresortAdaptiveSelection,
         Self::Merge,
         Self::MsbRadix,
@@ -59,6 +65,8 @@ impl Algorithm {
         match self {
             Self::Selection => "selection",
             Self::AdaptiveSelection => "adaptive-selection",
+            Self::LookaheadSelection => "lookahead-selection",
+            Self::LookaheadPresortAdaptiveSelection => "lookahead-presort-adaptive-selection",
             Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection",
             Self::Merge => "merge",
             Self::MsbRadix => "msb-radix",
@@ -141,6 +149,10 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
     match algorithm {
         Algorithm::Selection => selection(deck, algorithm),
         Algorithm::AdaptiveSelection => adaptive_selection(deck, algorithm),
+        Algorithm::LookaheadSelection => lookahead_selection(deck, algorithm),
+        Algorithm::LookaheadPresortAdaptiveSelection => {
+            lookahead_presort_adaptive_selection(deck, algorithm)
+        }
         Algorithm::BinaryPresortAdaptiveSelection => binary_presort(deck, algorithm),
         Algorithm::Merge => merge_sort(deck, algorithm),
         Algorithm::MsbRadix => msb_radix(deck, algorithm),
@@ -259,6 +271,80 @@ fn adaptive_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResult
     }
     let mut stats = SortStats::default();
     extract_adaptively(&mut machine, m, 0, &mut stats)?;
+    Ok(finish(&mut machine, algorithm, stats))
+}
+
+fn endpoint_top(machine: &Machine, endpoint: StackId) -> usize {
+    match endpoint {
+        StackId::A => machine.state().a[0],
+        StackId::B => machine.state().b[0],
+        StackId::D => unreachable!("D is not an endpoint"),
+    }
+}
+
+fn extract_with_lookahead(
+    machine: &mut Machine,
+    mut current: usize,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    while current > 0 {
+        let source = endpoint_containing(machine, current);
+        let destination = if source == StackId::A {
+            StackId::B
+        } else {
+            StackId::A
+        };
+        let mut lookahead = current - 1;
+        let mut held = 0;
+
+        while endpoint_top(machine, source) != current {
+            if lookahead > 0 && endpoint_top(machine, source) == lookahead {
+                move_cards(machine, 1, source, StackId::D)?;
+                lookahead -= 1;
+                held += 1;
+            } else {
+                move_cards(machine, 1, source, destination)?;
+            }
+            stats.bypasses += 1;
+        }
+
+        move_cards(machine, held, StackId::D, destination)?;
+        move_cards(machine, 1, source, StackId::D)?;
+        current -= 1;
+    }
+    Ok(())
+}
+
+fn lookahead_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResult, MachineError> {
+    let mut machine = Machine::new(deck)?;
+    let m = active_prefix(deck);
+    move_cards(&mut machine, m, StackId::D, StackId::A)?;
+
+    let mut stats = SortStats::default();
+    extract_with_lookahead(&mut machine, m, &mut stats)?;
+
+    Ok(finish(&mut machine, algorithm, stats))
+}
+
+fn lookahead_presort_adaptive_selection(
+    deck: &[usize],
+    algorithm: Algorithm,
+) -> Result<SortResult, MachineError> {
+    let mut machine = Machine::new(deck)?;
+    let m = active_prefix(deck);
+    let split = m / 2;
+    for _ in 0..m {
+        let destination = if machine.state().d[0] <= split {
+            StackId::A
+        } else {
+            StackId::B
+        };
+        move_cards(&mut machine, 1, StackId::D, destination)?;
+    }
+
+    let mut stats = SortStats::default();
+    extract_with_lookahead(&mut machine, m, &mut stats)?;
+
     Ok(finish(&mut machine, algorithm, stats))
 }
 
@@ -773,9 +859,53 @@ mod tests {
                     validate_sort_plan(permutation, &result.plan).unwrap_or_else(|error| {
                         panic!("{} invalid on {permutation:?}: {error}", algorithm.name())
                     });
+                    if matches!(
+                        algorithm,
+                        Algorithm::LookaheadSelection
+                            | Algorithm::LookaheadPresortAdaptiveSelection
+                    ) {
+                        let m = active_prefix(permutation);
+                        assert_eq!(result.cost(), 2 * m + 2 * result.stats.bypasses);
+                        assert!(result.cost() <= m * m + m);
+                    }
+                    if algorithm == Algorithm::LookaheadPresortAdaptiveSelection {
+                        let m = active_prefix(permutation);
+                        let a = m / 2;
+                        let b = m - a;
+                        assert!(
+                            result.cost()
+                                <= 2 * m + a * a.saturating_sub(1) + b * b.saturating_sub(1)
+                        );
+                    }
                 }
             });
         }
+    }
+
+    #[test]
+    fn lookahead_selection_freezes_suffix_and_accounts_for_staging() {
+        let sorted = solve(Algorithm::LookaheadSelection, &[1, 2, 3, 4]).unwrap();
+        assert!(sorted.plan.is_empty());
+        assert_eq!(sorted.stats.bypasses, 0);
+
+        let result = solve(Algorithm::LookaheadSelection, &[2, 1, 3, 4]).unwrap();
+        validate_sort_plan(&[2, 1, 3, 4], &result.plan).unwrap();
+        assert_eq!(result.stats.bypasses, 1);
+        assert_eq!(result.cost(), 6);
+
+        let active = active_prefix(&[2, 1, 3, 4]);
+        assert_eq!(result.cost(), 2 * active + 2 * result.stats.bypasses);
+    }
+
+    #[test]
+    fn lookahead_presort_freezes_suffix_and_keeps_buckets_separate() {
+        let sorted = solve(Algorithm::LookaheadPresortAdaptiveSelection, &[1, 2, 3, 4]).unwrap();
+        assert!(sorted.plan.is_empty());
+
+        let result = solve(Algorithm::LookaheadPresortAdaptiveSelection, &[2, 1, 3, 4]).unwrap();
+        validate_sort_plan(&[2, 1, 3, 4], &result.plan).unwrap();
+        assert_eq!(result.stats.bypasses, 0);
+        assert_eq!(result.cost(), 4);
     }
 
     #[test]

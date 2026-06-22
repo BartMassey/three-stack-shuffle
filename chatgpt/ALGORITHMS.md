@@ -433,7 +433,249 @@ endpoint-to-endpoint bypass as one step and omitting setup and final placement.
 
 ---
 
-## 5. BINARY-PRESORT ADAPTIVE SELECTION SORT
+## 5. LOOKAHEAD SELECTION SORT
+
+### Motivation
+
+This algorithm is due to **Gene Welborn**. It improves adaptive selection by
+recognizing consecutive future targets while searching for the current target.
+Those cards are staged temporarily on `D` and then moved together to the other
+endpoint. The staging reverses their order on the destination, leaving the
+next target exposed instead of buried.
+
+As with all algorithms in this document, first perform the free sorted-input
+test. Also freeze the maximal correct suffix, exactly as in SELECTION SORT and
+ADAPTIVE SELECTION SORT. Thus an already sorted input costs zero, and only the
+active prefix of length `m` participates in the algorithm.
+
+### Pseudocode
+
+```text
+m := largest value such that
+     D = [p1, ..., pm, m+1, m+2, ..., n]
+
+if m = 0:
+    stop
+
+move the top m cards D → A
+
+current := m
+
+while current > 0:
+    source := the endpoint containing current
+    destination := the other endpoint
+    lookahead := current - 1
+    held := 0
+
+    while top(source) != current:
+        if top(source) = lookahead:
+            source → D
+            lookahead := lookahead - 1
+            held := held + 1
+        else:
+            source → D
+            D → destination
+
+    repeat held times:
+        D → destination
+
+    source → D
+    current := current - 1
+```
+
+The cards counted by `held` are precisely the consecutive future targets
+`current-1, current-2, ...` encountered during the search. They temporarily
+sit above the frozen suffix and previously finalized cards on `D`. Moving the
+held block to `destination` exposes `current-1` there, so the next selection
+may be immediate.
+
+The complete state is known, so locating the endpoint containing `current` is
+free offline bookkeeping, as it is for ADAPTIVE SELECTION SORT.
+
+### Legal-move accounting
+
+Staging a lookahead card is not a free or one-move endpoint transfer. Its two
+steps are separated in time:
+
+```text
+source → D
+...
+D → destination
+```
+
+and therefore cost two legal moves, exactly like an ordinary endpoint bypass.
+Let `Q` count all nonfinal endpoint-to-endpoint relocations, including staged
+lookahead cards. The exact cost for an active prefix is
+
+```text
+C = 2m + 2Q.
+```
+
+The first `m` pays for setup, the second `m` pays for final placement, and
+every relocation in `Q` pays two adjacent-stack moves.
+
+### Bounds and status
+
+Best case with suffix freezing:
+
+```text
+0.
+```
+
+For a fixed active size `m`, the no-relocation best case is `2m`. During the
+selection of one target, each other active card can be relocated at most once.
+Consequently,
+
+```text
+Q <= m(m-1)/2
+C <= m^2 + m.
+```
+
+This is a certified bound, not a claim that the bound is attained for every
+`m`. The exact random-input expectation and exact worst case remain open.
+
+For `n=52`, a deterministic benchmark over 20,000 random permutations with
+seed `24301` measured:
+
+```text
+mean:             810.5857
+standard error:     0.6167
+minimum:           506
+maximum:          1184
+```
+
+This is an experimental estimate, not a calculated expectation. On the same
+inputs, ADAPTIVE SELECTION SORT measured `952.5079`, confirming that lookahead
+provides a substantial standalone average-case improvement. BINARY-PRESORT
+ADAPTIVE SELECTION SORT measured `553.8948`, so standalone lookahead does not
+supersede value presorting.
+
+The important distinction from ADAPTIVE SELECTION SORT is order, not a cheaper
+move convention: batching consecutive future targets reverses their order on
+the destination and can avoid later traversal. This lookahead rule can also be
+combined with value presorting; in that variant the value buckets should
+remain on separate endpoints rather than being consolidated.
+
+---
+
+## 6. LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT
+
+### Motivation
+
+This algorithm combines two ideas due to **Gene Welborn**: partitioning the
+active values into low and high buckets before adaptive selection, and staging
+consecutive future targets while searching for the current target. It retains
+the buckets on separate endpoints. Gene's literal program temporarily used the
+middle stack for one bucket and then consolidated the buckets to clear the
+middle for output; our initial configuration permits direct partitioning from
+`D` to `A` and `B`, so that consolidation is unnecessary.
+
+First perform the free sorted-input test and freeze the maximal correct suffix.
+Only the active prefix of length `m` is partitioned or moved.
+
+### Pseudocode
+
+```text
+m := largest value such that
+     D = [p1, ..., pm, m+1, m+2, ..., n]
+
+if m = 0:
+    stop
+
+split := floor(m/2)
+
+repeat m times:
+    if top(D) <= split:
+        D → A
+    else:
+        D → B
+
+current := m
+
+while current > 0:
+    source := the endpoint containing current
+    destination := the other endpoint
+    lookahead := current - 1
+    held := 0
+
+    while top(source) != current:
+        if top(source) = lookahead:
+            source → D
+            lookahead := lookahead - 1
+            held := held + 1
+        else:
+            source → D
+            D → destination
+
+    repeat held times:
+        D → destination
+
+    source → D
+    current := current - 1
+```
+
+The extraction phase is exactly LOOKAHEAD SELECTION SORT. The high bucket is
+completed before the low bucket because targets are selected in descending
+order. High cards temporarily moved onto the low bucket remain above and do
+not disturb it.
+
+### Legal-move accounting and bounds
+
+Let `Q` count all nonfinal endpoint-to-endpoint relocations, including staged
+lookahead cards. Partitioning costs `m`, final placement costs `m`, and every
+relocation costs two legal moves:
+
+```text
+C = 2m + 2Q.
+```
+
+Let
+
+```text
+a = floor(m/2)
+b = ceil(m/2).
+```
+
+No low card must be traversed while selecting the high bucket, and the high
+cards are finalized before low extraction begins. Therefore a certified bound
+is
+
+```text
+Q <= a(a-1)/2 + b(b-1)/2
+C <= 2m + a(a-1) + b(b-1).
+```
+
+Best case with suffix freezing is zero. For a fixed active size, the
+no-relocation best case is `2m`. The exact expected cost and exact worst case
+remain open.
+
+### `n = 52`
+
+A deterministic benchmark over 20,000 random permutations with seed `24301`
+measured:
+
+```text
+mean:             457.6273
+standard error:     0.3074
+minimum:           294
+maximum:           644
+certified bound:  1404
+```
+
+This validates the earlier prototype estimate of approximately `458` legal
+moves. On the identical inputs:
+
+```text
+LOOKAHEAD SELECTION SORT:                 810.5857
+BINARY-PRESORT ADAPTIVE SELECTION SORT:   553.8948
+ADAPTIVE SELECTION SORT:                  952.5079
+```
+
+The measured values are experimental estimates, not calculated expectations.
+
+---
+
+## 7. BINARY-PRESORT ADAPTIVE SELECTION SORT
 
 ### Motivation
 
@@ -572,7 +814,7 @@ convention plus extra pile-stacking overhead; it is not our legal-move count.
 
 ---
 
-## 6. MERGE SORT
+## 8. MERGE SORT
 
 ### Motivation
 
@@ -651,7 +893,7 @@ best with sorted detection:   0
 
 ---
 
-## 7. MSB RADIX SORT
+## 9. MSB RADIX SORT
 
 ### Motivation
 
@@ -722,7 +964,7 @@ orientation-aware MSB radix schemes.
 
 ---
 
-## 8. LSB RADIX SORT
+## 10. LSB RADIX SORT
 
 ### Motivation
 
@@ -784,7 +1026,7 @@ best with sorted detection:   0
 
 ---
 
-## 9. NATURAL SORT
+## 11. NATURAL SORT
 
 ### Motivation
 
@@ -873,7 +1115,7 @@ reversal:   624
 
 ---
 
-## 10. HU–TUCKER NATURAL MERGE SORT
+## 12. HU–TUCKER NATURAL MERGE SORT
 
 ### Motivation
 
@@ -998,7 +1240,7 @@ The measured value is an experimental estimate, not a calculated expectation.
 
 ---
 
-## 11. SIGNED NATURAL SORT — EXPERIMENTAL
+## 13. SIGNED NATURAL SORT — EXPERIMENTAL
 
 ### Motivation
 
@@ -1065,7 +1307,7 @@ safe-hybrid bound:  at most 624
 
 ---
 
-## 12. SPLIT-MERGE SORT
+## 14. SPLIT-MERGE SORT
 
 ### Motivation
 
@@ -1163,7 +1405,7 @@ has yet been derived.
 
 ---
 
-## 13. REVERSING SPLIT-MERGE SORT — EXPERIMENTAL
+## 15. REVERSING SPLIT-MERGE SORT — EXPERIMENTAL
 
 ### Motivation
 
@@ -1303,7 +1545,7 @@ true worst case:              unknown
 
 ---
 
-## 14. General lower bounds
+## 16. General lower bounds
 
 Let `M(n)` be the maximum, over all input permutations, of the minimum legal
 move count needed to sort that permutation.
@@ -1355,7 +1597,7 @@ M(n) = Omega(n lg n).
 
 ---
 
-## 15. `n = 52` comparison
+## 17. `n = 52` comparison
 
 All figures count legal adjacent-stack moves.
 
@@ -1363,6 +1605,8 @@ All figures count legal adjacent-stack moves.
 |---|---:|---:|---:|---:|
 | SELECTION SORT | 0 | 1854.961 | 2756 exact | — |
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
+| LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
+| LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT | 0 | unknown; measured 457.627 | <=1404 certified | Gene Welborn's combined ideas |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -1390,7 +1634,7 @@ reversible structure.
 
 ---
 
-## 16. A* PLANNING: TRANSPORT HEURISTIC
+## 18. A* PLANNING: TRANSPORT HEURISTIC
 
 The first per-instance planner will search the complete machine state graph
 with A*. A state is
@@ -1700,28 +1944,30 @@ the `f=g+h` value from decreasing along the current search path.
 
 ---
 
-## 17. Open questions and bookkeeping rules
+## 19. Open questions and bookkeeping rules
 
 1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
-4. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
-5. Determine or tightly approximate the random-input expectation of HU–TUCKER
+4. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT
+   and LOOKAHEAD-PRESORT ADAPTIVE SELECTION SORT.
+5. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
+6. Determine or tightly approximate the random-input expectation of HU–TUCKER
    NATURAL MERGE SORT.
-6. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
-7. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
-8. Audit whether the mixed and double-descending normalization macros can be
+7. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
+8. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
+9. Audit whether the mixed and double-descending normalization macros can be
    fused further.
-9. Improve the orientation-aware implementation of MSB RADIX SORT.
-10. Search optimal programs for small `n` and use them as block macros or
+10. Improve the orientation-aware implementation of MSB RADIX SORT.
+11. Search optimal programs for small `n` and use them as block macros or
    pattern databases.
-11. Improve the lower bound beyond
+12. Improve the lower bound beyond
 
     ```text
     max(ceil(log_3(n!)), 4n-4).
     ```
 
-12. Continue to distinguish rigorously among:
+13. Continue to distinguish rigorously among:
     - exact optimal costs;
     - exact costs of a specified algorithm;
     - certified upper bounds;
