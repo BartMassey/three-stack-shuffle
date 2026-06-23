@@ -21,6 +21,8 @@ pub enum Algorithm {
     LookaheadSelection,
     /// Gene Welborn's lookahead selection over `2 * k` balanced value buckets.
     TwoKPartitionLookaheadSelection(usize),
+    /// Exhaustive capture-mask rollout over `2 * k` balanced value buckets.
+    RolloutTwoKPartitionLookaheadSelectionExperimental(usize),
     /// Adaptive selection preceded by one binary value partition.
     BinaryPresortAdaptiveSelection,
     /// Literal top-down merge sort.
@@ -73,6 +75,9 @@ impl Algorithm {
             Self::TwoKPartitionLookaheadSelection(k) => {
                 format!("2k-partition-lookahead-selection:{k}")
             }
+            Self::RolloutTwoKPartitionLookaheadSelectionExperimental(k) => {
+                format!("rollout-2k-partition-lookahead-selection-experimental:{k}")
+            }
             Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection".into(),
             Self::Merge => "merge".into(),
             Self::MsbRadix => "msb-radix".into(),
@@ -90,13 +95,23 @@ impl Algorithm {
     pub const fn is_experimental(self) -> bool {
         matches!(
             self,
-            Self::SignedNaturalExperimental | Self::ReversingSplitMergeExperimental
+            Self::RolloutTwoKPartitionLookaheadSelectionExperimental(_)
+                | Self::SignedNaturalExperimental
+                | Self::ReversingSplitMergeExperimental
         )
     }
 
     /// Parses a stable command-line name.
     #[must_use]
     pub fn from_name(name: &str) -> Option<Self> {
+        if let Some(k) = name.strip_prefix("rollout-2k-partition-lookahead-selection-experimental:")
+        {
+            return k
+                .parse::<usize>()
+                .ok()
+                .filter(|&k| k > 0)
+                .map(Self::RolloutTwoKPartitionLookaheadSelectionExperimental);
+        }
         if let Some(k) = name.strip_prefix("2k-partition-lookahead-selection:") {
             return k
                 .parse::<usize>()
@@ -146,7 +161,11 @@ impl SortResult {
 
 /// Runs a constructive sorter after validating the input permutation.
 pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, MachineError> {
-    if matches!(algorithm, Algorithm::TwoKPartitionLookaheadSelection(0)) {
+    if matches!(
+        algorithm,
+        Algorithm::TwoKPartitionLookaheadSelection(0)
+            | Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(0)
+    ) {
         return Err(MachineError::InvalidAlgorithmParameter(
             "2k-partition lookahead selection requires k >= 1",
         ));
@@ -174,7 +193,15 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
                 .ok_or(MachineError::InvalidAlgorithmParameter(
                     "2k-partition lookahead selection bucket count overflowed",
                 ))?;
-            partition_lookahead_selection(deck, algorithm, buckets)
+            partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::Consecutive)
+        }
+        Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(k) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "rollout 2k-partition lookahead selection bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::Rollout)
         }
         Algorithm::BinaryPresortAdaptiveSelection => binary_presort(deck, algorithm),
         Algorithm::Merge => merge_sort(deck, algorithm),
@@ -339,6 +366,121 @@ fn extract_with_lookahead(
     Ok(())
 }
 
+const MAX_ROLLOUT_BLOCKERS: usize = 16;
+
+fn blocker_count(machine: &Machine, source: StackId, current: usize) -> usize {
+    let stack = match source {
+        StackId::A => &machine.state().a,
+        StackId::B => &machine.state().b,
+        StackId::D => unreachable!("D is not an endpoint"),
+    };
+    stack
+        .iter()
+        .position(|&card| card == current)
+        .expect("source contains current")
+}
+
+fn consecutive_capture_mask(
+    machine: &Machine,
+    source: StackId,
+    current: usize,
+    stop_after: usize,
+) -> usize {
+    let stack = match source {
+        StackId::A => &machine.state().a,
+        StackId::B => &machine.state().b,
+        StackId::D => unreachable!("D is not an endpoint"),
+    };
+    let mut expected = current - 1;
+    let mut mask = 0;
+    for (index, &card) in stack
+        .iter()
+        .take_while(|&&card| card != current)
+        .enumerate()
+    {
+        if expected > stop_after && card == expected {
+            mask |= 1 << index;
+            expected -= 1;
+        }
+    }
+    mask
+}
+
+fn apply_capture_mask(
+    machine: &mut Machine,
+    current: usize,
+    mask: usize,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    let source = endpoint_containing(machine, current);
+    let destination = if source == StackId::A {
+        StackId::B
+    } else {
+        StackId::A
+    };
+    let mut index = 0;
+    let mut held = 0;
+    while endpoint_top(machine, source) != current {
+        if mask & (1 << index) != 0 {
+            move_cards(machine, 1, source, StackId::D)?;
+            held += 1;
+        } else {
+            move_cards(machine, 1, source, destination)?;
+        }
+        stats.bypasses += 1;
+        index += 1;
+    }
+    move_cards(machine, held, StackId::D, destination)?;
+    move_cards(machine, 1, source, StackId::D)
+}
+
+/// At each target, tries every way to stage its blockers, scores the resulting
+/// state by completing the leaf with ordinary consecutive lookahead, and then
+/// commits only the best first pass. Ties retain the ordinary lookahead mask.
+fn extract_with_rollout(
+    machine: &mut Machine,
+    mut current: usize,
+    stop_after: usize,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    while current > stop_after {
+        let source = endpoint_containing(machine, current);
+        let blockers = blocker_count(machine, source, current);
+        if blockers > MAX_ROLLOUT_BLOCKERS {
+            return Err(MachineError::InvalidAlgorithmParameter(
+                "rollout lookahead supports at most 16 blockers in one pass",
+            ));
+        }
+
+        let greedy_mask = consecutive_capture_mask(machine, source, current, stop_after);
+        let candidate_count = 1usize << blockers;
+        let score = |mask| -> Result<usize, MachineError> {
+            let mut trial = Machine::from_state(machine.state().clone());
+            let mut ignored_stats = SortStats::default();
+            apply_capture_mask(&mut trial, current, mask, &mut ignored_stats)?;
+            extract_with_lookahead(&mut trial, current - 1, stop_after, &mut ignored_stats)?;
+            Ok(trial.plan().len())
+        };
+
+        let mut best_mask = greedy_mask;
+        let mut best_score = score(greedy_mask)?;
+        for mask in 0..candidate_count {
+            if mask == greedy_mask {
+                continue;
+            }
+            let candidate_score = score(mask)?;
+            if candidate_score < best_score {
+                best_score = candidate_score;
+                best_mask = mask;
+            }
+        }
+
+        apply_capture_mask(machine, current, best_mask, stats)?;
+        current -= 1;
+    }
+    Ok(())
+}
+
 fn lookahead_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResult, MachineError> {
     let mut machine = Machine::new(deck)?;
     let m = active_prefix(deck);
@@ -380,11 +522,15 @@ fn extract_partition_tree(
     high: usize,
     bucket_count: usize,
     source: StackId,
+    leaf_selection: LeafSelection,
     stats: &mut SortStats,
 ) -> Result<(), MachineError> {
     let card_count = high - low + 1;
     if bucket_count == 1 {
-        return extract_with_lookahead(machine, high, low - 1, stats);
+        return match leaf_selection {
+            LeafSelection::Consecutive => extract_with_lookahead(machine, high, low - 1, stats),
+            LeafSelection::Rollout => extract_with_rollout(machine, high, low - 1, stats),
+        };
     }
 
     let lower_buckets = bucket_count / 2;
@@ -393,14 +539,37 @@ fn extract_partition_tree(
     let split = low + lower_cards - 1;
 
     repartition_endpoint(machine, card_count, source, split)?;
-    extract_partition_tree(machine, split + 1, high, upper_buckets, StackId::B, stats)?;
-    extract_partition_tree(machine, low, split, lower_buckets, StackId::A, stats)
+    extract_partition_tree(
+        machine,
+        split + 1,
+        high,
+        upper_buckets,
+        StackId::B,
+        leaf_selection,
+        stats,
+    )?;
+    extract_partition_tree(
+        machine,
+        low,
+        split,
+        lower_buckets,
+        StackId::A,
+        leaf_selection,
+        stats,
+    )
+}
+
+#[derive(Clone, Copy)]
+enum LeafSelection {
+    Consecutive,
+    Rollout,
 }
 
 fn partition_lookahead_selection(
     deck: &[usize],
     algorithm: Algorithm,
     requested_buckets: usize,
+    leaf_selection: LeafSelection,
 ) -> Result<SortResult, MachineError> {
     let mut machine = Machine::new(deck)?;
     let m = active_prefix(deck);
@@ -409,6 +578,13 @@ fn partition_lookahead_selection(
         bucket_count >= 2,
         "non-sorted active prefixes have at least two cards"
     );
+    let largest_bucket = m.div_ceil(bucket_count);
+    if matches!(leaf_selection, LeafSelection::Rollout) && largest_bucket > MAX_ROLLOUT_BLOCKERS + 1
+    {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "rollout lookahead requires value buckets of at most 17 cards",
+        ));
+    }
     let lower_buckets = bucket_count / 2;
     let upper_buckets = bucket_count - lower_buckets;
     let lower_cards = lower_partition_size(m, bucket_count, lower_buckets);
@@ -431,6 +607,7 @@ fn partition_lookahead_selection(
         m,
         upper_buckets,
         StackId::B,
+        leaf_selection,
         &mut stats,
     )?;
     extract_partition_tree(
@@ -439,6 +616,7 @@ fn partition_lookahead_selection(
         lower_cards,
         lower_buckets,
         StackId::A,
+        leaf_selection,
         &mut stats,
     )?;
 
@@ -1011,6 +1189,35 @@ mod tests {
             Algorithm::from_name("2k-partition-lookahead-selection:0"),
             None
         );
+
+        let rollout = Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(2);
+        assert_eq!(Algorithm::from_name(&rollout.name()), Some(rollout));
+    }
+
+    #[test]
+    fn rollout_lookahead_sorts_and_never_loses_to_consecutive_lookahead() {
+        let mut found_strict_improvement = false;
+        for n in 2..=8 {
+            let mut deck: Vec<_> = (1..=n).collect();
+            permutations(&mut deck, 0, &mut |permutation| {
+                let consecutive =
+                    solve(Algorithm::TwoKPartitionLookaheadSelection(1), permutation).unwrap();
+                let rollout = solve(
+                    Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(1),
+                    permutation,
+                )
+                .unwrap();
+                validate_sort_plan(permutation, &rollout.plan).unwrap();
+                assert!(
+                    rollout.cost() <= consecutive.cost(),
+                    "rollout cost {} exceeded consecutive cost {} on {permutation:?}",
+                    rollout.cost(),
+                    consecutive.cost()
+                );
+                found_strict_improvement |= rollout.cost() < consecutive.cost();
+            });
+        }
+        assert!(found_strict_improvement);
     }
 
     #[test]

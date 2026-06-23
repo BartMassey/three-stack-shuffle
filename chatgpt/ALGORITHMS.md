@@ -734,6 +734,97 @@ than they save on average. Four buckets are therefore the measured optimum
 among the one-, two-, four-, six-, and eight-bucket configurations tested
 here (where one bucket is standalone LOOKAHEAD SELECTION SORT).
 
+### 6.2 Experimental optimized lookahead pass
+
+Consecutive lookahead is sufficient but not necessary. While uncovering
+`current`, any subset of the blockers may be left temporarily on `D`; every
+other blocker crosses immediately to the other endpoint. If the blockers in
+top-to-bottom encounter order are `X`, a capture subset `H` and its complement
+`P` produce
+
+```text
+new source      = cards below current
+new destination = H ++ reverse(P) ++ old destination
+```
+
+where `H` and `P` retain their encounter order before the displayed reversal.
+Every mask has the same immediate cost, `2|X| + 1`: two primitive moves per
+blocker and one to finalize `current`. The choice matters only through the
+states presented to later passes.
+
+An exact dynamic program over this selection family is:
+
+```text
+OPT(current, A, B):
+    if current < bucket.low:
+        return 0
+
+    canonicalize (A, B) under endpoint symmetry
+    if memo contains (current, A, B):
+        return memo[current, A, B]
+
+    source := endpoint containing current
+    destination := the other endpoint
+    write source = X ++ [current] ++ tail
+
+    best := infinity
+    for each subset H of X:
+        P := X with the cards of H removed
+        new source := tail
+        new destination := H ++ reverse(P) ++ destination
+        cost := 2|X| + 1 + OPT(current - 1, new A, new B)
+        best := min(best, cost)
+
+    memo[current, A, B] := best
+    return best
+```
+
+The `2^|X|` masks are only the branching factor at one state; the number of
+reachable endpoint states can still grow factorially. The first practical
+experiment therefore uses a receding-horizon rollout rather than the full
+state DP:
+
+```text
+ROLLOUT LOOKAHEAD PASS(current):
+    source := endpoint containing current
+    X := blockers above current on source
+
+    best mask := the consecutive-lookahead mask
+    best score := infinity
+
+    for each subset H of X:
+        simulate this pass with exactly H staged on D
+        finish the current value bucket with consecutive lookahead
+        score := simulated primitive moves
+        retain H if score is strictly smaller
+
+    execute the best mask
+```
+
+Ties retain the consecutive rule. The experiment repeats this optimization at
+every target, so each committed pass receives a new full-bucket rollout. The
+implementation limits a pass to 16 blockers to keep exhaustive enumeration
+deliberately small. For `n=52`, the four-bucket configuration (`K=2`) has
+13-card leaves and therefore satisfies this limit.
+
+A deterministic initial benchmark over 2,000 random 52-card permutations with
+seed `24301` measured:
+
+| `K` | Buckets | Consecutive mean | Rollout mean | Mean reduction | Rollout time |
+|---:|---:|---:|---:|---:|---:|
+| 2 | 4 | 385.620 | 343.931 | 41.689 | 8.20 s |
+| 3 | 6 | 394.347 | 376.051 | 18.296 | 0.69 s |
+| 4 | 8 | 401.046 | 392.375 | 8.671 | 0.26 s |
+| 5 | 10 | 422.986 | 418.789 | 4.197 | 0.16 s |
+| 6 | 12 | 439.258 | 437.339 | 1.919 | 0.11 s |
+
+These are experimental sample means, not calculated expectations. Rollout
+improves every tested bucket count, with rapidly diminishing benefit as the
+leaves shrink. `K=2` remains the best tested configuration and reduces the
+mean by about 10.8% relative to consecutive lookahead at the cost of roughly
+240 times the solver runtime in this benchmark. `K=1` at `n=52` has 26-card
+leaves and is intentionally rejected by the 17-card leaf limit.
+
 ---
 
 ## 7. BINARY-PRESORT ADAPTIVE SELECTION SORT
