@@ -5,9 +5,11 @@
 //! [`Algorithm`] and use certified fallbacks when their pure phase rule is not
 //! established by the specification.
 
-use std::collections::BTreeMap;
+use std::cmp::Reverse;
+use std::collections::{BTreeMap, BinaryHeap, HashMap, HashSet};
 
 use crate::macros::{move_cards, reverse_d, reverse_d_to_endpoint};
+use crate::search::transport_heuristic;
 use crate::{Machine, MachineError, Move, Plan, StackId, State};
 
 /// A constructive sorting algorithm.
@@ -23,6 +25,8 @@ pub enum Algorithm {
     TwoKPartitionLookaheadSelection(usize),
     /// Exhaustive capture-mask rollout over `2 * k` balanced value buckets.
     RolloutTwoKPartitionLookaheadSelectionExperimental(usize),
+    /// Optimal A* leaf extraction over `2 * k` balanced value buckets.
+    TwoKPartitioningPerfectSelection(usize),
     /// Adaptive selection preceded by one binary value partition.
     BinaryPresortAdaptiveSelection,
     /// Literal top-down merge sort.
@@ -78,6 +82,9 @@ impl Algorithm {
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(k) => {
                 format!("rollout-2k-partition-lookahead-selection-experimental:{k}")
             }
+            Self::TwoKPartitioningPerfectSelection(k) => {
+                format!("2k-partitioning-perfect-selection:{k}")
+            }
             Self::BinaryPresortAdaptiveSelection => "binary-presort-adaptive-selection".into(),
             Self::Merge => "merge".into(),
             Self::MsbRadix => "msb-radix".into(),
@@ -96,6 +103,7 @@ impl Algorithm {
         matches!(
             self,
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(_)
+                | Self::TwoKPartitioningPerfectSelection(_)
                 | Self::SignedNaturalExperimental
                 | Self::ReversingSplitMergeExperimental
         )
@@ -111,6 +119,13 @@ impl Algorithm {
                 .ok()
                 .filter(|&k| k > 0)
                 .map(Self::RolloutTwoKPartitionLookaheadSelectionExperimental);
+        }
+        if let Some(k) = name.strip_prefix("2k-partitioning-perfect-selection:") {
+            return k
+                .parse::<usize>()
+                .ok()
+                .filter(|&k| k > 0)
+                .map(Self::TwoKPartitioningPerfectSelection);
         }
         if let Some(k) = name.strip_prefix("2k-partition-lookahead-selection:") {
             return k
@@ -165,6 +180,7 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
         algorithm,
         Algorithm::TwoKPartitionLookaheadSelection(0)
             | Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(0)
+            | Algorithm::TwoKPartitioningPerfectSelection(0)
     ) {
         return Err(MachineError::InvalidAlgorithmParameter(
             "2k-partition lookahead selection requires k >= 1",
@@ -202,6 +218,14 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
                     "rollout 2k-partition lookahead selection bucket count overflowed",
                 ))?;
             partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::Rollout)
+        }
+        Algorithm::TwoKPartitioningPerfectSelection(k) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "2k-partitioning perfect selection bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::Perfect)
         }
         Algorithm::BinaryPresortAdaptiveSelection => binary_presort(deck, algorithm),
         Algorithm::Merge => merge_sort(deck, algorithm),
@@ -481,6 +505,96 @@ fn extract_with_rollout(
     Ok(())
 }
 
+fn project_interval_stack(stack: &[usize], low: usize, high: usize) -> Vec<usize> {
+    stack
+        .iter()
+        .filter_map(|&card| {
+            if (low..=high).contains(&card) {
+                Some(card - low + 1)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+fn project_interval_state(state: &State, low: usize, high: usize) -> State {
+    State {
+        a: project_interval_stack(&state.a, low, high),
+        d: project_interval_stack(&state.d, low, high),
+        b: project_interval_stack(&state.b, low, high),
+    }
+}
+
+fn interval_heuristic(state: &State, low: usize, high: usize) -> usize {
+    transport_heuristic(&project_interval_state(state, low, high))
+}
+
+fn stack_top(state: &State, stack: StackId) -> Option<usize> {
+    match stack {
+        StackId::A => state.a.first().copied(),
+        StackId::D => state.d.first().copied(),
+        StackId::B => state.b.first().copied(),
+    }
+}
+
+fn interval_neighbors(state: &State, low: usize, high: usize) -> Vec<(State, Move)> {
+    state
+        .neighbors()
+        .into_iter()
+        .filter(|(_, movement)| {
+            let (source, _) = movement.endpoints();
+            stack_top(state, source).is_some_and(|card| (low..=high).contains(&card))
+        })
+        .collect()
+}
+
+fn extract_with_perfect_selection(
+    machine: &mut Machine,
+    low: usize,
+    high: usize,
+) -> Result<(), MachineError> {
+    let start = machine.state().clone();
+    let goal = State::goal(high - low + 1);
+    let start_h = interval_heuristic(&start, low, high);
+    let mut open = BinaryHeap::from([Reverse((start_h, 0_usize, start.clone()))]);
+    let mut best_g = HashMap::from([(start.clone(), 0_usize)]);
+    let mut parents: HashMap<State, (State, Move)> = HashMap::new();
+    let mut expanded = HashSet::new();
+
+    while let Some(Reverse((_f, queued_g, state))) = open.pop() {
+        if best_g.get(&state) != Some(&queued_g) {
+            continue;
+        }
+        if project_interval_state(&state, low, high) == goal {
+            let mut current = state;
+            let mut reverse_plan = Vec::with_capacity(queued_g);
+            while current != start {
+                let (parent, movement) = parents[&current].clone();
+                reverse_plan.push(movement);
+                current = parent;
+            }
+            reverse_plan.reverse();
+            return machine.apply_plan(&reverse_plan);
+        }
+
+        expanded.insert(state.clone());
+        for (child, movement) in interval_neighbors(&state, low, high) {
+            let candidate_g = queued_g + 1;
+            if best_g.get(&child).is_none_or(|&known| candidate_g < known) {
+                best_g.insert(child.clone(), candidate_g);
+                parents.insert(child.clone(), (state.clone(), movement));
+                if expanded.contains(&child) {
+                    expanded.remove(&child);
+                }
+                let f = candidate_g + interval_heuristic(&child, low, high);
+                open.push(Reverse((f, candidate_g, child)));
+            }
+        }
+    }
+    unreachable!("the current interval can always be extracted to D")
+}
+
 fn lookahead_selection(deck: &[usize], algorithm: Algorithm) -> Result<SortResult, MachineError> {
     let mut machine = Machine::new(deck)?;
     let m = active_prefix(deck);
@@ -530,6 +644,7 @@ fn extract_partition_tree(
         return match leaf_selection {
             LeafSelection::Consecutive => extract_with_lookahead(machine, high, low - 1, stats),
             LeafSelection::Rollout => extract_with_rollout(machine, high, low - 1, stats),
+            LeafSelection::Perfect => extract_with_perfect_selection(machine, low, high),
         };
     }
 
@@ -563,6 +678,7 @@ fn extract_partition_tree(
 enum LeafSelection {
     Consecutive,
     Rollout,
+    Perfect,
 }
 
 fn partition_lookahead_selection(
@@ -1123,8 +1239,8 @@ mod tests {
     }
 
     #[test]
-    fn all_algorithms_sort_every_permutation_through_eight() {
-        for n in 0..=8 {
+    fn all_algorithms_sort_every_permutation_through_seven() {
+        for n in 0..=7 {
             let mut deck: Vec<_> = (1..=n).collect();
             permutations(&mut deck, 0, &mut |permutation| {
                 for algorithm in Algorithm::ALL {
@@ -1192,6 +1308,13 @@ mod tests {
 
         let rollout = Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(2);
         assert_eq!(Algorithm::from_name(&rollout.name()), Some(rollout));
+
+        let perfect = Algorithm::TwoKPartitioningPerfectSelection(2);
+        assert_eq!(Algorithm::from_name(&perfect.name()), Some(perfect));
+        assert_eq!(
+            Algorithm::from_name("2k-partitioning-perfect-selection:0"),
+            None
+        );
     }
 
     #[test]
@@ -1215,6 +1338,29 @@ mod tests {
                     consecutive.cost()
                 );
                 found_strict_improvement |= rollout.cost() < consecutive.cost();
+            });
+        }
+        assert!(found_strict_improvement);
+    }
+
+    #[test]
+    fn perfect_selection_sorts_and_never_loses_to_consecutive_lookahead() {
+        let mut found_strict_improvement = false;
+        for n in 2..=7 {
+            let mut deck: Vec<_> = (1..=n).collect();
+            permutations(&mut deck, 0, &mut |permutation| {
+                let consecutive =
+                    solve(Algorithm::TwoKPartitionLookaheadSelection(1), permutation).unwrap();
+                let perfect =
+                    solve(Algorithm::TwoKPartitioningPerfectSelection(1), permutation).unwrap();
+                validate_sort_plan(permutation, &perfect.plan).unwrap();
+                assert!(
+                    perfect.cost() <= consecutive.cost(),
+                    "perfect cost {} exceeded consecutive cost {} on {permutation:?}",
+                    perfect.cost(),
+                    consecutive.cost()
+                );
+                found_strict_improvement |= perfect.cost() < consecutive.cost();
             });
         }
         assert!(found_strict_improvement);

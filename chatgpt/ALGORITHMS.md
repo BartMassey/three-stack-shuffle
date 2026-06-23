@@ -825,6 +825,38 @@ mean by about 10.8% relative to consecutive lookahead at the cost of roughly
 240 times the solver runtime in this benchmark. `K=1` at `n=52` has 26-card
 leaves and is intentionally rejected by the 17-card leaf limit.
 
+### 6.3 Experimental 2K PARTITIONING PERFECT SELECTION
+
+`2K PARTITIONING PERFECT SELECTION` keeps the same balanced value-partition
+tree as `2K`-PARTITION LOOKAHEAD SELECTION, but replaces each leaf extraction
+with exact A* search.
+
+For a leaf interval `[low, high]`, cards outside the interval are treated as
+immovable barriers. The planner may move interval cards onto stacks above
+those barriers, but it may not pop an out-of-interval card. The local goal is
+that the interval's projection is sorted on `D`:
+
+```text
+D projection = [low, low+1, ..., high]
+A projection = []
+B projection = []
+```
+
+The A* heuristic is TRANSPORT HEURISTIC applied to this projected interval
+state after relabeling `low..=high` to `1..=high-low+1`. This projection
+ignores moves spent on out-of-interval cards, so the heuristic remains
+admissible for the leaf problem. The implementation uses reopening A* because
+TRANSPORT HEURISTIC is admissible but inconsistent.
+
+The stable command-line name is:
+
+```text
+2k-partitioning-perfect-selection:K
+```
+
+Like rollout, this is deliberately excluded from the default algorithm list
+because exact A* can be slow on 13-card leaves and worse on larger leaves.
+
 ---
 
 ## 7. BINARY-PRESORT ADAPTIVE SELECTION SORT

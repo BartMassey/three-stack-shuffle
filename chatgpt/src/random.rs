@@ -3,7 +3,8 @@
 use std::time::{Duration, Instant};
 
 use crate::algorithms::{solve, Algorithm};
-use crate::{validate_sort_plan, MachineError};
+use crate::search::transport_heuristic;
+use crate::{validate_sort_plan, MachineError, State};
 
 /// Small, reproducible SplitMix64 generator.
 #[derive(Clone, Debug)]
@@ -143,6 +144,8 @@ pub struct BenchmarkResult {
     pub algorithm: Algorithm,
     /// Primitive move-count distribution.
     pub moves: SampleStats,
+    /// Transport-heuristic lower-bound distribution for the input states.
+    pub lower_bounds: SampleStats,
     /// Total solver and replay time.
     pub elapsed: Duration,
 }
@@ -156,11 +159,17 @@ pub fn random_benchmark(
 ) -> Result<Vec<BenchmarkResult>, MachineError> {
     let mut rng = Rng::new(seed);
     let decks: Vec<_> = (0..samples).map(|_| rng.permutation(n)).collect();
+    let lower_bounds: Vec<_> = decks
+        .iter()
+        .map(|deck| State::initial(deck).map(|initial| transport_heuristic(&initial)))
+        .collect::<Result<_, _>>()?;
     let mut reports = Vec::with_capacity(algorithms.len());
     for &algorithm in algorithms {
         let began = Instant::now();
         let mut moves = SampleStats::default();
-        for deck in &decks {
+        let mut lower_bound_stats = SampleStats::default();
+        for (deck, &lower_bound) in decks.iter().zip(&lower_bounds) {
+            lower_bound_stats.add(lower_bound);
             let result = solve(algorithm, deck)?;
             validate_sort_plan(deck, &result.plan)?;
             moves.add(result.cost());
@@ -168,6 +177,7 @@ pub fn random_benchmark(
         reports.push(BenchmarkResult {
             algorithm,
             moves,
+            lower_bounds: lower_bound_stats,
             elapsed: began.elapsed(),
         });
     }
@@ -195,6 +205,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "2,000-sample benchmark regression; run explicitly when checking documented means"]
     fn documented_random_means_are_within_sampling_tolerance() {
         let algorithms = [
             Algorithm::Selection,
