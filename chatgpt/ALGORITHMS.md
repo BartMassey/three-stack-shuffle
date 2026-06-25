@@ -825,7 +825,197 @@ mean by about 10.8% relative to consecutive lookahead at the cost of roughly
 240 times the solver runtime in this benchmark. `K=1` at `n=52` has 26-card
 leaves and is intentionally rejected by the 17-card leaf limit.
 
-### 6.3 Experimental 2K PARTITIONING PERFECT SELECTION
+
+### 6.3 INCREMENTAL RHL
+
+`INCREMENTAL RHL` produces exactly the same masks and primitive move sequence
+as the receding-horizon rollout above. It changes only the planning method.
+
+The ordinary rollout implementation evaluates every candidate mask by copying
+the machine and rerunning consecutive lookahead to the end of the bucket.
+INCREMENTAL RHL instead maintains the exact remaining cost of the deterministic
+consecutive-lookahead policy in a persistent memo table. After committing the
+best mask, the chosen successor becomes the next root and the existing rollout
+DAG is retained.
+
+Let `V(S)` be the exact remaining cost of ordinary consecutive lookahead from
+active bucket state `S`. For a mask `M` with blockers `X`:
+
+```text
+rollout score(M) = 2|X| + 1 + V(successor(S,M)).
+```
+
+All masks have the same immediate cost, so their ordering depends only on the
+cached suffix value.
+
+#### Algebraic successor construction
+
+Write the source endpoint top-to-bottom as:
+
+```text
+source = X ++ [current] ++ tail.
+```
+
+For a mask `M`, let:
+
+```text
+H = staged blockers, in encounter order
+P = bypassed blockers, in encounter order.
+```
+
+The post-pass active endpoint state is:
+
+```text
+new source      = tail
+new destination = H ++ reverse(P) ++ old destination.
+```
+
+Trial states should be constructed from this formula. Replaying primitive moves
+is necessary only for the mask finally committed to the real machine.
+
+#### Persistent base-policy value table
+
+```text
+BASE_COST(current, bucket_low, A, B):
+    (forced, current, A, B) :=
+        REMOVE_FORCED_TARGETS(current, bucket_low, A, B)
+
+    if current < bucket_low:
+        return forced
+
+    key := current together with the lexicographically smaller of
+           (A,B) and (B,A), after projecting and relabeling the bucket
+
+    if key is memoized:
+        return forced + memo[key]
+
+    X := blockers above current on its endpoint
+    M := CONSECUTIVE_MASK(current, X)
+    (pass_cost, A1, B1) := MASK_SUCCESSOR(current, A, B, M)
+
+    remainder :=
+        pass_cost + BASE_COST(current - 1, bucket_low, A1, B1)
+
+    memo[key] := remainder
+    return forced + remainder
+```
+
+`REMOVE_FORCED_TARGETS` repeatedly removes an already exposed `current` from
+its endpoint at cost one and decrements `current`. No choice is lost: an exposed
+target has an empty blocker set.
+
+`CONSECUTIVE_MASK` scans `X` top-to-bottom. It stages `current-1` if encountered,
+then `current-2`, and so on; all other blockers are bypassed.
+
+`MASK_SUCCESSOR` uses the algebraic formula above and returns immediate cost
+`2|X|+1`.
+
+#### Incremental receding-horizon loop
+
+```text
+INCREMENTAL_RHL_BUCKET(bucket_low, bucket_high, A, B):
+    memo := empty base-policy value table
+    current := bucket_high
+
+    while current >= bucket_low:
+        while current is exposed on A or B:
+            move current to D
+            current := current - 1
+
+        if current < bucket_low:
+            stop
+
+        source := endpoint containing current
+        X := blockers above current on source
+        pass_cost := 2|X| + 1
+
+        best_mask := CONSECUTIVE_MASK(current, X)
+        best_score := infinity
+
+        enumerate each distinct mask outcome for X:
+            (ignored, A1, B1) :=
+                MASK_SUCCESSOR(current, A, B, mask)
+
+            score :=
+                pass_cost
+                + BASE_COST(current - 1, bucket_low, A1, B1)
+
+            if score is smaller, or ties under the established rule:
+                retain this mask
+
+        execute the retained mask on the real machine
+        current := current - 1
+```
+
+The memo table persists for the complete bucket. Calling `BASE_COST` for all
+candidate successors naturally constructs the union of their deterministic
+rollout paths as a DAG. Equal normalized states share one cached suffix value.
+An implementation may evaluate missing DAG nodes recursively or in batches
+with a worklist.
+
+#### Exact mask quotient
+
+If `X=[x1,...,xm]` and `m>0`, toggling the membership of the bottommost blocker
+`xm` does not change the successor:
+
+```text
+H' ++ [xm] ++ reverse(P')
+```
+
+is obtained whether `xm` is classified as staged or bypassed.
+
+These are the only duplicate masks. In the successor order, cards before `xm`
+must be staged and cards after `xm` must be bypassed; only `xm` itself is
+ambiguous. Therefore one may fix its bit, giving exactly:
+
+```text
+2^(m-1)
+```
+
+distinct successors for `m>0`, and one successor for `m=0`.
+
+If a bucket begins with `b` active cards, the blocker count at the decision
+with `r` cards remaining is at most `r-1`. Hence the total number of distinct
+mask outcomes enumerated over the entire bucket is at most:
+
+```text
+1 + sum from r=2 to b of 2^(r-2)
+  = 2^(b-1).
+```
+
+For a 26-card `K=1` leaf:
+
+```text
+2^25 = 33,554,432
+```
+
+distinct mask outcomes suffice for the whole extraction in the worst case,
+not for every target separately.
+
+#### Equivalence to ordinary rollout RHL
+
+For every candidate mask, INCREMENTAL RHL computes the same immediate pass
+cost and the same deterministic consecutive-lookahead completion cost as the
+brute-force rollout. Memoization, endpoint symmetry, forced-target reduction,
+and duplicate-state elimination only reuse equal subproblems.
+
+With the same tie rule, INCREMENTAL RHL therefore selects exactly the same mask
+at every target and emits exactly the same primitive move sequence. Existing
+RHL move benchmarks apply unchanged; only planning time and memory use differ.
+
+The algorithm specification is complete. Implementation and benchmarking are
+still pending. The immediate experiment is to verify exact equivalence with
+brute-force RHL on small leaves, then attempt `K=1` on 26-card leaves while
+measuring mask visits, unique normalized states, cache behavior, memory use,
+and planning time.
+
+If incremental reuse alone is insufficient, the next planned directions are
+safe mask pruning, dynamic programming over partial masks, and exact
+state-space lower bounds. Those are deliberately deferred until this baseline
+experiment has been tried.
+
+
+### 6.4 Experimental 2K PARTITIONING PERFECT SELECTION
 
 `2K PARTITIONING PERFECT SELECTION` keeps the same balanced value-partition
 tree as `2K`-PARTITION LOOKAHEAD SELECTION, but replaces each leaf extraction
@@ -1791,6 +1981,7 @@ All figures count legal adjacent-stack moves.
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
 | `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
+| INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | specification complete; persistent rollout DAG |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -2129,29 +2320,33 @@ the `f=g+h` value from decreasing along the current search path.
 ---
 
 ## 19. Open questions and bookkeeping rules
-
 1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
-4. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT
+4. Implement and benchmark INCREMENTAL RHL at `K=1`, including mask
+   outcomes, unique normalized states, cache hits, memory use, and planning
+   time; verify exact equivalence with brute-force RHL on small leaves.
+5. After the fixed-bucket RHL work, investigate instance- or
+   distribution-optimized value boundaries and alphabetic partition trees.
+6. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT
    and `2K`-PARTITION LOOKAHEAD SELECTION SORT.
-5. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
-6. Determine or tightly approximate the random-input expectation of HU–TUCKER
+7. Determine the exact worst and expected costs of SPLIT-MERGE SORT.
+8. Determine or tightly approximate the random-input expectation of HU–TUCKER
    NATURAL MERGE SORT.
-7. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
-8. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
-9. Audit whether the mixed and double-descending normalization macros can be
-   fused further.
-10. Improve the orientation-aware implementation of MSB RADIX SORT.
-11. Search optimal programs for small `n` and use them as block macros or
-   pattern databases.
-12. Improve the lower bound beyond
+9. Complete and analyze a pure SIGNED NATURAL SORT phase rule.
+10. Tighten the worst-case analysis of REVERSING SPLIT-MERGE SORT.
+11. Audit whether the mixed and double-descending normalization macros can be
+    fused further.
+12. Improve the orientation-aware implementation of MSB RADIX SORT.
+13. Search optimal programs for small `n` and use them as block macros or
+    pattern databases.
+14. Improve the lower bound beyond
 
     ```text
     max(ceil(log_3(n!)), 4n-4).
     ```
 
-13. Continue to distinguish rigorously among:
+15. Continue to distinguish rigorously among:
     - exact optimal costs;
     - exact costs of a specified algorithm;
     - certified upper bounds;

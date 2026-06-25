@@ -621,7 +621,90 @@ configuration in this rollout family.
 
 ---
 
-## 7. Perfect Leaf Selection by A*
+
+## 7. Incremental Receding-Horizon Lookahead
+
+### Description
+
+Incremental RHL is algorithmically identical to the receding-horizon rollout
+in the previous section. It selects the same mask at every target and therefore
+has the same primitive move count. It avoids repeatedly simulating the same
+ordinary-lookahead suffixes.
+
+For each active bucket state `S`, memoize the exact remaining cost `V(S)` of
+ordinary consecutive lookahead. Candidate masks are scored as:
+
+```text
+2|X| + 1 + V(successor(S, mask)).
+```
+
+After the best mask is committed, its successor is the next planning root.
+The memoized rollout DAG is retained and extended rather than discarded.
+
+### Pseudocode
+
+```text
+INCREMENTAL_RHL_BUCKET(bucket_low, bucket_high):
+    memo := empty
+    current := bucket_high
+
+    while current >= bucket_low:
+        place every consecutively exposed target on D
+
+        if current < bucket_low:
+            stop
+
+        X := blockers above current
+        best_mask := consecutive mask
+        best_score := infinity
+
+        enumerate distinct mask outcomes for X:
+            successor := construct algebraically
+            score :=
+                2|X| + 1
+                + BASE_COST(successor, current-1, bucket_low, memo)
+
+            retain the least score, using the ordinary RHL tie rule
+
+        execute the retained mask
+        current := current - 1
+```
+
+`BASE_COST` follows ordinary consecutive lookahead, memoizing each normalized
+state. Normalization removes exposed target chains, projects and relabels the
+active bucket, and identifies states differing only by interchange of `A` and
+`B`.
+
+### Mask-count bound
+
+For `m>0` blockers, toggling the bottommost blocker gives the same successor,
+and this is the only mask duplication. Thus there are `2^(m-1)` distinct mask
+outcomes.
+
+Across a complete `b`-card bucket, the total number of distinct outcomes
+enumerated is at most:
+
+```text
+2^(b-1).
+```
+
+For a 26-card `K=1` leaf:
+
+```text
+2^25 = 33,554,432.
+```
+
+This is the intended next experiment.
+
+### Status
+
+Move quality is exactly the same as ordinary receding-horizon rollout. The
+specification is considered complete for the present investigation; no further
+INCREMENTAL RHL work is currently scheduled.
+
+---
+
+## 8. Perfect Leaf Selection by A*
 
 ### Description
 
@@ -720,7 +803,7 @@ is left on the table.
 
 ---
 
-## 8. Summary
+## 9. Summary
 
 The progression is:
 
@@ -731,6 +814,7 @@ selection sort
     -> lookahead selection
     -> 2K-partition lookahead selection
     -> receding-horizon lookahead
+    -> incremental receding-horizon lookahead
     -> exact A* leaf selection
 ```
 
