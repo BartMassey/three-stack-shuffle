@@ -2,7 +2,7 @@
 
 use std::time::{Duration, Instant};
 
-use crate::algorithms::{solve, Algorithm};
+use crate::algorithms::{solve, Algorithm, IncrementalRhlStats};
 use crate::search::transport_heuristic;
 use crate::{validate_sort_plan, MachineError, State};
 
@@ -148,6 +148,24 @@ pub struct BenchmarkResult {
     pub lower_bounds: SampleStats,
     /// Total solver and replay time.
     pub elapsed: Duration,
+    /// Aggregate incremental-RHL planning counters.
+    pub incremental_rhl: IncrementalRhlStats,
+}
+
+fn add_incremental_rhl_stats(total: &mut IncrementalRhlStats, value: &IncrementalRhlStats) {
+    total.masks_visited += value.masks_visited;
+    total.distinct_algebraic_successors += value.distinct_algebraic_successors;
+    total.distinct_normalized_successors += value.distinct_normalized_successors;
+    total.base_cache_hits += value.base_cache_hits;
+    total.base_cache_misses += value.base_cache_misses;
+    total.base_states_stored += value.base_states_stored;
+    total.forced_targets_removed += value.forced_targets_removed;
+    total.estimated_peak_memory_bytes = total
+        .estimated_peak_memory_bytes
+        .max(value.estimated_peak_memory_bytes);
+    total.planning_nanos += value.planning_nanos;
+    total.planning_targets += value.planning_targets;
+    total.planning_buckets += value.planning_buckets;
 }
 
 /// Benchmarks algorithms on the same deterministic set of random inputs.
@@ -168,17 +186,20 @@ pub fn random_benchmark(
         let began = Instant::now();
         let mut moves = SampleStats::default();
         let mut lower_bound_stats = SampleStats::default();
+        let mut incremental_rhl = IncrementalRhlStats::default();
         for (deck, &lower_bound) in decks.iter().zip(&lower_bounds) {
             lower_bound_stats.add(lower_bound);
             let result = solve(algorithm, deck)?;
             validate_sort_plan(deck, &result.plan)?;
             moves.add(result.cost());
+            add_incremental_rhl_stats(&mut incremental_rhl, &result.stats.incremental_rhl);
         }
         reports.push(BenchmarkResult {
             algorithm,
             moves,
             lower_bounds: lower_bound_stats,
             elapsed: began.elapsed(),
+            incremental_rhl,
         });
     }
     Ok(reports)

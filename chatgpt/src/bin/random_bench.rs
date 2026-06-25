@@ -42,8 +42,23 @@ fn main() -> ExitCode {
             for (index, report) in reports.iter().enumerate() {
                 let mean_gap = report.moves.mean - report.lower_bounds.mean;
                 let mean_ratio = report.moves.mean / report.lower_bounds.mean;
+                let planning_seconds = report.incremental_rhl.planning_nanos as f64 / 1e9;
+                let planning_per_target_micros = if report.incremental_rhl.planning_targets == 0 {
+                    0.0
+                } else {
+                    report.incremental_rhl.planning_nanos as f64
+                        / report.incremental_rhl.planning_targets as f64
+                        / 1e3
+                };
+                let planning_per_bucket_micros = if report.incremental_rhl.planning_buckets == 0 {
+                    0.0
+                } else {
+                    report.incremental_rhl.planning_nanos as f64
+                        / report.incremental_rhl.planning_buckets as f64
+                        / 1e3
+                };
                 println!(
-                    "  {{\"algorithm\":\"{}\",\"experimental\":{},\"n\":{n},\"samples\":{},\"seed\":{seed},\"mean\":{:.9},\"standard_deviation\":{:.9},\"standard_error\":{:.9},\"minimum\":{},\"maximum\":{},\"transport_lower_bound_mean\":{:.9},\"transport_lower_bound_standard_deviation\":{:.9},\"mean_gap_vs_lower_bound\":{:.9},\"mean_ratio_vs_lower_bound\":{:.9},\"elapsed_seconds\":{:.6}}}{}",
+                    "  {{\"algorithm\":\"{}\",\"experimental\":{},\"n\":{n},\"samples\":{},\"seed\":{seed},\"mean\":{:.9},\"standard_deviation\":{:.9},\"standard_error\":{:.9},\"minimum\":{},\"maximum\":{},\"transport_lower_bound_mean\":{:.9},\"transport_lower_bound_standard_deviation\":{:.9},\"mean_gap_vs_lower_bound\":{:.9},\"mean_ratio_vs_lower_bound\":{:.9},\"elapsed_seconds\":{:.6},\"masks_visited\":{},\"distinct_algebraic_successors\":{},\"distinct_normalized_successors\":{},\"base_cache_hits\":{},\"base_cache_misses\":{},\"base_states_stored\":{},\"forced_targets_removed\":{},\"estimated_peak_memory_bytes\":{},\"planning_seconds\":{planning_seconds:.6},\"planning_per_target_micros\":{planning_per_target_micros:.3},\"planning_per_bucket_micros\":{planning_per_bucket_micros:.3}}}{}",
                     report.algorithm.name(),
                     report.algorithm.is_experimental(),
                     report.moves.count,
@@ -57,6 +72,14 @@ fn main() -> ExitCode {
                     mean_gap,
                     mean_ratio,
                     report.elapsed.as_secs_f64(),
+                    report.incremental_rhl.masks_visited,
+                    report.incremental_rhl.distinct_algebraic_successors,
+                    report.incremental_rhl.distinct_normalized_successors,
+                    report.incremental_rhl.base_cache_hits,
+                    report.incremental_rhl.base_cache_misses,
+                    report.incremental_rhl.base_states_stored,
+                    report.incremental_rhl.forced_targets_removed,
+                    report.incremental_rhl.estimated_peak_memory_bytes,
                     if index + 1 == reports.len() { "" } else { "," }
                 );
             }
@@ -82,6 +105,25 @@ fn main() -> ExitCode {
                     mean_ratio,
                     report.elapsed.as_secs_f64()
                 );
+                if report.incremental_rhl.planning_buckets > 0 {
+                    let planning_per_target = report.incremental_rhl.planning_nanos as f64
+                        / report.incremental_rhl.planning_targets as f64
+                        / 1e3;
+                    let planning_per_bucket = report.incremental_rhl.planning_nanos as f64
+                        / report.incremental_rhl.planning_buckets as f64
+                        / 1e3;
+                    println!(
+                        "  incremental-rhl: masks={} algebraic={} normalized={} cache_hits={} cache_misses={} stored={} forced={} peak_memory_bytes={} planning_us/target={planning_per_target:.3} planning_us/bucket={planning_per_bucket:.3}",
+                        report.incremental_rhl.masks_visited,
+                        report.incremental_rhl.distinct_algebraic_successors,
+                        report.incremental_rhl.distinct_normalized_successors,
+                        report.incremental_rhl.base_cache_hits,
+                        report.incremental_rhl.base_cache_misses,
+                        report.incremental_rhl.base_states_stored,
+                        report.incremental_rhl.forced_targets_removed,
+                        report.incremental_rhl.estimated_peak_memory_bytes,
+                    );
+                }
             }
         }
         Ok(())

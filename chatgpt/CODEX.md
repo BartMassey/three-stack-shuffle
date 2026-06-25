@@ -17,17 +17,18 @@ The repository already contains:
 - reverse BFS and A* search support;
 - TRANSPORT HEURISTIC and its validation machinery;
 - ordinary and receding-horizon lookahead selection variants;
-- the complete specification of INCREMENTAL RHL; implementation and benchmarking are still pending.
+- INCREMENTAL RHL, including exact-equivalence tests, planning counters, and
+  an initial `K=2` benchmark.
 
 Do not reimplement or broadly refactor these components unless specifically
 asked.
 
-## Current assignment: INCREMENTAL RHL
+## Completed experiment: INCREMENTAL RHL
 
-The INCREMENTAL RHL specification is complete; the implementation experiment
-is not.
+INCREMENTAL RHL is implemented as a separate experimental algorithm and keeps
+ordinary brute-force RHL as its reference implementation.
 
-Implement it as a computationally equivalent version of ordinary
+It is a computationally equivalent version of ordinary
 receding-horizon rollout using:
 
 - algebraic successor construction;
@@ -40,14 +41,14 @@ receding-horizon rollout using:
 It must select the same masks and emit the same primitive move sequence as the
 existing brute-force RHL under the same tie rule.
 
-### Required implementation sequence
+### Completed validation
 
-1. Verify exact score and mask equivalence against brute-force RHL on exhaustive
-   small leaves.
-2. Verify complete move-sequence equivalence on random `K=2`, `K=3`, and `K=4`
-   runs.
-3. Attempt `K=1` with 26-card leaves.
-4. Report:
+1. Exact score and mask equivalence is tested exhaustively through six-card
+   leaves.
+2. Complete move-sequence equivalence is tested on random `K=2`, `K=3`, and
+   `K=4` runs.
+3. The initial benchmark was intentionally limited to `K=2`.
+4. The benchmark reports:
 
    ```text
    masks visited
@@ -61,7 +62,11 @@ existing brute-force RHL under the same tie rule.
    primitive move count
    ```
 
-5. Preserve the existing RHL implementation as a reference implementation.
+5. The existing RHL implementation remains the reference implementation.
+
+The 2,000-sample, 52-card, seed-`24301` `K=2` benchmark measured `8.133`
+seconds for brute-force RHL and `4.795` seconds for incremental RHL, with the
+same `343.931` mean primitive moves. See `ALGORITHMS.md` for counters.
 
 Do not add pruning, pattern databases, or a changed policy in this first
 experiment. Once this baseline has been measured, the next round may add safe

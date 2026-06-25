@@ -7,6 +7,8 @@
 
 use std::cmp::Reverse;
 use std::collections::{BTreeMap, BinaryHeap, HashMap, HashSet};
+use std::mem::size_of;
+use std::time::Instant;
 
 use crate::macros::{move_cards, reverse_d, reverse_d_to_endpoint};
 use crate::search::transport_heuristic;
@@ -25,6 +27,8 @@ pub enum Algorithm {
     TwoKPartitionLookaheadSelection(usize),
     /// Exhaustive capture-mask rollout over `2 * k` balanced value buckets.
     RolloutTwoKPartitionLookaheadSelectionExperimental(usize),
+    /// Incrementally memoized equivalent of exhaustive rollout.
+    IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(usize),
     /// Optimal A* leaf extraction over `2 * k` balanced value buckets.
     TwoKPartitioningPerfectSelection(usize),
     /// Adaptive selection preceded by one binary value partition.
@@ -82,6 +86,9 @@ impl Algorithm {
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(k) => {
                 format!("rollout-2k-partition-lookahead-selection-experimental:{k}")
             }
+            Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(k) => {
+                format!("incremental-rhl-2k-partition-lookahead-selection-experimental:{k}")
+            }
             Self::TwoKPartitioningPerfectSelection(k) => {
                 format!("2k-partitioning-perfect-selection:{k}")
             }
@@ -103,6 +110,7 @@ impl Algorithm {
         matches!(
             self,
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(_)
+                | Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(_)
                 | Self::TwoKPartitioningPerfectSelection(_)
                 | Self::SignedNaturalExperimental
                 | Self::ReversingSplitMergeExperimental
@@ -112,6 +120,15 @@ impl Algorithm {
     /// Parses a stable command-line name.
     #[must_use]
     pub fn from_name(name: &str) -> Option<Self> {
+        if let Some(k) =
+            name.strip_prefix("incremental-rhl-2k-partition-lookahead-selection-experimental:")
+        {
+            return k
+                .parse::<usize>()
+                .ok()
+                .filter(|&k| k > 0)
+                .map(Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental);
+        }
         if let Some(k) = name.strip_prefix("rollout-2k-partition-lookahead-selection-experimental:")
         {
             return k
@@ -153,6 +170,35 @@ pub struct SortStats {
     pub initial_runs: usize,
     /// Explicit reversal operations.
     pub reversals: usize,
+    /// Incremental-RHL planning measurements, when applicable.
+    pub incremental_rhl: IncrementalRhlStats,
+}
+
+/// Planning counters for incremental receding-horizon lookahead.
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct IncrementalRhlStats {
+    /// Distinct mask outcomes evaluated after the bottommost-bit quotient.
+    pub masks_visited: usize,
+    /// Distinct unnormalized algebraic successor states constructed.
+    pub distinct_algebraic_successors: usize,
+    /// Distinct successors after forced-target and endpoint normalization.
+    pub distinct_normalized_successors: usize,
+    /// Persistent base-policy cache hits.
+    pub base_cache_hits: usize,
+    /// Persistent base-policy cache misses.
+    pub base_cache_misses: usize,
+    /// Number of base-policy states stored.
+    pub base_states_stored: usize,
+    /// Exposed deterministic targets removed during base-policy evaluation.
+    pub forced_targets_removed: usize,
+    /// Estimated peak bytes occupied by planner hash tables and owned vectors.
+    pub estimated_peak_memory_bytes: usize,
+    /// Total planning time, excluding execution of committed masks.
+    pub planning_nanos: u128,
+    /// Number of nontrivial target decisions planned.
+    pub planning_targets: usize,
+    /// Number of leaf buckets planned.
+    pub planning_buckets: usize,
 }
 
 /// A fully replayable result from a constructive algorithm.
@@ -180,6 +226,7 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
         algorithm,
         Algorithm::TwoKPartitionLookaheadSelection(0)
             | Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(0)
+            | Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(0)
             | Algorithm::TwoKPartitioningPerfectSelection(0)
     ) {
         return Err(MachineError::InvalidAlgorithmParameter(
@@ -218,6 +265,14 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
                     "rollout 2k-partition lookahead selection bucket count overflowed",
                 ))?;
             partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::Rollout)
+        }
+        Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(k) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "incremental RHL 2k-partition lookahead selection bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::IncrementalRhl)
         }
         Algorithm::TwoKPartitioningPerfectSelection(k) => {
             let buckets = k
@@ -505,6 +560,272 @@ fn extract_with_rollout(
     Ok(())
 }
 
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+struct ActiveBucketState {
+    a: Vec<usize>,
+    b: Vec<usize>,
+}
+
+impl ActiveBucketState {
+    fn canonical(mut self) -> Self {
+        if self.b < self.a {
+            std::mem::swap(&mut self.a, &mut self.b);
+        }
+        self
+    }
+
+    fn estimated_owned_vector_bytes(&self) -> usize {
+        (self.a.capacity() + self.b.capacity()) * size_of::<usize>()
+    }
+}
+
+#[derive(Default)]
+struct IncrementalRhlPlanner {
+    memo: HashMap<ActiveBucketState, usize>,
+    algebraic_successors: HashSet<ActiveBucketState>,
+    normalized_successors: HashSet<ActiveBucketState>,
+    stats: IncrementalRhlStats,
+    estimated_owned_vector_bytes: usize,
+}
+
+impl IncrementalRhlPlanner {
+    fn from_machine(machine: &Machine, low: usize, current: usize) -> ActiveBucketState {
+        let project = |stack: &[usize]| {
+            stack
+                .iter()
+                .filter(|&&card| (low..=current).contains(&card))
+                .map(|&card| card - low + 1)
+                .collect()
+        };
+        ActiveBucketState {
+            a: project(&machine.state().a),
+            b: project(&machine.state().b),
+        }
+    }
+
+    fn source_and_blockers(state: &ActiveBucketState, current: usize) -> (StackId, &[usize]) {
+        if let Some(position) = state.a.iter().position(|&card| card == current) {
+            (StackId::A, &state.a[..position])
+        } else {
+            let position = state
+                .b
+                .iter()
+                .position(|&card| card == current)
+                .expect("active state contains current target");
+            (StackId::B, &state.b[..position])
+        }
+    }
+
+    fn consecutive_mask(state: &ActiveBucketState, current: usize) -> usize {
+        let (_, blockers) = Self::source_and_blockers(state, current);
+        let mut expected = current - 1;
+        let mut mask = 0;
+        for (index, &card) in blockers.iter().enumerate() {
+            if expected > 0 && card == expected {
+                mask |= 1 << index;
+                expected -= 1;
+            }
+        }
+        mask
+    }
+
+    fn mask_successor(state: &ActiveBucketState, current: usize, mask: usize) -> ActiveBucketState {
+        let (source, blockers) = Self::source_and_blockers(state, current);
+        let source_stack = if source == StackId::A {
+            &state.a
+        } else {
+            &state.b
+        };
+        let current_position = blockers.len();
+        let tail = source_stack[current_position + 1..].to_vec();
+        let mut staged = Vec::new();
+        let mut bypassed = Vec::new();
+        for (index, &card) in blockers.iter().enumerate() {
+            if mask & (1 << index) != 0 {
+                staged.push(card);
+            } else {
+                bypassed.push(card);
+            }
+        }
+        let old_destination = if source == StackId::A {
+            &state.b
+        } else {
+            &state.a
+        };
+        let mut destination =
+            Vec::with_capacity(staged.len() + bypassed.len() + old_destination.len());
+        destination.extend(staged);
+        destination.extend(bypassed.into_iter().rev());
+        destination.extend_from_slice(old_destination);
+        if source == StackId::A {
+            ActiveBucketState {
+                a: tail,
+                b: destination,
+            }
+        } else {
+            ActiveBucketState {
+                a: destination,
+                b: tail,
+            }
+        }
+    }
+
+    fn remove_forced(
+        mut state: ActiveBucketState,
+        mut current: usize,
+    ) -> (usize, usize, ActiveBucketState) {
+        let mut forced = 0;
+        while current > 0 {
+            if state.a.first() == Some(&current) {
+                state.a.remove(0);
+            } else if state.b.first() == Some(&current) {
+                state.b.remove(0);
+            } else {
+                break;
+            }
+            forced += 1;
+            current -= 1;
+        }
+        (forced, current, state)
+    }
+
+    fn normalized_successor(state: ActiveBucketState, current: usize) -> ActiveBucketState {
+        let (_, _, state) = Self::remove_forced(state, current);
+        state.canonical()
+    }
+
+    fn update_peak_memory_bytes(&mut self) {
+        let memo_table_bytes = self.memo.capacity()
+            * (size_of::<ActiveBucketState>() + size_of::<usize>() + size_of::<usize>());
+        let successor_table_bytes = (self.algebraic_successors.capacity()
+            + self.normalized_successors.capacity())
+            * (size_of::<ActiveBucketState>() + size_of::<usize>());
+        self.stats.estimated_peak_memory_bytes = self
+            .stats
+            .estimated_peak_memory_bytes
+            .max(self.estimated_owned_vector_bytes + memo_table_bytes + successor_table_bytes);
+    }
+
+    fn record_successor(&mut self, successor: &ActiveBucketState, current: usize) {
+        if self.algebraic_successors.insert(successor.clone()) {
+            self.estimated_owned_vector_bytes += successor.estimated_owned_vector_bytes();
+        }
+        let normalized = Self::normalized_successor(successor.clone(), current);
+        if self.normalized_successors.insert(normalized.clone()) {
+            self.estimated_owned_vector_bytes += normalized.estimated_owned_vector_bytes();
+        }
+        self.update_peak_memory_bytes();
+    }
+
+    fn base_cost(&mut self, state: ActiveBucketState, current: usize) -> usize {
+        let (forced, current, state) = Self::remove_forced(state, current);
+        self.stats.forced_targets_removed += forced;
+        if current == 0 {
+            return forced;
+        }
+
+        let key = state.clone().canonical();
+        if let Some(&cost) = self.memo.get(&key) {
+            self.stats.base_cache_hits += 1;
+            return forced + cost;
+        }
+        self.stats.base_cache_misses += 1;
+
+        let blockers = Self::source_and_blockers(&state, current).1.len();
+        let mask = Self::consecutive_mask(&state, current);
+        let successor = Self::mask_successor(&state, current, mask);
+        let remainder = 2 * blockers + 1 + self.base_cost(successor, current - 1);
+        self.estimated_owned_vector_bytes += key.estimated_owned_vector_bytes();
+        self.memo.insert(key, remainder);
+        self.stats.base_states_stored = self.memo.len();
+        self.update_peak_memory_bytes();
+        forced + remainder
+    }
+
+    fn best_mask(&mut self, state: &ActiveBucketState, current: usize) -> usize {
+        let blockers = Self::source_and_blockers(state, current).1.len();
+        let greedy_mask = Self::consecutive_mask(state, current);
+        let quotient_count = if blockers == 0 {
+            1
+        } else {
+            1usize << (blockers - 1)
+        };
+        let pass_cost = 2 * blockers + 1;
+
+        let greedy_successor = Self::mask_successor(state, current, greedy_mask);
+        self.stats.masks_visited += 1;
+        self.record_successor(&greedy_successor, current - 1);
+        let mut best_mask = greedy_mask;
+        let mut best_score = pass_cost + self.base_cost(greedy_successor, current - 1);
+
+        for mask in 0..quotient_count {
+            if mask == greedy_mask || (blockers > 0 && mask == greedy_mask & (quotient_count - 1)) {
+                continue;
+            }
+            let successor = Self::mask_successor(state, current, mask);
+            self.stats.masks_visited += 1;
+            self.record_successor(&successor, current - 1);
+            let score = pass_cost + self.base_cost(successor, current - 1);
+            if score < best_score {
+                best_score = score;
+                best_mask = mask;
+            }
+        }
+        self.stats.distinct_algebraic_successors = self.algebraic_successors.len();
+        self.stats.distinct_normalized_successors = self.normalized_successors.len();
+        best_mask
+    }
+}
+
+fn extract_with_incremental_rhl(
+    machine: &mut Machine,
+    mut current: usize,
+    stop_after: usize,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    let low = stop_after + 1;
+    let mut planner = IncrementalRhlPlanner::default();
+    planner.stats.planning_buckets = 1;
+    while current > stop_after {
+        let source = endpoint_containing(machine, current);
+        let blockers = blocker_count(machine, source, current);
+        if blockers == 0 {
+            move_cards(machine, 1, source, StackId::D)?;
+            current -= 1;
+            continue;
+        }
+        if blockers >= usize::BITS as usize {
+            return Err(MachineError::InvalidAlgorithmParameter(
+                "incremental RHL blocker mask exceeds machine word size",
+            ));
+        }
+        let active_state = IncrementalRhlPlanner::from_machine(machine, low, current);
+        let began = Instant::now();
+        let best_mask = planner.best_mask(&active_state, current - stop_after);
+        planner.stats.planning_nanos += began.elapsed().as_nanos();
+        planner.stats.planning_targets += 1;
+        apply_capture_mask(machine, current, best_mask, stats)?;
+        current -= 1;
+    }
+    stats.incremental_rhl.masks_visited += planner.stats.masks_visited;
+    stats.incremental_rhl.distinct_algebraic_successors +=
+        planner.stats.distinct_algebraic_successors;
+    stats.incremental_rhl.distinct_normalized_successors +=
+        planner.stats.distinct_normalized_successors;
+    stats.incremental_rhl.base_cache_hits += planner.stats.base_cache_hits;
+    stats.incremental_rhl.base_cache_misses += planner.stats.base_cache_misses;
+    stats.incremental_rhl.base_states_stored += planner.stats.base_states_stored;
+    stats.incremental_rhl.forced_targets_removed += planner.stats.forced_targets_removed;
+    stats.incremental_rhl.estimated_peak_memory_bytes = stats
+        .incremental_rhl
+        .estimated_peak_memory_bytes
+        .max(planner.stats.estimated_peak_memory_bytes);
+    stats.incremental_rhl.planning_nanos += planner.stats.planning_nanos;
+    stats.incremental_rhl.planning_targets += planner.stats.planning_targets;
+    stats.incremental_rhl.planning_buckets += planner.stats.planning_buckets;
+    Ok(())
+}
+
 fn project_interval_stack(stack: &[usize], low: usize, high: usize) -> Vec<usize> {
     stack
         .iter()
@@ -644,6 +965,9 @@ fn extract_partition_tree(
         return match leaf_selection {
             LeafSelection::Consecutive => extract_with_lookahead(machine, high, low - 1, stats),
             LeafSelection::Rollout => extract_with_rollout(machine, high, low - 1, stats),
+            LeafSelection::IncrementalRhl => {
+                extract_with_incremental_rhl(machine, high, low - 1, stats)
+            }
             LeafSelection::Perfect => extract_with_perfect_selection(machine, low, high),
         };
     }
@@ -678,6 +1002,7 @@ fn extract_partition_tree(
 enum LeafSelection {
     Consecutive,
     Rollout,
+    IncrementalRhl,
     Perfect,
 }
 
@@ -1224,6 +1549,7 @@ fn reversing_split_merge(deck: &[usize], algorithm: Algorithm) -> Result<SortRes
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::random::Rng;
     use crate::validate_sort_plan;
 
     fn permutations(values: &mut [usize], start: usize, visit: &mut impl FnMut(&[usize])) {
@@ -1309,6 +1635,9 @@ mod tests {
         let rollout = Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(2);
         assert_eq!(Algorithm::from_name(&rollout.name()), Some(rollout));
 
+        let incremental = Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(2);
+        assert_eq!(Algorithm::from_name(&incremental.name()), Some(incremental));
+
         let perfect = Algorithm::TwoKPartitioningPerfectSelection(2);
         assert_eq!(Algorithm::from_name(&perfect.name()), Some(perfect));
         assert_eq!(
@@ -1341,6 +1670,84 @@ mod tests {
             });
         }
         assert!(found_strict_improvement);
+    }
+
+    #[test]
+    fn incremental_rhl_matches_brute_force_scores_and_masks_on_small_leaves() {
+        for n in 1..=6 {
+            let mut cards: Vec<_> = (1..=n).collect();
+            permutations(&mut cards, 0, &mut |permutation| {
+                for cut in 0..=n {
+                    let state = ActiveBucketState {
+                        a: permutation[..cut].to_vec(),
+                        b: permutation[cut..].to_vec(),
+                    };
+                    let (source, blockers) = IncrementalRhlPlanner::source_and_blockers(&state, n);
+                    let greedy_mask = IncrementalRhlPlanner::consecutive_mask(&state, n);
+                    let mut brute_mask = greedy_mask;
+                    let score = |mask| {
+                        let machine_state = State {
+                            a: state.a.clone(),
+                            d: Vec::new(),
+                            b: state.b.clone(),
+                        };
+                        let mut machine = Machine::from_state(machine_state);
+                        let mut ignored = SortStats::default();
+                        apply_capture_mask(&mut machine, n, mask, &mut ignored).unwrap();
+                        extract_with_lookahead(&mut machine, n - 1, 0, &mut ignored).unwrap();
+                        machine.plan().len()
+                    };
+                    let mut brute_score = score(greedy_mask);
+                    for mask in 0..(1usize << blockers.len()) {
+                        if mask == greedy_mask {
+                            continue;
+                        }
+                        let candidate_score = score(mask);
+                        if candidate_score < brute_score {
+                            brute_score = candidate_score;
+                            brute_mask = mask;
+                        }
+                    }
+
+                    let mut planner = IncrementalRhlPlanner::default();
+                    let incremental_mask = planner.best_mask(&state, n);
+                    let successor =
+                        IncrementalRhlPlanner::mask_successor(&state, n, incremental_mask);
+                    let incremental_score =
+                        2 * blockers.len() + 1 + planner.base_cost(successor, n - 1);
+                    assert_eq!(
+                        (incremental_score, incremental_mask),
+                        (brute_score, brute_mask),
+                        "mismatch for n={n}, source={source:?}, state={state:?}"
+                    );
+                }
+            });
+        }
+    }
+
+    #[test]
+    fn incremental_rhl_emits_the_same_plans_as_rollout() {
+        let mut rng = Rng::new(0x1c3_3e7a);
+        for k in 2..=4 {
+            for _ in 0..100 {
+                let deck = rng.permutation(24);
+                let brute = solve(
+                    Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(k),
+                    &deck,
+                )
+                .unwrap();
+                let incremental = solve(
+                    Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(k),
+                    &deck,
+                )
+                .unwrap();
+                assert_eq!(
+                    incremental.plan, brute.plan,
+                    "plan mismatch for k={k}, deck={deck:?}"
+                );
+                validate_sort_plan(&deck, &incremental.plan).unwrap();
+            }
+        }
     }
 
     #[test]

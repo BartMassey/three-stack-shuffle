@@ -1003,11 +1003,39 @@ With the same tie rule, INCREMENTAL RHL therefore selects exactly the same mask
 at every target and emits exactly the same primitive move sequence. Existing
 RHL move benchmarks apply unchanged; only planning time and memory use differ.
 
-The algorithm specification is complete. Implementation and benchmarking are
-still pending. The immediate experiment is to verify exact equivalence with
-brute-force RHL on small leaves, then attempt `K=1` on 26-card leaves while
-measuring mask visits, unique normalized states, cache behavior, memory use,
-and planning time.
+The algorithm is implemented as a separate experimental variant. Exhaustive
+small-leaf tests through six cards verify exact score and mask equivalence, and
+random complete runs verify primitive move-sequence equivalence for `K=2`,
+`K=3`, and `K=4`.
+
+A deterministic `K=2` benchmark over 2,000 random 52-card permutations with
+seed `24301` measured:
+
+| Planner | Mean primitive moves | Solver and replay time |
+|---|---:|---:|
+| Brute-force RHL | 343.931 | 8.133 s |
+| Incremental RHL | 343.931 | 4.795 s |
+
+The incremental implementation was about `1.70x` as fast, a `41.0%` elapsed
+time reduction, while producing the same plans. Its aggregate planning
+measurements were:
+
+```text
+masks visited:                   2,976,151
+distinct algebraic successors:  2,976,151
+distinct normalized successors: 2,976,151
+base-cache hits:                 2,872,980
+base-cache misses:               6,400,988
+base states stored:              6,400,988
+forced targets removed:          6,164,901
+estimated peak planner memory:   1,683,296 bytes
+planning time per target:        100.312 microseconds
+planning time per bucket:        543.568 microseconds
+```
+
+The memory figure estimates the largest leaf planner's hash-table slots and
+owned vector allocations; the benchmark environment did not provide an
+OS-level peak-RSS tool.
 
 If incremental reuse alone is insufficient, the next planned directions are
 safe mask pruning, dynamic programming over partial masks, and exact

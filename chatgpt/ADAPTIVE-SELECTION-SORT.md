@@ -698,9 +698,13 @@ This is the intended next experiment.
 
 ### Status
 
-Move quality is exactly the same as ordinary receding-horizon rollout. The
-specification is considered complete for the present investigation; no further
-INCREMENTAL RHL work is currently scheduled.
+The implementation is complete as a separate experimental variant. Exhaustive
+small-leaf checks through six cards match brute-force scores and masks, and
+random `K=2` through `K=4` runs match complete primitive move sequences.
+
+For 2,000 random 52-card permutations with seed `24301`, `K=2` incremental RHL
+retained the brute-force mean of `343.931` moves and reduced solver/replay time
+from `8.133` seconds to `4.795` seconds (`1.70x`, or `41.0%` faster).
 
 ---
 
