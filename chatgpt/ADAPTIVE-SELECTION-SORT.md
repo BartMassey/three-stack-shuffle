@@ -708,7 +708,99 @@ from `8.133` seconds to `4.795` seconds (`1.70x`, or `41.0%` faster).
 
 ---
 
-## 8. Perfect Leaf Selection by A*
+## 8. Depth-Limited Receding-Horizon Lookahead
+
+### Description
+
+Depth-limited RHL plans over individual blocker choices rather than complete
+capture masks.
+
+At each blocker, the two choices are:
+
+```text
+STAGE:   source -> D
+BYPASS:  source -> D -> destination
+```
+
+The algorithm searches the next `d` binary choices, evaluates each frontier
+state by completing the bucket with ordinary consecutive lookahead, commits
+only the first choice, reroots the retained search tree, and repeats.
+
+The terminal evaluation is the exact cost of a known greedy completion policy.
+It need not be admissible because this is rollout policy improvement, not A*.
+
+### Pseudocode
+
+```text
+DEPTH_VALUE(state, d):
+    forced_cost, state := perform forced target placements
+
+    if bucket is complete:
+        return forced_cost
+
+    if d = 0:
+        return forced_cost + GREEDY_COMPLETION_COST(state)
+
+    greedy_action :=
+        STAGE if top(source) = next_capture
+        else BYPASS
+
+    return forced_cost
+           + minimum over STAGE and BYPASS of:
+                 immediate action cost
+                 + DEPTH_VALUE(child state, d-1)
+           breaking ties toward greedy_action
+```
+
+```text
+DEPTH_LIMITED_RHL_BUCKET(low, high, depth):
+    initialize the partial-pass state
+
+    while bucket is unfinished:
+        perform forced target placements
+
+        if bucket is complete:
+            stop
+
+        compare STAGE and BYPASS using DEPTH_VALUE at depth-1
+        break ties toward the greedy action
+        execute only the selected first action
+        reroot and extend the retained search tree
+```
+
+Depth counts only blocker decisions. Flushing staged cards and placing exposed
+targets are forced and do not consume depth.
+
+### Relationship to existing policies
+
+```text
+depth 0 = ordinary consecutive lookahead
+depth 1 = one binary choice followed by greedy completion
+```
+
+Existing full-mask RHL is different: it searches every remaining blocker choice
+for the current target and commits the whole mask.
+
+Because greedy completion is an available continuation at every node, the
+depth-limited policy is guaranteed not to exceed the ordinary greedy policy's
+cost. Larger depth gives a nonincreasing rollout estimate, although realized
+receding-horizon move counts are not guaranteed to be monotone in depth.
+
+### Intended measurements
+
+Benchmark depths:
+
+```text
+0, 1, 2, 4, 6, 8, 10, 12, 14, 16
+```
+
+for both `K=2` and `K=1`, recording move count, runtime, expanded binary nodes,
+frontier evaluations, cache effectiveness, retained-tree reuse, and peak
+memory.
+
+---
+
+## 9. Perfect Leaf Selection by A*
 
 ### Description
 
@@ -807,7 +899,7 @@ is left on the table.
 
 ---
 
-## 9. Summary
+## 10. Summary
 
 The progression is:
 
@@ -819,6 +911,7 @@ selection sort
     -> 2K-partition lookahead selection
     -> receding-horizon lookahead
     -> incremental receding-horizon lookahead
+    -> depth-limited receding-horizon lookahead
     -> exact A* leaf selection
 ```
 

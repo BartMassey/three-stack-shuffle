@@ -1037,13 +1037,321 @@ The memory figure estimates the largest leaf planner's hash-table slots and
 owned vector allocations; the benchmark environment did not provide an
 OS-level peak-RSS tool.
 
-If incremental reuse alone is insufficient, the next planned directions are
-safe mask pruning, dynamic programming over partial masks, and exact
-state-space lower bounds. Those are deliberately deferred until this baseline
-experiment has been tried.
+Incremental reuse alone is insufficient to make exhaustive `K=1` mask
+enumeration attractive. Safe mask pruning, dynamic programming over partial
+masks, and exact state-space lower bounds remain possible later directions,
+but the next planned experiment is depth-limited receding-horizon lookahead.
 
 
-### 6.4 Experimental 2K PARTITIONING PERFECT SELECTION
+### 6.4 Experimental DEPTH-LIMITED RHL
+
+`DEPTH-LIMITED RHL` changes the unit of receding-horizon planning.
+
+Ordinary RHL enumerates every stage/bypass mask for the blockers above the
+current target, commits the entire best mask, and then replans at the next
+target. If there are `m` blockers, that requires up to `2^(m-1)` distinct mask
+outcomes even before considering later targets.
+
+DEPTH-LIMITED RHL instead treats each individual blocker as one binary
+decision:
+
+```text
+STAGE:   source -> D
+BYPASS:  source -> D -> destination
+```
+
+It searches only the next `d` binary decisions, evaluates every frontier state
+by finishing the bucket with ordinary consecutive lookahead, commits only the
+first decision, reroots the search tree, and repeats.
+
+The terminal evaluator is not an admissible lower bound. It is the exact cost
+of a known completion policy. This is deliberate: the algorithm is a
+depth-limited rollout policy, not A*.
+
+#### Partial-pass state
+
+During extraction of `current`, a planning state records:
+
+```text
+current          next target to place on D
+bucket_low       final target in this bucket
+source           endpoint containing current
+destination      the other endpoint
+held             number of blockers currently staged on D
+next_capture     next consecutive value the greedy policy would stage
+A, D, B          current physical stacks
+```
+
+At the start of a target pass:
+
+```text
+held := 0
+next_capture := current - 1
+```
+
+For the top blocker `x` on `source`:
+
+```text
+STAGE:
+    source -> D
+    held := held + 1
+
+    if x = next_capture:
+        next_capture := next_capture - 1
+
+BYPASS:
+    source -> D
+    D -> destination
+```
+
+A staged nonconsecutive card is legal, but it does not advance
+`next_capture`. If `next_capture` is bypassed, the greedy completion will not
+capture any lower consecutive values during that pass because the missing
+value cannot appear later on the source stack.
+
+#### Forced normalization
+
+When `current` becomes exposed, no binary choice remains in that pass:
+
+```text
+repeat held times:
+    D -> destination
+
+source -> D
+current := current - 1
+held := 0
+next_capture := current - 1
+```
+
+Then choose the endpoint containing the new `current` as the new source.
+Repeat this normalization while targets are exposed. Forced moves add to the
+score but do not consume search depth.
+
+#### Greedy terminal evaluator
+
+`GREEDY_COMPLETION_COST(S)` returns the exact legal move cost of finishing the
+active bucket from partial state `S` using ordinary consecutive lookahead:
+
+```text
+GREEDY_COMPLETION_COST(S):
+    cost := 0
+
+    while current >= bucket_low:
+        perform every forced normalization step
+        adding its primitive moves to cost
+
+        if current < bucket_low:
+            break
+
+        x := top(source)
+
+        if x = next_capture:
+            perform STAGE
+        else:
+            perform BYPASS
+
+        add the primitive moves performed to cost
+
+    return cost
+```
+
+This evaluator includes the eventual second move of every already staged card.
+It therefore scores a partial mask state exactly under the base policy.
+
+#### Depth-limited value
+
+Let `F_d(S)` be the rollout score from partial state `S` with `d` future binary
+choices remaining in the horizon.
+
+```text
+DEPTH_VALUE(S, d):
+    forced_cost, S := FORCE_TARGET_PLACEMENTS(S)
+
+    if S has finished the bucket:
+        return forced_cost
+
+    if d = 0:
+        return forced_cost + GREEDY_COMPLETION_COST(S)
+
+    greedy_action :=
+        STAGE if top(source) = next_capture
+        else BYPASS
+
+    best := infinity
+
+    for action in [greedy_action, the other action]:
+        action_cost, child := APPLY_DECISION(S, action)
+        candidate :=
+            forced_cost
+            + action_cost
+            + DEPTH_VALUE(child, d - 1)
+
+        if candidate < best:
+            best := candidate
+        else if candidate = best:
+            retain greedy_action
+
+    return best
+```
+
+`FORCE_TARGET_PLACEMENTS` performs the deterministic flush-and-place sequence
+described above until the bucket is complete or another blocker decision is
+required.
+
+`APPLY_DECISION` executes exactly one `STAGE` or `BYPASS` decision and updates
+`held` and `next_capture`.
+
+#### Receding-horizon policy
+
+```text
+DEPTH_LIMITED_RHL_BUCKET(bucket_low, bucket_high, depth):
+    initialize the partial-pass state for current := bucket_high
+
+    while the bucket is unfinished:
+        execute all forced target placements on the real machine
+
+        if the bucket is finished:
+            stop
+
+        greedy_action :=
+            STAGE if top(source) = next_capture
+            else BYPASS
+
+        best_action := greedy_action
+        best_score := infinity
+
+        for action in [greedy_action, the other action]:
+            action_cost, child :=
+                simulate one decision from the real partial state
+
+            score :=
+                action_cost
+                + DEPTH_VALUE(child, depth - 1)
+
+            if score < best_score:
+                best_score := score
+                best_action := action
+            else if score = best_score:
+                retain greedy_action
+
+        execute best_action on the real machine
+```
+
+Depth counts only binary blocker decisions. Forced target placements do not
+consume depth.
+
+Special cases:
+
+```text
+depth = 0:
+    ordinary consecutive lookahead
+
+depth = 1:
+    compare STAGE and BYPASS for the next blocker,
+    assuming greedy completion immediately afterward
+```
+
+Existing full-mask RHL is not `depth=1`. It searches every remaining blocker
+choice in the current pass before committing the entire mask. DEPTH-LIMITED
+RHL commits one blocker decision at a time and may allow its horizon to cross
+target boundaries.
+
+#### Incremental tree reuse
+
+The implementation should retain the depth-limited binary tree after each
+decision.
+
+After committing the chosen root action:
+
+1. discard the unchosen root subtree;
+2. reroot at the chosen child;
+3. retain all already computed descendants and greedy frontier values;
+4. extend the old frontier by one additional binary decision to restore depth
+   `d`;
+5. propagate updated values back to the new root.
+
+Memoization by:
+
+```text
+(normalized partial state, remaining depth)
+```
+
+is compatible with this rerooting. `GREEDY_COMPLETION_COST` should also be
+memoized separately.
+
+This is the incremental calculation originally sought: after the initial
+`O(2^d)` tree fill, each committed blocker decision extends the retained tree
+by roughly one new frontier layer rather than rebuilding it from scratch.
+
+#### Policy-improvement guarantee
+
+Let `G(S)` be the exact greedy completion cost. Then:
+
+```text
+F_0(S) = G(S)
+```
+
+and the greedy action is always one of the candidates at every search node.
+Therefore:
+
+```text
+F_d(S) <= F_(d-1)(S) <= G(S).
+```
+
+The actual receding-horizon policy using depth `d` is also no worse than the
+greedy policy. A backward induction on the finite remaining decision process
+shows that after choosing the first action, replanning at the child cannot cost
+more than the stored continuation value used to select that action.
+
+This guarantee depends on using the exact greedy completion cost at the
+frontier. A cheaper learned or handcrafted terminal evaluator is allowed
+experimentally, but then the guarantee disappears. No admissibility property
+is required in either case.
+
+The estimated values `F_d` are nonincreasing with depth. The actual move count
+of the receding-horizon policies need not be monotone in `d`, because each
+depth induces a different policy and replans after every decision.
+
+#### Complexity and intended experiment
+
+Without state merging, a depth-`d` search has at most:
+
+```text
+2^d frontier states
+2^(d+1) - 1 total binary nodes.
+```
+
+This bound depends on the chosen horizon, not on the total blocker count above
+the current target.
+
+The first experiment should benchmark:
+
+```text
+depth = 0, 1, 2, 4, 6, 8, 10, 12, 14, 16
+```
+
+on both `K=2` and `K=1`, stopping when runtime or memory becomes unreasonable.
+
+Required measurements include:
+
+```text
+mean primitive moves
+planning time
+binary nodes expanded
+frontier evaluations
+greedy-cache hits and misses
+depth-state cache hits and misses
+nodes retained after rerooting
+new nodes added per committed decision
+peak memory
+```
+
+INCREMENTAL RHL's persistent base-policy cache may be reused as the terminal
+evaluator cache, even though that experiment by itself produced only about a
+twofold speedup at `K=2`.
+
+
+### 6.5 Experimental 2K PARTITIONING PERFECT SELECTION
 
 `2K PARTITIONING PERFECT SELECTION` keeps the same balanced value-partition
 tree as `2K`-PARTITION LOOKAHEAD SELECTION, but replaces each leaf extraction
@@ -2009,7 +2317,8 @@ All figures count legal adjacent-stack moves.
 | ADAPTIVE SELECTION SORT | 0 | 952.980 | 2756 exact | Gene's bypass mean: 425 |
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
 | `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
-| INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | specification complete; persistent rollout DAG |
+| INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | about 2x planning speedup at `K=2`; insufficient alone |
+| DEPTH-LIMITED RHL | 0 | pending; depth-0 is consecutive lookahead | inherits greedy-policy bound | binary-decision rollout; experiment pending |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -2351,9 +2660,9 @@ the `f=g+h` value from decreasing along the current search path.
 1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
-4. Implement and benchmark INCREMENTAL RHL at `K=1`, including mask
-   outcomes, unique normalized states, cache hits, memory use, and planning
-   time; verify exact equivalence with brute-force RHL on small leaves.
+4. Implement and benchmark DEPTH-LIMITED RHL at `K=1` and `K=2`,
+   including move quality as a function of depth, retained-tree reuse, cache
+   behavior, memory use, and planning time.
 5. After the fixed-bucket RHL work, investigate instance- or
    distribution-optimized value boundaries and alphabetic partition trees.
 6. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT
