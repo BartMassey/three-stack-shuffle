@@ -2,7 +2,7 @@
 
 use std::time::{Duration, Instant};
 
-use crate::algorithms::{solve, Algorithm, IncrementalRhlStats};
+use crate::algorithms::{solve, Algorithm, DepthLimitedRhlStats, IncrementalRhlStats};
 use crate::search::transport_heuristic;
 use crate::{validate_sort_plan, MachineError, State};
 
@@ -150,6 +150,8 @@ pub struct BenchmarkResult {
     pub elapsed: Duration,
     /// Aggregate incremental-RHL planning counters.
     pub incremental_rhl: IncrementalRhlStats,
+    /// Aggregate depth-limited-RHL planning counters.
+    pub depth_limited_rhl: DepthLimitedRhlStats,
 }
 
 fn add_incremental_rhl_stats(total: &mut IncrementalRhlStats, value: &IncrementalRhlStats) {
@@ -165,6 +167,24 @@ fn add_incremental_rhl_stats(total: &mut IncrementalRhlStats, value: &Incrementa
         .max(value.estimated_peak_memory_bytes);
     total.planning_nanos += value.planning_nanos;
     total.planning_targets += value.planning_targets;
+    total.planning_buckets += value.planning_buckets;
+}
+
+fn add_depth_limited_rhl_stats(total: &mut DepthLimitedRhlStats, value: &DepthLimitedRhlStats) {
+    total.depth = value.depth;
+    total.binary_nodes_expanded += value.binary_nodes_expanded;
+    total.frontier_evaluations += value.frontier_evaluations;
+    total.greedy_cache_hits += value.greedy_cache_hits;
+    total.greedy_cache_misses += value.greedy_cache_misses;
+    total.depth_cache_hits += value.depth_cache_hits;
+    total.depth_cache_misses += value.depth_cache_misses;
+    total.nodes_retained_after_rerooting += value.nodes_retained_after_rerooting;
+    total.new_nodes_added += value.new_nodes_added;
+    total.estimated_peak_memory_bytes = total
+        .estimated_peak_memory_bytes
+        .max(value.estimated_peak_memory_bytes);
+    total.planning_nanos += value.planning_nanos;
+    total.planning_decisions += value.planning_decisions;
     total.planning_buckets += value.planning_buckets;
 }
 
@@ -187,12 +207,14 @@ pub fn random_benchmark(
         let mut moves = SampleStats::default();
         let mut lower_bound_stats = SampleStats::default();
         let mut incremental_rhl = IncrementalRhlStats::default();
+        let mut depth_limited_rhl = DepthLimitedRhlStats::default();
         for (deck, &lower_bound) in decks.iter().zip(&lower_bounds) {
             lower_bound_stats.add(lower_bound);
             let result = solve(algorithm, deck)?;
             validate_sort_plan(deck, &result.plan)?;
             moves.add(result.cost());
             add_incremental_rhl_stats(&mut incremental_rhl, &result.stats.incremental_rhl);
+            add_depth_limited_rhl_stats(&mut depth_limited_rhl, &result.stats.depth_limited_rhl);
         }
         reports.push(BenchmarkResult {
             algorithm,
@@ -200,6 +222,7 @@ pub fn random_benchmark(
             lower_bounds: lower_bound_stats,
             elapsed: began.elapsed(),
             incremental_rhl,
+            depth_limited_rhl,
         });
     }
     Ok(reports)

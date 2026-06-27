@@ -20,7 +20,9 @@ The repository already contains:
 - TRANSPORT HEURISTIC and its validation machinery;
 - ordinary and receding-horizon lookahead selection variants;
 - INCREMENTAL RHL, including exact-equivalence tests, planning counters, and
-  an initial `K=2` benchmark.
+  an initial `K=2` benchmark;
+- DEPTH-LIMITED RHL, including baseline planning counters and initial `K=1`
+  and `K=2` benchmarks.
 
 Do not reimplement or broadly refactor these components unless specifically
 asked.
@@ -75,9 +77,13 @@ enumeration practical by itself. Keep its persistent greedy-completion cache
 available for later algorithms, but do not spend more time optimizing this
 variant unless requested.
 
-## Current assignment: DEPTH-LIMITED RHL
+## Completed experiment: DEPTH-LIMITED RHL
 
-Implement the algorithm specified in `ALGORITHMS.md`.
+DEPTH-LIMITED RHL is implemented as a separate experimental algorithm:
+
+```text
+depth-limited-rhl-2k-partition-lookahead-selection-experimental:<K>:<depth>
+```
 
 The search unit is one blocker-placement decision:
 
@@ -86,159 +92,73 @@ STAGE
 BYPASS
 ```
 
-not one whole target pass and not one primitive move.
+not one whole target pass and not one primitive move. Depth `0` is ordinary
+consecutive lookahead; depth `1` compares the next blocker decision against
+greedy completion.
 
-At each real decision:
+The implementation uses exact greedy completion as the terminal evaluator and
+keeps all existing algorithms as separate selectable variants.
 
-1. search the next `depth` binary blocker decisions;
-2. evaluate every frontier state by exact ordinary consecutive-lookahead
-   completion;
-3. commit only the first decision;
-4. reroot the retained tree;
-5. extend the frontier one level to restore the requested depth.
+### Completed validation
 
-### Required state
+1. Depth `0` exactly matches ordinary consecutive lookahead.
+2. Exhaustive small-leaf checks compare the memoized recursion against a simple
+   nonincremental reference.
+3. Exhaustive small-input checks replay every returned plan.
+4. Exhaustive small-input checks verify the depth-limited policy does not lose
+   to ordinary greedy completion.
 
-A partial-pass planning state must preserve enough information to continue both
-arbitrary planning and greedy completion:
+### Current implementation note
 
-```text
-current
-bucket_low
-source and destination endpoint roles
-held staged-card count
-next_capture
-physical A, D, B stacks
-```
+The baseline planner memoizes depth values and greedy completions using full
+physical partial states. It does not yet maintain an explicit retained tree
+object after each committed blocker, so the retained-tree counter is currently
+zero. Cache hits still provide reuse, but a compact algebraic state and explicit
+rerooted tree are the next obvious implementation optimizations if deeper
+search is revisited.
 
-At the start of a target pass:
+### Initial benchmarks
 
-```text
-held = 0
-next_capture = current - 1
-```
+The rapid benchmark used 200 random 52-card permutations with seed `24301`.
 
-A staged card advances `next_capture` only when its value equals
-`next_capture`.
+`K=2`:
 
-### Forced moves
+| depth | mean moves | stderr | min | max | elapsed |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 387.760 | 1.552 | 318 | 448 | 0.004 s |
+| 1 | 350.690 | 1.101 | 304 | 402 | 0.114 s |
+| 2 | 348.800 | 1.058 | 302 | 402 | 0.206 s |
+| 3 | 346.940 | 0.981 | 302 | 402 | 0.343 s |
+| 4 | 345.600 | 0.935 | 302 | 382 | 0.579 s |
+| 5 | 344.730 | 0.909 | 302 | 382 | 0.932 s |
+| 6 | 344.360 | 0.899 | 302 | 378 | 1.432 s |
+| 7 | 343.760 | 0.884 | 302 | 376 | 2.241 s |
+| 8 | 343.340 | 0.873 | 302 | 376 | 3.570 s |
+| 9 | 342.880 | 0.856 | 302 | 376 | 5.689 s |
+| 10 | 342.390 | 0.848 | 302 | 376 | 9.147 s |
+| 11 | 341.990 | 0.835 | 302 | 376 | 14.891 s |
+| 12 | 341.750 | 0.825 | 302 | 372 | 23.734 s |
+| 13 | 341.610 | 0.823 | 302 | 372 | 40.261 s |
 
-When `current` is exposed:
+`K=1`:
 
-```text
-move held staged cards D -> destination
-move current source -> D
-decrement current
-reset held and next_capture
-```
+| depth | mean moves | stderr | min | max | elapsed |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 465.320 | 3.114 | 344 | 584 | 0.004 s |
+| 1 | 348.710 | 1.775 | 290 | 430 | 0.528 s |
+| 2 | 342.440 | 1.718 | 288 | 418 | 0.898 s |
+| 3 | 339.900 | 1.711 | 272 | 404 | 1.656 s |
+| 4 | 336.240 | 1.595 | 282 | 396 | 2.685 s |
+| 5 | 334.130 | 1.600 | 280 | 396 | 5.088 s |
+| 6 | 332.370 | 1.591 | 280 | 394 | 10.072 s |
+| 7 | 331.310 | 1.612 | 270 | 400 | 19.745 s |
 
-Repeat while later targets are exposed. These moves add to cost but do not
-consume search depth.
-
-### Terminal evaluator
-
-Use exact greedy completion from the partial state:
-
-```text
-GREEDY_COMPLETION_COST(partial_state)
-```
-
-This is not an admissible heuristic and does not need to be. It is an exact
-upper-bound completion policy.
-
-Reuse the INCREMENTAL RHL base-policy cache where possible, but extend its key
-to include the partial-pass control state (`held`, `next_capture`, and endpoint
-roles) when necessary.
-
-### Depth recursion
-
-Implement the documented recursion conceptually equivalent to:
-
-```text
-F(state, 0) = greedy completion cost
-
-F(state, d) =
-    forced cost
-    + min over STAGE/BYPASS:
-          immediate cost + F(child, d-1)
-```
-
-Always evaluate the greedy action first and retain it on exact ties.
-
-Memoize by:
-
-```text
-(normalized partial state, remaining depth)
-```
-
-### Tree reuse
-
-Do not rebuild the depth tree after every committed blocker.
-
-After committing the chosen root action:
-
-- retain the chosen child subtree;
-- discard the other subtree;
-- extend the retained frontier by one decision layer;
-- update values bottom-up.
-
-Instrument how much work this actually saves.
-
-### Variants and tests
-
-Preserve all existing algorithms as separate selectable variants.
-
-Add at least:
-
-```text
-depth 0
-depth 1
-depth 2
-depth 4
-depth 6
-depth 8
-depth 10
-depth 12
-depth 14
-depth 16
-```
-
-Depth 0 must exactly match ordinary consecutive lookahead.
-
-For exhaustive small leaves:
-
-- compare the recursive value against a simple nonincremental reference;
-- verify retained-tree and rebuilt-tree versions choose identical actions;
-- replay every returned plan;
-- verify the depth-limited policy never loses to ordinary greedy completion.
-
-Do not assert that larger depth always produces a lower realized move count.
-The rollout estimates are monotone; the receding-horizon policies need not be.
-
-### Benchmarks
-
-Benchmark `K=2` first for comparison with existing RHL data, then attempt
-`K=1`.
-
-Report:
-
-```text
-depth
-mean primitive moves
-minimum and maximum moves
-standard error
-planning time
-binary nodes expanded
-frontier greedy evaluations
-greedy-cache hits and misses
-depth-cache hits and misses
-nodes retained after rerooting
-new nodes added per real decision
-peak memory
-```
-
-Use the existing deterministic benchmark seeds as well as a smaller rapid
-development benchmark.
+The main finding is that most of the benefit comes from short lookahead.
+`K=2` improves sharply from depth `0` to depth `1`, then tapers. `K=1` starts
+much worse at depth `0`, but depth `1` already beats `K=2` depth `1`, and depth
+`7` reaches `331.310` moves. Deeper `K=1` runs are probably not worth the
+current baseline planner cost unless the retained-tree/compact-state
+optimization is implemented first.
 
 ### Optional experimental terminal evaluators
 
@@ -268,7 +188,8 @@ These are open topics, not automatic implementation assignments:
 1. Strengthen TRANSPORT HEURISTIC while preserving admissibility.
 2. Investigate consistent relaxations, reopenings, and pathmax behavior.
 3. Add disjoint additive pattern databases for exact abstractions.
-4. Implement and benchmark DEPTH-LIMITED RHL at `K=1` and `K=2`.
+4. Optimize DEPTH-LIMITED RHL with compact partial states and explicit retained
+   tree reuse, if deeper horizons become interesting again.
 5. Determine exact or tighter expected and worst-case results for the
    lookahead-selection family.
 6. Determine the exact worst and expected costs of SPLIT-MERGE SORT.

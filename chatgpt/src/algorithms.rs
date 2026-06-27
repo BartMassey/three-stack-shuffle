@@ -29,6 +29,8 @@ pub enum Algorithm {
     RolloutTwoKPartitionLookaheadSelectionExperimental(usize),
     /// Incrementally memoized equivalent of exhaustive rollout.
     IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(usize),
+    /// Depth-limited binary-decision receding-horizon rollout.
+    DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(usize, usize),
     /// Optimal A* leaf extraction over `2 * k` balanced value buckets.
     TwoKPartitioningPerfectSelection(usize),
     /// Adaptive selection preceded by one binary value partition.
@@ -89,6 +91,11 @@ impl Algorithm {
             Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(k) => {
                 format!("incremental-rhl-2k-partition-lookahead-selection-experimental:{k}")
             }
+            Self::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(k, depth) => {
+                format!(
+                    "depth-limited-rhl-2k-partition-lookahead-selection-experimental:{k}:{depth}"
+                )
+            }
             Self::TwoKPartitioningPerfectSelection(k) => {
                 format!("2k-partitioning-perfect-selection:{k}")
             }
@@ -111,6 +118,7 @@ impl Algorithm {
             self,
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(_)
                 | Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(_)
+                | Self::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(_, _)
                 | Self::TwoKPartitioningPerfectSelection(_)
                 | Self::SignedNaturalExperimental
                 | Self::ReversingSplitMergeExperimental
@@ -128,6 +136,17 @@ impl Algorithm {
                 .ok()
                 .filter(|&k| k > 0)
                 .map(Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental);
+        }
+        if let Some(rest) =
+            name.strip_prefix("depth-limited-rhl-2k-partition-lookahead-selection-experimental:")
+        {
+            let (k, depth) = rest.split_once(':')?;
+            return Some(
+                Self::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(
+                    k.parse::<usize>().ok().filter(|&k| k > 0)?,
+                    depth.parse::<usize>().ok()?,
+                ),
+            );
         }
         if let Some(k) = name.strip_prefix("rollout-2k-partition-lookahead-selection-experimental:")
         {
@@ -172,6 +191,8 @@ pub struct SortStats {
     pub reversals: usize,
     /// Incremental-RHL planning measurements, when applicable.
     pub incremental_rhl: IncrementalRhlStats,
+    /// Depth-limited-RHL planning measurements, when applicable.
+    pub depth_limited_rhl: DepthLimitedRhlStats,
 }
 
 /// Planning counters for incremental receding-horizon lookahead.
@@ -197,6 +218,37 @@ pub struct IncrementalRhlStats {
     pub planning_nanos: u128,
     /// Number of nontrivial target decisions planned.
     pub planning_targets: usize,
+    /// Number of leaf buckets planned.
+    pub planning_buckets: usize,
+}
+
+/// Planning counters for depth-limited receding-horizon lookahead.
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct DepthLimitedRhlStats {
+    /// Configured binary-decision search depth.
+    pub depth: usize,
+    /// Binary decision nodes expanded by the planner.
+    pub binary_nodes_expanded: usize,
+    /// Greedy terminal frontier evaluations requested.
+    pub frontier_evaluations: usize,
+    /// Greedy terminal cache hits.
+    pub greedy_cache_hits: usize,
+    /// Greedy terminal cache misses.
+    pub greedy_cache_misses: usize,
+    /// Depth-value cache hits.
+    pub depth_cache_hits: usize,
+    /// Depth-value cache misses.
+    pub depth_cache_misses: usize,
+    /// Nodes retained after rerooting. Zero in the baseline memoized planner.
+    pub nodes_retained_after_rerooting: usize,
+    /// New nodes added per real decision. Equal to expanded nodes per decision in the baseline.
+    pub new_nodes_added: usize,
+    /// Estimated peak bytes occupied by planner hash tables and owned vectors.
+    pub estimated_peak_memory_bytes: usize,
+    /// Total planning time, excluding execution of committed decisions.
+    pub planning_nanos: u128,
+    /// Number of real binary decisions planned.
+    pub planning_decisions: usize,
     /// Number of leaf buckets planned.
     pub planning_buckets: usize,
 }
@@ -227,6 +279,7 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
         Algorithm::TwoKPartitionLookaheadSelection(0)
             | Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(0)
             | Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(0)
+            | Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(0, _)
             | Algorithm::TwoKPartitioningPerfectSelection(0)
     ) {
         return Err(MachineError::InvalidAlgorithmParameter(
@@ -273,6 +326,19 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
                     "incremental RHL 2k-partition lookahead selection bucket count overflowed",
                 ))?;
             partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::IncrementalRhl)
+        }
+        Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(k, depth) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "depth-limited RHL 2k-partition lookahead selection bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(
+                deck,
+                algorithm,
+                buckets,
+                LeafSelection::DepthLimitedRhl { depth },
+            )
         }
         Algorithm::TwoKPartitioningPerfectSelection(k) => {
             let buckets = k
@@ -826,6 +892,343 @@ fn extract_with_incremental_rhl(
     Ok(())
 }
 
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+enum DepthDecision {
+    Stage,
+    Bypass,
+}
+
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+struct DepthLimitedState {
+    state: State,
+    low: usize,
+    current: usize,
+    source: StackId,
+    destination: StackId,
+    held: usize,
+    next_capture: usize,
+}
+
+impl DepthLimitedState {
+    fn from_machine(machine: &Machine, low: usize, current: usize) -> Self {
+        let source = endpoint_containing(machine, current);
+        Self {
+            state: machine.state().clone(),
+            low,
+            current,
+            source,
+            destination: opposite_endpoint(source),
+            held: 0,
+            next_capture: current.saturating_sub(1),
+        }
+    }
+
+    fn estimated_owned_vector_bytes(&self) -> usize {
+        (self.state.a.capacity() + self.state.d.capacity() + self.state.b.capacity())
+            * size_of::<usize>()
+    }
+
+    fn finished(&self) -> bool {
+        self.current < self.low
+    }
+
+    fn endpoint(&self, id: StackId) -> &[usize] {
+        match id {
+            StackId::A => &self.state.a,
+            StackId::B => &self.state.b,
+            StackId::D => unreachable!("D is not an endpoint"),
+        }
+    }
+
+    fn top_source(&self) -> usize {
+        self.endpoint(self.source)[0]
+    }
+
+    fn greedy_decision(&self) -> DepthDecision {
+        if self.top_source() == self.next_capture {
+            DepthDecision::Stage
+        } else {
+            DepthDecision::Bypass
+        }
+    }
+}
+
+fn opposite_endpoint(endpoint: StackId) -> StackId {
+    match endpoint {
+        StackId::A => StackId::B,
+        StackId::B => StackId::A,
+        StackId::D => unreachable!("D is not an endpoint"),
+    }
+}
+
+fn move_one_in_state(
+    state: &mut State,
+    source: StackId,
+    destination: StackId,
+) -> Result<(), MachineError> {
+    let movement = match (source, destination) {
+        (StackId::A, StackId::D) => Move::AtoD,
+        (StackId::D, StackId::A) => Move::DtoA,
+        (StackId::D, StackId::B) => Move::DtoB,
+        (StackId::B, StackId::D) => Move::BtoD,
+        _ => unreachable!("non-primitive move requested"),
+    };
+    state.apply(movement)
+}
+
+fn apply_depth_decision(
+    mut state: DepthLimitedState,
+    decision: DepthDecision,
+) -> Result<(usize, DepthLimitedState), MachineError> {
+    let top = state.top_source();
+    match decision {
+        DepthDecision::Stage => {
+            move_one_in_state(&mut state.state, state.source, StackId::D)?;
+            state.held += 1;
+            if top == state.next_capture {
+                state.next_capture = state.next_capture.saturating_sub(1);
+            }
+            Ok((1, state))
+        }
+        DepthDecision::Bypass => {
+            move_one_in_state(&mut state.state, state.source, StackId::D)?;
+            move_one_in_state(&mut state.state, StackId::D, state.destination)?;
+            Ok((2, state))
+        }
+    }
+}
+
+fn force_depth_targets(
+    mut state: DepthLimitedState,
+) -> Result<(usize, DepthLimitedState), MachineError> {
+    let mut cost = 0;
+    while !state.finished() && state.top_source() == state.current {
+        for _ in 0..state.held {
+            move_one_in_state(&mut state.state, StackId::D, state.destination)?;
+            cost += 1;
+        }
+        move_one_in_state(&mut state.state, state.source, StackId::D)?;
+        cost += 1;
+        state.current -= 1;
+        state.held = 0;
+        state.next_capture = state.current.saturating_sub(1);
+        if !state.finished() {
+            state.source = if state.state.a.contains(&state.current) {
+                StackId::A
+            } else {
+                debug_assert!(state.state.b.contains(&state.current));
+                StackId::B
+            };
+            state.destination = opposite_endpoint(state.source);
+        }
+    }
+    Ok((cost, state))
+}
+
+#[derive(Default)]
+struct DepthLimitedRhlPlanner {
+    greedy_memo: HashMap<DepthLimitedState, usize>,
+    depth_memo: HashMap<(DepthLimitedState, usize), usize>,
+    stats: DepthLimitedRhlStats,
+    estimated_owned_vector_bytes: usize,
+}
+
+impl DepthLimitedRhlPlanner {
+    fn update_peak_memory_bytes(&mut self) {
+        let greedy_table_bytes = self.greedy_memo.capacity()
+            * (size_of::<DepthLimitedState>() + size_of::<usize>() + size_of::<usize>());
+        let depth_table_bytes = self.depth_memo.capacity()
+            * (size_of::<(DepthLimitedState, usize)>() + size_of::<usize>() + size_of::<usize>());
+        self.stats.estimated_peak_memory_bytes = self
+            .stats
+            .estimated_peak_memory_bytes
+            .max(greedy_table_bytes + depth_table_bytes + self.estimated_owned_vector_bytes);
+    }
+
+    fn greedy_completion_cost(&mut self, state: DepthLimitedState) -> Result<usize, MachineError> {
+        self.stats.frontier_evaluations += 1;
+        let (forced, state) = force_depth_targets(state)?;
+        if state.finished() {
+            return Ok(forced);
+        }
+        if let Some(&cost) = self.greedy_memo.get(&state) {
+            self.stats.greedy_cache_hits += 1;
+            return Ok(forced + cost);
+        }
+        self.stats.greedy_cache_misses += 1;
+        let greedy = state.greedy_decision();
+        let (action_cost, child) = apply_depth_decision(state.clone(), greedy)?;
+        let cost = action_cost + self.greedy_completion_cost(child)?;
+        self.estimated_owned_vector_bytes += state.estimated_owned_vector_bytes();
+        self.greedy_memo.insert(state, cost);
+        self.update_peak_memory_bytes();
+        Ok(forced + cost)
+    }
+
+    fn depth_value(
+        &mut self,
+        state: DepthLimitedState,
+        depth: usize,
+    ) -> Result<usize, MachineError> {
+        let (forced, state) = force_depth_targets(state)?;
+        if state.finished() {
+            return Ok(forced);
+        }
+        if depth == 0 {
+            return Ok(forced + self.greedy_completion_cost(state)?);
+        }
+
+        let key = (state.clone(), depth);
+        if let Some(&cost) = self.depth_memo.get(&key) {
+            self.stats.depth_cache_hits += 1;
+            return Ok(forced + cost);
+        }
+        self.stats.depth_cache_misses += 1;
+        self.stats.binary_nodes_expanded += 1;
+
+        let greedy = state.greedy_decision();
+        let other = match greedy {
+            DepthDecision::Stage => DepthDecision::Bypass,
+            DepthDecision::Bypass => DepthDecision::Stage,
+        };
+
+        let (greedy_cost, greedy_child) = apply_depth_decision(state.clone(), greedy)?;
+        let mut best = greedy_cost + self.depth_value(greedy_child, depth - 1)?;
+        let (other_cost, other_child) = apply_depth_decision(state.clone(), other)?;
+        let candidate = other_cost + self.depth_value(other_child, depth - 1)?;
+        if candidate < best {
+            best = candidate;
+        }
+
+        self.estimated_owned_vector_bytes += key.0.estimated_owned_vector_bytes();
+        self.depth_memo.insert(key, best);
+        self.update_peak_memory_bytes();
+        Ok(forced + best)
+    }
+
+    fn best_decision(
+        &mut self,
+        state: &DepthLimitedState,
+        depth: usize,
+    ) -> Result<DepthDecision, MachineError> {
+        let greedy = state.greedy_decision();
+        if depth == 0 {
+            return Ok(greedy);
+        }
+        let other = match greedy {
+            DepthDecision::Stage => DepthDecision::Bypass,
+            DepthDecision::Bypass => DepthDecision::Stage,
+        };
+
+        let before_nodes = self.stats.binary_nodes_expanded;
+        let (greedy_cost, greedy_child) = apply_depth_decision(state.clone(), greedy)?;
+        let greedy_score = greedy_cost + self.depth_value(greedy_child, depth - 1)?;
+        let (other_cost, other_child) = apply_depth_decision(state.clone(), other)?;
+        let other_score = other_cost + self.depth_value(other_child, depth - 1)?;
+        self.stats.new_nodes_added += self.stats.binary_nodes_expanded - before_nodes;
+
+        if other_score < greedy_score {
+            Ok(other)
+        } else {
+            Ok(greedy)
+        }
+    }
+}
+
+fn execute_depth_forced_targets(
+    machine: &mut Machine,
+    partial: &mut DepthLimitedState,
+) -> Result<(), MachineError> {
+    while !partial.finished() && endpoint_top(machine, partial.source) == partial.current {
+        move_cards(machine, partial.held, StackId::D, partial.destination)?;
+        move_cards(machine, 1, partial.source, StackId::D)?;
+        partial.current -= 1;
+        partial.held = 0;
+        partial.next_capture = partial.current.saturating_sub(1);
+        if !partial.finished() {
+            partial.source = endpoint_containing(machine, partial.current);
+            partial.destination = opposite_endpoint(partial.source);
+        }
+        partial.state = machine.state().clone();
+    }
+    Ok(())
+}
+
+fn execute_depth_decision(
+    machine: &mut Machine,
+    partial: &mut DepthLimitedState,
+    decision: DepthDecision,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    let top = endpoint_top(machine, partial.source);
+    match decision {
+        DepthDecision::Stage => {
+            move_cards(machine, 1, partial.source, StackId::D)?;
+            partial.held += 1;
+            if top == partial.next_capture {
+                partial.next_capture = partial.next_capture.saturating_sub(1);
+            }
+            stats.bypasses += 1;
+        }
+        DepthDecision::Bypass => {
+            move_cards(machine, 1, partial.source, StackId::D)?;
+            move_cards(machine, 1, StackId::D, partial.destination)?;
+            stats.bypasses += 1;
+        }
+    }
+    partial.state = machine.state().clone();
+    Ok(())
+}
+
+fn extract_with_depth_limited_rhl(
+    machine: &mut Machine,
+    current: usize,
+    stop_after: usize,
+    depth: usize,
+    stats: &mut SortStats,
+) -> Result<(), MachineError> {
+    if depth == 0 {
+        extract_with_lookahead(machine, current, stop_after, stats)?;
+        stats.depth_limited_rhl.depth = depth;
+        stats.depth_limited_rhl.planning_buckets += 1;
+        return Ok(());
+    }
+
+    let mut partial = DepthLimitedState::from_machine(machine, stop_after + 1, current);
+    let mut planner = DepthLimitedRhlPlanner::default();
+    planner.stats.depth = depth;
+    planner.stats.planning_buckets = 1;
+    while !partial.finished() {
+        execute_depth_forced_targets(machine, &mut partial)?;
+        if partial.finished() {
+            break;
+        }
+        let began = Instant::now();
+        let decision = planner.best_decision(&partial, depth)?;
+        planner.stats.planning_nanos += began.elapsed().as_nanos();
+        planner.stats.planning_decisions += 1;
+        execute_depth_decision(machine, &mut partial, decision, stats)?;
+    }
+    stats.depth_limited_rhl.depth = depth;
+    stats.depth_limited_rhl.binary_nodes_expanded += planner.stats.binary_nodes_expanded;
+    stats.depth_limited_rhl.frontier_evaluations += planner.stats.frontier_evaluations;
+    stats.depth_limited_rhl.greedy_cache_hits += planner.stats.greedy_cache_hits;
+    stats.depth_limited_rhl.greedy_cache_misses += planner.stats.greedy_cache_misses;
+    stats.depth_limited_rhl.depth_cache_hits += planner.stats.depth_cache_hits;
+    stats.depth_limited_rhl.depth_cache_misses += planner.stats.depth_cache_misses;
+    stats.depth_limited_rhl.nodes_retained_after_rerooting +=
+        planner.stats.nodes_retained_after_rerooting;
+    stats.depth_limited_rhl.new_nodes_added += planner.stats.new_nodes_added;
+    stats.depth_limited_rhl.estimated_peak_memory_bytes = stats
+        .depth_limited_rhl
+        .estimated_peak_memory_bytes
+        .max(planner.stats.estimated_peak_memory_bytes);
+    stats.depth_limited_rhl.planning_nanos += planner.stats.planning_nanos;
+    stats.depth_limited_rhl.planning_decisions += planner.stats.planning_decisions;
+    stats.depth_limited_rhl.planning_buckets += planner.stats.planning_buckets;
+    Ok(())
+}
+
 fn project_interval_stack(stack: &[usize], low: usize, high: usize) -> Vec<usize> {
     stack
         .iter()
@@ -968,6 +1371,9 @@ fn extract_partition_tree(
             LeafSelection::IncrementalRhl => {
                 extract_with_incremental_rhl(machine, high, low - 1, stats)
             }
+            LeafSelection::DepthLimitedRhl { depth } => {
+                extract_with_depth_limited_rhl(machine, high, low - 1, depth, stats)
+            }
             LeafSelection::Perfect => extract_with_perfect_selection(machine, low, high),
         };
     }
@@ -1003,6 +1409,7 @@ enum LeafSelection {
     Consecutive,
     Rollout,
     IncrementalRhl,
+    DepthLimitedRhl { depth: usize },
     Perfect,
 }
 
@@ -1638,6 +2045,19 @@ mod tests {
         let incremental = Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(2);
         assert_eq!(Algorithm::from_name(&incremental.name()), Some(incremental));
 
+        let depth_limited =
+            Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(2, 13);
+        assert_eq!(
+            Algorithm::from_name(&depth_limited.name()),
+            Some(depth_limited)
+        );
+        assert_eq!(
+            Algorithm::from_name(
+                "depth-limited-rhl-2k-partition-lookahead-selection-experimental:0:2"
+            ),
+            None
+        );
+
         let perfect = Algorithm::TwoKPartitioningPerfectSelection(2);
         assert_eq!(Algorithm::from_name(&perfect.name()), Some(perfect));
         assert_eq!(
@@ -1747,6 +2167,117 @@ mod tests {
                 );
                 validate_sort_plan(&deck, &incremental.plan).unwrap();
             }
+        }
+    }
+
+    fn reference_depth_value(
+        state: DepthLimitedState,
+        depth: usize,
+    ) -> Result<usize, MachineError> {
+        let (forced, state) = force_depth_targets(state)?;
+        if state.finished() {
+            return Ok(forced);
+        }
+        if depth == 0 {
+            let mut planner = DepthLimitedRhlPlanner::default();
+            return Ok(forced + planner.greedy_completion_cost(state)?);
+        }
+        let greedy = state.greedy_decision();
+        let other = match greedy {
+            DepthDecision::Stage => DepthDecision::Bypass,
+            DepthDecision::Bypass => DepthDecision::Stage,
+        };
+        let (greedy_cost, greedy_child) = apply_depth_decision(state.clone(), greedy)?;
+        let greedy_score = greedy_cost + reference_depth_value(greedy_child, depth - 1)?;
+        let (other_cost, other_child) = apply_depth_decision(state, other)?;
+        let other_score = other_cost + reference_depth_value(other_child, depth - 1)?;
+        Ok(forced + greedy_score.min(other_score))
+    }
+
+    #[test]
+    fn depth_limited_rhl_depth_zero_matches_consecutive_lookahead() {
+        for n in 1..=7 {
+            let mut deck: Vec<_> = (1..=n).collect();
+            permutations(&mut deck, 0, &mut |permutation| {
+                let consecutive =
+                    solve(Algorithm::TwoKPartitionLookaheadSelection(1), permutation).unwrap();
+                let depth_zero = solve(
+                    Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(1, 0),
+                    permutation,
+                )
+                .unwrap();
+                assert_eq!(depth_zero.plan, consecutive.plan);
+                validate_sort_plan(permutation, &depth_zero.plan).unwrap();
+            });
+        }
+    }
+
+    #[test]
+    fn depth_limited_rhl_sorts_and_never_loses_to_consecutive_lookahead() {
+        let mut found_strict_improvement = false;
+        for n in 2..=7 {
+            let mut deck: Vec<_> = (1..=n).collect();
+            permutations(&mut deck, 0, &mut |permutation| {
+                let consecutive =
+                    solve(Algorithm::TwoKPartitionLookaheadSelection(1), permutation).unwrap();
+                for depth in 1..=4 {
+                    let result = solve(
+                        Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(
+                            1, depth,
+                        ),
+                        permutation,
+                    )
+                    .unwrap();
+                    validate_sort_plan(permutation, &result.plan).unwrap();
+                    assert!(
+                        result.cost() <= consecutive.cost(),
+                        "depth {depth} cost {} exceeded consecutive cost {} on {permutation:?}",
+                        result.cost(),
+                        consecutive.cost()
+                    );
+                    found_strict_improvement |= result.cost() < consecutive.cost();
+                }
+            });
+        }
+        assert!(found_strict_improvement);
+    }
+
+    #[test]
+    fn depth_limited_value_matches_simple_reference_on_small_leaves() {
+        for n in 2..=6 {
+            let mut cards: Vec<_> = (1..=n).collect();
+            permutations(&mut cards, 0, &mut |permutation| {
+                for cut in 0..=n {
+                    let state = State {
+                        a: permutation[..cut].to_vec(),
+                        d: Vec::new(),
+                        b: permutation[cut..].to_vec(),
+                    };
+                    let source = if state.a.contains(&n) {
+                        StackId::A
+                    } else {
+                        StackId::B
+                    };
+                    let partial = DepthLimitedState {
+                        state,
+                        low: 1,
+                        current: n,
+                        source,
+                        destination: opposite_endpoint(source),
+                        held: 0,
+                        next_capture: n - 1,
+                    };
+                    for depth in 0..=5 {
+                        let mut planner = DepthLimitedRhlPlanner::default();
+                        let memoized = planner.depth_value(partial.clone(), depth).unwrap();
+                        let reference = reference_depth_value(partial.clone(), depth).unwrap();
+                        assert_eq!(
+                            memoized, reference,
+                            "value mismatch for n={n}, cut={cut}, depth={depth}, permutation={permutation:?}"
+                        );
+                    }
+                }
+            });
         }
     }
 

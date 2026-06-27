@@ -1324,13 +1324,15 @@ Without state merging, a depth-`d` search has at most:
 This bound depends on the chosen horizon, not on the total blocker count above
 the current target.
 
-The first experiment should benchmark:
+The first baseline experiment benchmarked the contiguous depth range:
 
 ```text
-depth = 0, 1, 2, 4, 6, 8, 10, 12, 14, 16
+depth = 0, 1, 2, ..., 13
 ```
 
-on both `K=2` and `K=1`, stopping when runtime or memory becomes unreasonable.
+for `K=2`, and depth `0` through `7` for `K=1`, stopping when the larger
+`K=1` leaves made the baseline full-state planner expensive and the mean move
+count had already flattened.
 
 Required measurements include:
 
@@ -1349,6 +1351,70 @@ peak memory
 INCREMENTAL RHL's persistent base-policy cache may be reused as the terminal
 evaluator cache, even though that experiment by itself produced only about a
 twofold speedup at `K=2`.
+
+#### Initial implementation and benchmark
+
+DEPTH-LIMITED RHL is implemented as a separate experimental variant:
+
+```text
+depth-limited-rhl-2k-partition-lookahead-selection-experimental:K:depth
+```
+
+The baseline implementation memoizes depth values and greedy terminal
+completions over full physical partial states. It validates depth `0` against
+ordinary consecutive lookahead, checks the memoized recursion against a simple
+nonincremental reference on small leaves, replays returned plans, and checks
+that the policy does not lose to ordinary greedy completion on exhaustive small
+inputs.
+
+This baseline does not yet store an explicit retained tree across committed
+blocker decisions. The reported retained-tree counter is therefore zero; reuse
+comes from the depth-value and greedy-completion caches. A compact algebraic
+partial state plus explicit rerooting remains the main implementation
+optimization if deeper horizons become worth revisiting.
+
+The first benchmark used 200 random 52-card permutations with seed `24301`.
+
+`K=2`:
+
+| depth | Mean primitive moves | Standard error | Min | Max | Solver and replay time |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 387.760 | 1.552 | 318 | 448 | 0.004 s |
+| 1 | 350.690 | 1.101 | 304 | 402 | 0.114 s |
+| 2 | 348.800 | 1.058 | 302 | 402 | 0.206 s |
+| 3 | 346.940 | 0.981 | 302 | 402 | 0.343 s |
+| 4 | 345.600 | 0.935 | 302 | 382 | 0.579 s |
+| 5 | 344.730 | 0.909 | 302 | 382 | 0.932 s |
+| 6 | 344.360 | 0.899 | 302 | 378 | 1.432 s |
+| 7 | 343.760 | 0.884 | 302 | 376 | 2.241 s |
+| 8 | 343.340 | 0.873 | 302 | 376 | 3.570 s |
+| 9 | 342.880 | 0.856 | 302 | 376 | 5.689 s |
+| 10 | 342.390 | 0.848 | 302 | 376 | 9.147 s |
+| 11 | 341.990 | 0.835 | 302 | 376 | 14.891 s |
+| 12 | 341.750 | 0.825 | 302 | 372 | 23.734 s |
+| 13 | 341.610 | 0.823 | 302 | 372 | 40.261 s |
+
+`K=1`:
+
+| depth | Mean primitive moves | Standard error | Min | Max | Solver and replay time |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 465.320 | 3.114 | 344 | 584 | 0.004 s |
+| 1 | 348.710 | 1.775 | 290 | 430 | 0.528 s |
+| 2 | 342.440 | 1.718 | 288 | 418 | 0.898 s |
+| 3 | 339.900 | 1.711 | 272 | 404 | 1.656 s |
+| 4 | 336.240 | 1.595 | 282 | 396 | 2.685 s |
+| 5 | 334.130 | 1.600 | 280 | 396 | 5.088 s |
+| 6 | 332.370 | 1.591 | 280 | 394 | 10.072 s |
+| 7 | 331.310 | 1.612 | 270 | 400 | 19.745 s |
+
+The main empirical conclusion is that most of the move-count benefit comes
+from short binary lookahead. `K=2` gets most of its gain by depth `1` and then
+tapers gradually. `K=1` starts much worse at depth `0`, because its leaves are
+about twice as large, but short lookahead quickly makes the larger leaves
+useful: `K=1`, depth `1` is already competitive with `K=2`, and depth `7`
+reaches `331.310` moves on this sample. Deeper `K=1` horizons were stopped
+because the baseline full-state planner cost rises quickly and the mean was
+already plateauing.
 
 
 ### 6.5 Experimental 2K PARTITIONING PERFECT SELECTION
@@ -2318,7 +2384,7 @@ All figures count legal adjacent-stack moves.
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
 | `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
 | INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | about 2x planning speedup at `K=2`; insufficient alone |
-| DEPTH-LIMITED RHL | 0 | pending; depth-0 is consecutive lookahead | inherits greedy-policy bound | binary-decision rollout; experiment pending |
+| DEPTH-LIMITED RHL | 0 | measured 331.310 (`K=1`, depth 7), 341.610 (`K=2`, depth 13) | inherits greedy-policy bound | most benefit from short binary lookahead |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -2660,9 +2726,8 @@ the `f=g+h` value from decreasing along the current search path.
 1. Strengthen TRANSPORT HEURISTIC while retaining admissibility.
 2. Find a useful consistent relaxation, or evaluate reopenings versus pathmax.
 3. Add disjoint additive pattern databases for exact small-card abstractions.
-4. Implement and benchmark DEPTH-LIMITED RHL at `K=1` and `K=2`,
-   including move quality as a function of depth, retained-tree reuse, cache
-   behavior, memory use, and planning time.
+4. Optimize DEPTH-LIMITED RHL with compact partial states and explicit retained
+   tree reuse if deeper horizons become interesting again.
 5. After the fixed-bucket RHL work, investigate instance- or
    distribution-optimized value boundaries and alphabetic partition trees.
 6. Determine the exact worst and expected costs of LOOKAHEAD SELECTION SORT

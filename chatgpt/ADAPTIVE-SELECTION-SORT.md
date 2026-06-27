@@ -798,6 +798,59 @@ for both `K=2` and `K=1`, recording move count, runtime, expanded binary nodes,
 frontier evaluations, cache effectiveness, retained-tree reuse, and peak
 memory.
 
+### Initial results
+
+The implementation is complete as a separate experimental variant:
+
+```text
+depth-limited-rhl-2k-partition-lookahead-selection-experimental:K:depth
+```
+
+The baseline planner memoizes depth values and greedy terminal completions over
+full physical partial states. It does not yet keep an explicit rerooted tree
+object, so retained-tree reuse is not reflected beyond cache hits.
+
+For 200 random 52-card permutations with seed `24301`, the measured `K=2`
+means were:
+
+| depth | mean moves | stderr | min | max | elapsed |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 387.760 | 1.552 | 318 | 448 | 0.004 s |
+| 1 | 350.690 | 1.101 | 304 | 402 | 0.114 s |
+| 2 | 348.800 | 1.058 | 302 | 402 | 0.206 s |
+| 3 | 346.940 | 0.981 | 302 | 402 | 0.343 s |
+| 4 | 345.600 | 0.935 | 302 | 382 | 0.579 s |
+| 5 | 344.730 | 0.909 | 302 | 382 | 0.932 s |
+| 6 | 344.360 | 0.899 | 302 | 378 | 1.432 s |
+| 7 | 343.760 | 0.884 | 302 | 376 | 2.241 s |
+| 8 | 343.340 | 0.873 | 302 | 376 | 3.570 s |
+| 9 | 342.880 | 0.856 | 302 | 376 | 5.689 s |
+| 10 | 342.390 | 0.848 | 302 | 376 | 9.147 s |
+| 11 | 341.990 | 0.835 | 302 | 376 | 14.891 s |
+| 12 | 341.750 | 0.825 | 302 | 372 | 23.734 s |
+| 13 | 341.610 | 0.823 | 302 | 372 | 40.261 s |
+
+The same benchmark for `K=1` measured:
+
+| depth | mean moves | stderr | min | max | elapsed |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 465.320 | 3.114 | 344 | 584 | 0.004 s |
+| 1 | 348.710 | 1.775 | 290 | 430 | 0.528 s |
+| 2 | 342.440 | 1.718 | 288 | 418 | 0.898 s |
+| 3 | 339.900 | 1.711 | 272 | 404 | 1.656 s |
+| 4 | 336.240 | 1.595 | 282 | 396 | 2.685 s |
+| 5 | 334.130 | 1.600 | 280 | 396 | 5.088 s |
+| 6 | 332.370 | 1.591 | 280 | 394 | 10.072 s |
+| 7 | 331.310 | 1.612 | 270 | 400 | 19.745 s |
+
+Most of the benefit appears at short depths. `K=2` improves sharply from depth
+`0` to depth `1` and then tapers. `K=1` has much larger leaves and therefore a
+worse depth-`0` baseline, but short binary lookahead makes those larger leaves
+useful: depth `1` is already competitive with `K=2`, and depth `7` reaches
+`331.310` moves. Deeper `K=1` runs were not pursued because runtime climbs
+quickly under the baseline full-state planner and the measured means were
+already flattening.
+
 ---
 
 ## 9. Perfect Leaf Selection by A*
