@@ -814,7 +814,9 @@ rerooted tree object, so retained-tree reuse is not reflected beyond cache
 hits.
 
 For 200 random 52-card permutations with seed `24301`, the measured `K=2`
-means were:
+means were as follows. The elapsed times in this table were measured before
+the suffix-cache terminal evaluator optimization; the move distributions are
+unchanged by that exact optimization.
 
 | depth | mean moves | stderr | min | max | elapsed |
 |---:|---:|---:|---:|---:|---:|

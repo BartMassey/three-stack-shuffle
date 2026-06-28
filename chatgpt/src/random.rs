@@ -176,6 +176,10 @@ fn add_depth_limited_rhl_stats(total: &mut DepthLimitedRhlStats, value: &DepthLi
     total.frontier_evaluations += value.frontier_evaluations;
     total.greedy_cache_hits += value.greedy_cache_hits;
     total.greedy_cache_misses += value.greedy_cache_misses;
+    total.suffix_cache_hits += value.suffix_cache_hits;
+    total.suffix_cache_misses += value.suffix_cache_misses;
+    total.suffix_states_stored += value.suffix_states_stored;
+    total.suffix_forced_targets_removed += value.suffix_forced_targets_removed;
     total.depth_cache_hits += value.depth_cache_hits;
     total.depth_cache_misses += value.depth_cache_misses;
     total.nodes_retained_after_rerooting += value.nodes_retained_after_rerooting;

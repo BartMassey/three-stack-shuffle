@@ -1039,8 +1039,9 @@ OS-level peak-RSS tool.
 
 Incremental reuse alone is insufficient to make exhaustive `K=1` mask
 enumeration attractive. Safe mask pruning, dynamic programming over partial
-masks, and exact state-space lower bounds remain possible later directions,
-but the next planned experiment is depth-limited receding-horizon lookahead.
+masks, and exact state-space lower bounds remain possible later directions.
+The next completed follow-up experiment was depth-limited receding-horizon
+lookahead.
 
 
 ### 6.4 Experimental DEPTH-LIMITED RHL
@@ -1376,6 +1377,9 @@ compact algebraic partial state plus explicit rerooting remains the main
 implementation optimization if deeper horizons become worth revisiting.
 
 The first benchmark used 200 random 52-card permutations with seed `24301`.
+The elapsed times in this table were measured before the suffix-cache terminal
+evaluator optimization; the move distributions are unchanged by that exact
+optimization.
 
 `K=2`:
 
@@ -2403,7 +2407,7 @@ All figures count legal adjacent-stack moves.
 | LOOKAHEAD SELECTION SORT | 0 | unknown; measured 810.586 | <=2756 certified | Gene Welborn's algorithm |
 | `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
 | INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | about 2x planning speedup at `K=2`; insufficient alone |
-| DEPTH-LIMITED RHL | 0 | measured 331.310 (`K=1`, depth 7), 341.610 (`K=2`, depth 13) | inherits greedy-policy bound | most benefit from short binary lookahead |
+| DEPTH-LIMITED RHL | 0 | measured 328.829 (`K=1`, depth 7, 5,000 samples), 341.610 (`K=2`, depth 13, 200 samples) | inherits greedy-policy bound | most benefit from short binary lookahead; tail remains expensive |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |
@@ -2759,6 +2763,41 @@ the `f=g+h` value from decreasing along the current search path.
 11. Audit whether the mixed and double-descending normalization macros can be
     fused further.
 12. Improve the orientation-aware implementation of MSB RADIX SORT.
+
+### Implementation guardrails
+
+When modifying this repository:
+
+1. Count only primitive legal moves:
+
+   ```text
+   A -> D, D -> A, D -> B, B -> D.
+   ```
+
+2. A direct `A <-> B` transfer costs two primitive moves through `D`.
+3. Every reported algorithm cost must equal the length of a replayable
+   primitive move sequence.
+4. Preserve deterministic tie rules exactly when comparing algorithms.
+5. Distinguish exact values, certified bounds, mathematical expectations, and
+   measured sample means.
+6. Do not turn a heuristic, simulation result, or upper bound into an exact
+   claim.
+7. Keep experimental algorithms clearly labeled.
+8. Validate returned plans by replaying them to the exact goal.
+9. TRANSPORT HEURISTIC is admissible but inconsistent; A* must support
+   reopenings.
+10. The frozen suffix is a heuristic concept, not an established pruning rule.
+
+For new implementation tasks:
+
+1. Read the relevant section of this document.
+2. State the exact algorithmic or experimental change being made.
+3. Preserve the existing algorithm as a separate selectable variant when the
+   change alters semantics.
+4. Add targeted correctness tests and cost regressions.
+5. Benchmark with primitive move counts and clearly identified sample sizes.
+6. Update the documentation with results, including failures or negative
+   findings.
 13. Search optimal programs for small `n` and use them as block macros or
     pattern databases.
 14. Improve the lower bound beyond

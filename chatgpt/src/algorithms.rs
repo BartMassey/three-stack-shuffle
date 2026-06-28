@@ -235,6 +235,14 @@ pub struct DepthLimitedRhlStats {
     pub greedy_cache_hits: usize,
     /// Greedy terminal cache misses.
     pub greedy_cache_misses: usize,
+    /// Deterministic suffix-cache hits inside optimized greedy terminal evaluation.
+    pub suffix_cache_hits: usize,
+    /// Deterministic suffix-cache misses inside optimized greedy terminal evaluation.
+    pub suffix_cache_misses: usize,
+    /// Number of deterministic suffix states stored.
+    pub suffix_states_stored: usize,
+    /// Forced targets removed during deterministic suffix evaluation.
+    pub suffix_forced_targets_removed: usize,
     /// Depth-value cache hits.
     pub depth_cache_hits: usize,
     /// Depth-value cache misses.
@@ -1256,6 +1264,11 @@ fn extract_with_depth_limited_rhl(
     stats.depth_limited_rhl.frontier_evaluations += planner.stats.frontier_evaluations;
     stats.depth_limited_rhl.greedy_cache_hits += planner.stats.greedy_cache_hits;
     stats.depth_limited_rhl.greedy_cache_misses += planner.stats.greedy_cache_misses;
+    stats.depth_limited_rhl.suffix_cache_hits += planner.suffix_planner.stats.base_cache_hits;
+    stats.depth_limited_rhl.suffix_cache_misses += planner.suffix_planner.stats.base_cache_misses;
+    stats.depth_limited_rhl.suffix_states_stored += planner.suffix_planner.stats.base_states_stored;
+    stats.depth_limited_rhl.suffix_forced_targets_removed +=
+        planner.suffix_planner.stats.forced_targets_removed;
     stats.depth_limited_rhl.depth_cache_hits += planner.stats.depth_cache_hits;
     stats.depth_limited_rhl.depth_cache_misses += planner.stats.depth_cache_misses;
     stats.depth_limited_rhl.nodes_retained_after_rerooting +=

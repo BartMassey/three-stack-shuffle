@@ -67,7 +67,7 @@ fn main() -> ExitCode {
                             / 1e3
                     };
                 println!(
-                    "  {{\"algorithm\":\"{}\",\"experimental\":{},\"n\":{n},\"samples\":{},\"seed\":{seed},\"mean\":{:.9},\"standard_deviation\":{:.9},\"standard_error\":{:.9},\"minimum\":{},\"maximum\":{},\"transport_lower_bound_mean\":{:.9},\"transport_lower_bound_standard_deviation\":{:.9},\"mean_gap_vs_lower_bound\":{:.9},\"mean_ratio_vs_lower_bound\":{:.9},\"elapsed_seconds\":{:.6},\"masks_visited\":{},\"distinct_algebraic_successors\":{},\"distinct_normalized_successors\":{},\"base_cache_hits\":{},\"base_cache_misses\":{},\"base_states_stored\":{},\"forced_targets_removed\":{},\"estimated_peak_memory_bytes\":{},\"planning_seconds\":{planning_seconds:.6},\"planning_per_target_micros\":{planning_per_target_micros:.3},\"planning_per_bucket_micros\":{planning_per_bucket_micros:.3},\"depth\":{},\"binary_nodes_expanded\":{},\"frontier_evaluations\":{},\"greedy_cache_hits\":{},\"greedy_cache_misses\":{},\"depth_cache_hits\":{},\"depth_cache_misses\":{},\"nodes_retained_after_rerooting\":{},\"new_nodes_added\":{},\"depth_peak_memory_bytes\":{},\"depth_planning_seconds\":{depth_planning_seconds:.6},\"depth_planning_per_decision_micros\":{depth_planning_per_decision_micros:.3}}}{}",
+                    "  {{\"algorithm\":\"{}\",\"experimental\":{},\"n\":{n},\"samples\":{},\"seed\":{seed},\"mean\":{:.9},\"standard_deviation\":{:.9},\"standard_error\":{:.9},\"minimum\":{},\"maximum\":{},\"transport_lower_bound_mean\":{:.9},\"transport_lower_bound_standard_deviation\":{:.9},\"mean_gap_vs_lower_bound\":{:.9},\"mean_ratio_vs_lower_bound\":{:.9},\"elapsed_seconds\":{:.6},\"masks_visited\":{},\"distinct_algebraic_successors\":{},\"distinct_normalized_successors\":{},\"base_cache_hits\":{},\"base_cache_misses\":{},\"base_states_stored\":{},\"forced_targets_removed\":{},\"estimated_peak_memory_bytes\":{},\"planning_seconds\":{planning_seconds:.6},\"planning_per_target_micros\":{planning_per_target_micros:.3},\"planning_per_bucket_micros\":{planning_per_bucket_micros:.3},\"depth\":{},\"binary_nodes_expanded\":{},\"frontier_evaluations\":{},\"greedy_cache_hits\":{},\"greedy_cache_misses\":{},\"suffix_cache_hits\":{},\"suffix_cache_misses\":{},\"suffix_states_stored\":{},\"suffix_forced_targets_removed\":{},\"depth_cache_hits\":{},\"depth_cache_misses\":{},\"nodes_retained_after_rerooting\":{},\"new_nodes_added\":{},\"depth_peak_memory_bytes\":{},\"depth_planning_seconds\":{depth_planning_seconds:.6},\"depth_planning_per_decision_micros\":{depth_planning_per_decision_micros:.3}}}{}",
                     report.algorithm.name(),
                     report.algorithm.is_experimental(),
                     report.moves.count,
@@ -94,6 +94,10 @@ fn main() -> ExitCode {
                     report.depth_limited_rhl.frontier_evaluations,
                     report.depth_limited_rhl.greedy_cache_hits,
                     report.depth_limited_rhl.greedy_cache_misses,
+                    report.depth_limited_rhl.suffix_cache_hits,
+                    report.depth_limited_rhl.suffix_cache_misses,
+                    report.depth_limited_rhl.suffix_states_stored,
+                    report.depth_limited_rhl.suffix_forced_targets_removed,
                     report.depth_limited_rhl.depth_cache_hits,
                     report.depth_limited_rhl.depth_cache_misses,
                     report.depth_limited_rhl.nodes_retained_after_rerooting,
@@ -153,12 +157,16 @@ fn main() -> ExitCode {
                             / 1e3
                     };
                     println!(
-                        "  depth-limited-rhl: depth={} nodes={} frontier={} greedy_hits={} greedy_misses={} depth_hits={} depth_misses={} retained={} new_nodes={} peak_memory_bytes={} planning_us/decision={planning_per_decision:.3}",
+                        "  depth-limited-rhl: depth={} nodes={} frontier={} greedy_hits={} greedy_misses={} suffix_hits={} suffix_misses={} suffix_stored={} suffix_forced={} depth_hits={} depth_misses={} retained={} new_nodes={} peak_memory_bytes={} planning_us/decision={planning_per_decision:.3}",
                         report.depth_limited_rhl.depth,
                         report.depth_limited_rhl.binary_nodes_expanded,
                         report.depth_limited_rhl.frontier_evaluations,
                         report.depth_limited_rhl.greedy_cache_hits,
                         report.depth_limited_rhl.greedy_cache_misses,
+                        report.depth_limited_rhl.suffix_cache_hits,
+                        report.depth_limited_rhl.suffix_cache_misses,
+                        report.depth_limited_rhl.suffix_states_stored,
+                        report.depth_limited_rhl.suffix_forced_targets_removed,
                         report.depth_limited_rhl.depth_cache_hits,
                         report.depth_limited_rhl.depth_cache_misses,
                         report.depth_limited_rhl.nodes_retained_after_rerooting,
