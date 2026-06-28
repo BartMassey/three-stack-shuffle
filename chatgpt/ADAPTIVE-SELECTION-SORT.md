@@ -806,9 +806,12 @@ The implementation is complete as a separate experimental variant:
 depth-limited-rhl-2k-partition-lookahead-selection-experimental:K:depth
 ```
 
-The baseline planner memoizes depth values and greedy terminal completions over
-full physical partial states. It does not yet keep an explicit rerooted tree
-object, so retained-tree reuse is not reflected beyond cache hits.
+The planner memoizes depth values over full physical partial states. Greedy
+terminal evaluation is exact but optimized: it finishes the current partial
+pass, then uses the incremental-RHL deterministic suffix cache for the
+remaining consecutive-lookahead bucket. It does not yet keep an explicit
+rerooted tree object, so retained-tree reuse is not reflected beyond cache
+hits.
 
 For 200 random 52-card permutations with seed `24301`, the measured `K=2`
 means were:
@@ -848,8 +851,20 @@ Most of the benefit appears at short depths. `K=2` improves sharply from depth
 worse depth-`0` baseline, but short binary lookahead makes those larger leaves
 useful: depth `1` is already competitive with `K=2`, and depth `7` reaches
 `331.310` moves. Deeper `K=1` runs were not pursued because runtime climbs
-quickly under the baseline full-state planner and the measured means were
-already flattening.
+quickly and the measured means were already flattening.
+
+After adding the exact suffix-cache terminal evaluator, 5,000-sample tail
+checks with the same seed measured:
+
+| variant | mean moves | stderr | min | max | elapsed |
+|---|---:|---:|---:|---:|---:|
+| `K=1`, depth 6 | 330.478 | 0.303 | 260 | 406 | 71.363 s |
+| `K=1`, depth 7 | 328.829 | 0.298 | 260 | 412 | 126.549 s |
+| `K=2`, depth 7 | 342.798 | 0.177 | 294 | 394 | 35.666 s |
+
+The shortcut improved compute time without changing the policy, but the tail
+remained expensive. `K=1` kept the better mean but still exceeded 400 in the
+larger sample; `K=2` had lower variance but still reached 394.
 
 ---
 

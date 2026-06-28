@@ -1029,6 +1029,7 @@ fn force_depth_targets(
 struct DepthLimitedRhlPlanner {
     greedy_memo: HashMap<DepthLimitedState, usize>,
     depth_memo: HashMap<(DepthLimitedState, usize), usize>,
+    suffix_planner: IncrementalRhlPlanner,
     stats: DepthLimitedRhlStats,
     estimated_owned_vector_bytes: usize,
 }
@@ -1039,10 +1040,43 @@ impl DepthLimitedRhlPlanner {
             * (size_of::<DepthLimitedState>() + size_of::<usize>() + size_of::<usize>());
         let depth_table_bytes = self.depth_memo.capacity()
             * (size_of::<(DepthLimitedState, usize)>() + size_of::<usize>() + size_of::<usize>());
-        self.stats.estimated_peak_memory_bytes = self
-            .stats
-            .estimated_peak_memory_bytes
-            .max(greedy_table_bytes + depth_table_bytes + self.estimated_owned_vector_bytes);
+        self.stats.estimated_peak_memory_bytes = self.stats.estimated_peak_memory_bytes.max(
+            greedy_table_bytes
+                + depth_table_bytes
+                + self.estimated_owned_vector_bytes
+                + self.suffix_planner.stats.estimated_peak_memory_bytes,
+        );
+    }
+
+    fn active_bucket_state(state: &DepthLimitedState) -> ActiveBucketState {
+        let project = |stack: &[usize]| {
+            stack
+                .iter()
+                .filter(|&&card| (state.low..=state.current).contains(&card))
+                .map(|&card| card - state.low + 1)
+                .collect()
+        };
+        ActiveBucketState {
+            a: project(&state.state.a),
+            b: project(&state.state.b),
+        }
+    }
+
+    fn finish_current_pass_greedily(
+        &mut self,
+        mut state: DepthLimitedState,
+    ) -> Result<(usize, DepthLimitedState), MachineError> {
+        let original_current = state.current;
+        let mut cost = 0;
+        while !state.finished() && state.current == original_current {
+            let greedy = state.greedy_decision();
+            let (action_cost, child) = apply_depth_decision(state, greedy)?;
+            cost += action_cost;
+            let (forced_cost, child) = force_depth_targets(child)?;
+            cost += forced_cost;
+            state = child;
+        }
+        Ok((cost, state))
     }
 
     fn greedy_completion_cost(&mut self, state: DepthLimitedState) -> Result<usize, MachineError> {
@@ -1056,9 +1090,17 @@ impl DepthLimitedRhlPlanner {
             return Ok(forced + cost);
         }
         self.stats.greedy_cache_misses += 1;
-        let greedy = state.greedy_decision();
-        let (action_cost, child) = apply_depth_decision(state.clone(), greedy)?;
-        let cost = action_cost + self.greedy_completion_cost(child)?;
+        let (pass_cost, state_after_pass) = self.finish_current_pass_greedily(state.clone())?;
+        let suffix_cost = if state_after_pass.finished() {
+            0
+        } else {
+            let suffix_state = Self::active_bucket_state(&state_after_pass);
+            self.suffix_planner.base_cost(
+                suffix_state,
+                state_after_pass.current - state_after_pass.low + 1,
+            )
+        };
+        let cost = pass_cost + suffix_cost;
         self.estimated_owned_vector_bytes += state.estimated_owned_vector_bytes();
         self.greedy_memo.insert(state, cost);
         self.update_peak_memory_bytes();

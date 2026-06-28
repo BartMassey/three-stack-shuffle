@@ -1331,8 +1331,8 @@ depth = 0, 1, 2, ..., 13
 ```
 
 for `K=2`, and depth `0` through `7` for `K=1`, stopping when the larger
-`K=1` leaves made the baseline full-state planner expensive and the mean move
-count had already flattened.
+`K=1` leaves made the planner expensive and the mean move count had already
+flattened.
 
 Required measurements include:
 
@@ -1360,18 +1360,20 @@ DEPTH-LIMITED RHL is implemented as a separate experimental variant:
 depth-limited-rhl-2k-partition-lookahead-selection-experimental:K:depth
 ```
 
-The baseline implementation memoizes depth values and greedy terminal
-completions over full physical partial states. It validates depth `0` against
+The implementation memoizes depth values over full physical partial states.
+Greedy terminal evaluation is exact but optimized: it finishes the current
+partial pass and then uses the incremental-RHL deterministic suffix cache for
+the remaining consecutive-lookahead bucket. It validates depth `0` against
 ordinary consecutive lookahead, checks the memoized recursion against a simple
 nonincremental reference on small leaves, replays returned plans, and checks
 that the policy does not lose to ordinary greedy completion on exhaustive small
 inputs.
 
-This baseline does not yet store an explicit retained tree across committed
-blocker decisions. The reported retained-tree counter is therefore zero; reuse
-comes from the depth-value and greedy-completion caches. A compact algebraic
-partial state plus explicit rerooting remains the main implementation
-optimization if deeper horizons become worth revisiting.
+This implementation does not yet store an explicit retained tree across
+committed blocker decisions. The reported retained-tree counter is therefore
+zero; reuse comes from the depth-value cache and the exact suffix cache. A
+compact algebraic partial state plus explicit rerooting remains the main
+implementation optimization if deeper horizons become worth revisiting.
 
 The first benchmark used 200 random 52-card permutations with seed `24301`.
 
@@ -1413,8 +1415,25 @@ tapers gradually. `K=1` starts much worse at depth `0`, because its leaves are
 about twice as large, but short lookahead quickly makes the larger leaves
 useful: `K=1`, depth `1` is already competitive with `K=2`, and depth `7`
 reaches `331.310` moves on this sample. Deeper `K=1` horizons were stopped
-because the baseline full-state planner cost rises quickly and the mean was
-already plateauing.
+because planner cost rises quickly and the mean was already plateauing.
+
+A follow-up exact terminal-evaluator optimization was then added. Instead of
+physically running the entire greedy suffix for every depth frontier, the
+planner greedily completes only the current partial pass, then calls the
+incremental-RHL deterministic suffix cache. This preserves the same policy but
+reduces repeated runout work. Larger 5,000-sample tail checks with seed
+`24301` measured:
+
+| Variant | Mean primitive moves | Standard error | Min | Max | Solver and replay time |
+|---|---:|---:|---:|---:|---:|
+| `K=1`, depth 6 | 330.478 | 0.303 | 260 | 406 | 71.363 s |
+| `K=1`, depth 7 | 328.829 | 0.298 | 260 | 412 | 126.549 s |
+| `K=2`, depth 7 | 342.798 | 0.177 | 294 | 394 | 35.666 s |
+
+The optimization improved compute time materially without changing the move
+policy, but it did not remove the expensive tail. `K=1` retains the stronger
+mean but still produced samples above 400; `K=2` has lower variance but still
+reached 394.
 
 
 ### 6.5 Experimental 2K PARTITIONING PERFECT SELECTION

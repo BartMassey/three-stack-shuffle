@@ -110,12 +110,14 @@ keeps all existing algorithms as separate selectable variants.
 
 ### Current implementation note
 
-The baseline planner memoizes depth values and greedy completions using full
-physical partial states. It does not yet maintain an explicit retained tree
-object after each committed blocker, so the retained-tree counter is currently
-zero. Cache hits still provide reuse, but a compact algebraic state and explicit
-rerooted tree are the next obvious implementation optimizations if deeper
-search is revisited.
+The planner memoizes depth values using full physical partial states. Greedy
+terminal evaluation is exact but no longer runs the whole suffix physically:
+it finishes the current partial pass, then uses the incremental-RHL
+deterministic suffix cache for the remaining consecutive-lookahead bucket.
+The implementation does not yet maintain an explicit retained tree object
+after each committed blocker, so the retained-tree counter is currently zero.
+A compact algebraic state and explicit rerooted tree remain possible
+optimizations if deeper search is revisited.
 
 ### Initial benchmarks
 
@@ -157,8 +159,22 @@ The main finding is that most of the benefit comes from short lookahead.
 `K=2` improves sharply from depth `0` to depth `1`, then tapers. `K=1` starts
 much worse at depth `0`, but depth `1` already beats `K=2` depth `1`, and depth
 `7` reaches `331.310` moves. Deeper `K=1` runs are probably not worth the
-current baseline planner cost unless the retained-tree/compact-state
-optimization is implemented first.
+current planner cost unless the retained-tree/compact-state optimization is
+implemented first.
+
+After adding the exact suffix-cache terminal evaluator, larger 5,000-sample
+tail checks with the same seed measured:
+
+| variant | mean moves | stderr | min | max | elapsed |
+|---|---:|---:|---:|---:|---:|
+| `K=1`, depth 6 | 330.478 | 0.303 | 260 | 406 | 71.363 s |
+| `K=1`, depth 7 | 328.829 | 0.298 | 260 | 412 | 126.549 s |
+| `K=2`, depth 7 | 342.798 | 0.177 | 294 | 394 | 35.666 s |
+
+The suffix-cache shortcut substantially improved compute time without changing
+the policy, but these larger samples show the expensive tail remains. `K=1`
+has the better mean but still produces cases above 400; `K=2` has much lower
+variance but still reached 394 in 5,000 samples.
 
 ### Optional experimental terminal evaluators
 
