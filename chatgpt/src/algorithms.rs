@@ -11,7 +11,7 @@ use std::mem::size_of;
 use std::time::Instant;
 
 use crate::macros::{move_cards, reverse_d, reverse_d_to_endpoint};
-use crate::search::transport_heuristic;
+use crate::search::{project_interval_state, transport_heuristic};
 use crate::{Machine, MachineError, Move, Plan, StackId, State};
 
 /// A constructive sorting algorithm.
@@ -1282,27 +1282,6 @@ fn extract_with_depth_limited_rhl(
     stats.depth_limited_rhl.planning_decisions += planner.stats.planning_decisions;
     stats.depth_limited_rhl.planning_buckets += planner.stats.planning_buckets;
     Ok(())
-}
-
-fn project_interval_stack(stack: &[usize], low: usize, high: usize) -> Vec<usize> {
-    stack
-        .iter()
-        .filter_map(|&card| {
-            if (low..=high).contains(&card) {
-                Some(card - low + 1)
-            } else {
-                None
-            }
-        })
-        .collect()
-}
-
-fn project_interval_state(state: &State, low: usize, high: usize) -> State {
-    State {
-        a: project_interval_stack(&state.a, low, high),
-        d: project_interval_stack(&state.d, low, high),
-        b: project_interval_stack(&state.b, low, high),
-    }
 }
 
 fn interval_heuristic(state: &State, low: usize, high: usize) -> usize {
