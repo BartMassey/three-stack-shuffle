@@ -2,7 +2,9 @@
 
 use std::time::{Duration, Instant};
 
-use crate::algorithms::{solve, Algorithm, DepthLimitedRhlStats, IncrementalRhlStats};
+use crate::algorithms::{
+    solve, Algorithm, DepthLimitedRhlStats, IncrementalRhlStats, TargetBlockDpStats,
+};
 use crate::search::transport_heuristic;
 use crate::{validate_sort_plan, MachineError, State};
 
@@ -152,6 +154,8 @@ pub struct BenchmarkResult {
     pub incremental_rhl: IncrementalRhlStats,
     /// Aggregate depth-limited-RHL planning counters.
     pub depth_limited_rhl: DepthLimitedRhlStats,
+    /// Aggregate consecutive-target block-DP planning counters.
+    pub target_block_dp: TargetBlockDpStats,
 }
 
 fn add_incremental_rhl_stats(total: &mut IncrementalRhlStats, value: &IncrementalRhlStats) {
@@ -192,6 +196,14 @@ fn add_depth_limited_rhl_stats(total: &mut DepthLimitedRhlStats, value: &DepthLi
     total.planning_buckets += value.planning_buckets;
 }
 
+fn add_target_block_dp_stats(total: &mut TargetBlockDpStats, value: &TargetBlockDpStats) {
+    total.states += value.states;
+    total.transitions += value.transitions;
+    total.max_candidates = total.max_candidates.max(value.max_candidates);
+    total.cache_hits += value.cache_hits;
+    total.forced_targets += value.forced_targets;
+}
+
 /// Benchmarks algorithms on the same deterministic set of random inputs.
 pub fn random_benchmark(
     n: usize,
@@ -212,6 +224,7 @@ pub fn random_benchmark(
         let mut lower_bound_stats = SampleStats::default();
         let mut incremental_rhl = IncrementalRhlStats::default();
         let mut depth_limited_rhl = DepthLimitedRhlStats::default();
+        let mut target_block_dp = TargetBlockDpStats::default();
         for (deck, &lower_bound) in decks.iter().zip(&lower_bounds) {
             lower_bound_stats.add(lower_bound);
             let result = solve(algorithm, deck)?;
@@ -219,6 +232,7 @@ pub fn random_benchmark(
             moves.add(result.cost());
             add_incremental_rhl_stats(&mut incremental_rhl, &result.stats.incremental_rhl);
             add_depth_limited_rhl_stats(&mut depth_limited_rhl, &result.stats.depth_limited_rhl);
+            add_target_block_dp_stats(&mut target_block_dp, &result.stats.target_block_dp);
         }
         reports.push(BenchmarkResult {
             algorithm,
@@ -227,6 +241,7 @@ pub fn random_benchmark(
             elapsed: began.elapsed(),
             incremental_rhl,
             depth_limited_rhl,
+            target_block_dp,
         });
     }
     Ok(reports)

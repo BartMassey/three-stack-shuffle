@@ -17,6 +17,9 @@ path = "src/bin/random_test.rs"
 name = "random-bench"
 path = "src/bin/random_bench.rs"
 
+[[bin]]
+name = "selection-diagnostic"
+path = "src/bin/selection_diagnostic.rs"
+
 [profile.release]
 debug = true
-

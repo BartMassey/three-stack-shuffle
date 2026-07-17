@@ -31,6 +31,10 @@ pub enum Algorithm {
     IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(usize),
     /// Depth-limited binary-decision receding-horizon rollout.
     DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(usize, usize),
+    /// Receding-horizon rollout over target blocks built by one parked reversal.
+    TargetBlockRolloutSelectionExperimental,
+    /// Balanced value partitioning with target-block rollout in each leaf.
+    TargetBlockRolloutTwoKPartitionSelectionExperimental(usize),
     /// Optimal A* leaf extraction over `2 * k` balanced value buckets.
     TwoKPartitioningPerfectSelection(usize),
     /// Adaptive selection preceded by one binary value partition.
@@ -96,6 +100,12 @@ impl Algorithm {
                     "depth-limited-rhl-2k-partition-lookahead-selection-experimental:{k}:{depth}"
                 )
             }
+            Self::TargetBlockRolloutSelectionExperimental => {
+                "target-block-rollout-selection-experimental".into()
+            }
+            Self::TargetBlockRolloutTwoKPartitionSelectionExperimental(k) => {
+                format!("target-block-rollout-2k-partition-selection-experimental:{k}")
+            }
             Self::TwoKPartitioningPerfectSelection(k) => {
                 format!("2k-partitioning-perfect-selection:{k}")
             }
@@ -119,6 +129,8 @@ impl Algorithm {
             Self::RolloutTwoKPartitionLookaheadSelectionExperimental(_)
                 | Self::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(_)
                 | Self::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(_, _)
+                | Self::TargetBlockRolloutSelectionExperimental
+                | Self::TargetBlockRolloutTwoKPartitionSelectionExperimental(_)
                 | Self::TwoKPartitioningPerfectSelection(_)
                 | Self::SignedNaturalExperimental
                 | Self::ReversingSplitMergeExperimental
@@ -170,6 +182,18 @@ impl Algorithm {
                 .filter(|&k| k > 0)
                 .map(Self::TwoKPartitionLookaheadSelection);
         }
+        if let Some(k) =
+            name.strip_prefix("target-block-rollout-2k-partition-selection-experimental:")
+        {
+            return k
+                .parse::<usize>()
+                .ok()
+                .filter(|&k| k > 0)
+                .map(Self::TargetBlockRolloutTwoKPartitionSelectionExperimental);
+        }
+        if name == "target-block-rollout-selection-experimental" {
+            return Some(Self::TargetBlockRolloutSelectionExperimental);
+        }
         Self::ALL
             .into_iter()
             .find(|algorithm| algorithm.name() == name)
@@ -193,6 +217,8 @@ pub struct SortStats {
     pub incremental_rhl: IncrementalRhlStats,
     /// Depth-limited-RHL planning measurements, when applicable.
     pub depth_limited_rhl: DepthLimitedRhlStats,
+    /// Consecutive-target block-DP planning measurements, when applicable.
+    pub target_block_dp: TargetBlockDpStats,
 }
 
 /// Planning counters for incremental receding-horizon lookahead.
@@ -261,6 +287,30 @@ pub struct DepthLimitedRhlStats {
     pub planning_buckets: usize,
 }
 
+/// Planning counters for consecutive-target block DP and rollout.
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct TargetBlockDpStats {
+    /// Canonical endpoint states whose values were computed.
+    pub states: usize,
+    /// Candidate consecutive-target batch transitions evaluated.
+    pub transitions: usize,
+    /// Largest number of batch lengths considered at one state.
+    pub max_candidates: usize,
+    /// Memoized value lookups reused.
+    pub cache_hits: usize,
+    /// Exposed targets removed without a branching decision.
+    pub forced_targets: usize,
+}
+
+/// Replayable isolated target-block planning result.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TargetBlockDpResult {
+    /// Primitive legal move sequence from the supplied A-stack permutation.
+    pub plan: Plan,
+    /// Dynamic-programming state and transition counts.
+    pub stats: TargetBlockDpStats,
+}
+
 /// A fully replayable result from a constructive algorithm.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct SortResult {
@@ -288,6 +338,7 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
             | Algorithm::RolloutTwoKPartitionLookaheadSelectionExperimental(0)
             | Algorithm::IncrementalRhlTwoKPartitionLookaheadSelectionExperimental(0)
             | Algorithm::DepthLimitedRhlTwoKPartitionLookaheadSelectionExperimental(0, _)
+            | Algorithm::TargetBlockRolloutTwoKPartitionSelectionExperimental(0)
             | Algorithm::TwoKPartitioningPerfectSelection(0)
     ) {
         return Err(MachineError::InvalidAlgorithmParameter(
@@ -347,6 +398,17 @@ pub fn solve(algorithm: Algorithm, deck: &[usize]) -> Result<SortResult, Machine
                 buckets,
                 LeafSelection::DepthLimitedRhl { depth },
             )
+        }
+        Algorithm::TargetBlockRolloutSelectionExperimental => {
+            target_block_rollout_selection(deck, algorithm)
+        }
+        Algorithm::TargetBlockRolloutTwoKPartitionSelectionExperimental(k) => {
+            let buckets = k
+                .checked_mul(2)
+                .ok_or(MachineError::InvalidAlgorithmParameter(
+                    "target-block 2k-partition bucket count overflowed",
+                ))?;
+            partition_lookahead_selection(deck, algorithm, buckets, LeafSelection::TargetBlock)
         }
         Algorithm::TwoKPartitioningPerfectSelection(k) => {
             let buckets = k
@@ -851,6 +913,322 @@ impl IncrementalRhlPlanner {
     }
 }
 
+#[derive(Default)]
+struct TargetBlockDpPlanner {
+    memo: HashMap<ActiveBucketState, usize>,
+    stats: TargetBlockDpStats,
+}
+
+#[derive(Default)]
+struct TargetBlockRolloutPlanner {
+    suffix: IncrementalRhlPlanner,
+    stats: TargetBlockDpStats,
+}
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+struct TargetBlockDecision {
+    /// Blockers transferred directly before opening the parked block.
+    before: usize,
+    /// Consecutive source cards parked together on D.
+    held: usize,
+    /// Cards passed to the destination while the held block remains on D.
+    during: usize,
+}
+
+impl TargetBlockDpPlanner {
+    fn successor(
+        state: &ActiveBucketState,
+        current: usize,
+        decision: TargetBlockDecision,
+    ) -> ActiveBucketState {
+        let (source, blockers) = IncrementalRhlPlanner::source_and_blockers(state, current);
+        let source_stack = if source == StackId::A {
+            &state.a
+        } else {
+            &state.b
+        };
+        let old_destination = if source == StackId::A {
+            &state.b
+        } else {
+            &state.a
+        };
+        let after_start = decision.before + decision.held + decision.during;
+        debug_assert!(after_start <= blockers.len());
+        let before = &blockers[..decision.before];
+        let held = &blockers[decision.before..decision.before + decision.held];
+        let during = &blockers
+            [decision.before + decision.held..decision.before + decision.held + decision.during];
+        let after = &blockers[after_start..];
+        let mut destination = Vec::with_capacity(blockers.len() + old_destination.len());
+        destination.extend(after.iter().rev().copied());
+        destination.extend_from_slice(held);
+        destination.extend(during.iter().rev().copied());
+        destination.extend(before.iter().rev().copied());
+        destination.extend_from_slice(old_destination);
+        let tail = source_stack[blockers.len() + 1..].to_vec();
+        if source == StackId::A {
+            ActiveBucketState {
+                a: tail,
+                b: destination,
+            }
+        } else {
+            ActiveBucketState {
+                a: destination,
+                b: tail,
+            }
+        }
+    }
+
+    fn descending_target_prefix(stack: &[usize], current: usize) -> usize {
+        let mut expected = current.saturating_sub(1);
+        let mut length = 0;
+        for &card in stack {
+            if expected == 0 || card != expected {
+                break;
+            }
+            length += 1;
+            expected -= 1;
+        }
+        length
+    }
+
+    /// Enumerates direct finalization plus every single parked reversal block
+    /// that exposes a nonempty consecutive-target prefix on the destination.
+    fn candidates(
+        state: &ActiveBucketState,
+        current: usize,
+    ) -> Vec<(TargetBlockDecision, ActiveBucketState)> {
+        let (source, blockers) = IncrementalRhlPlanner::source_and_blockers(state, current);
+        let direct = TargetBlockDecision {
+            before: blockers.len(),
+            held: 0,
+            during: 0,
+        };
+        let direct_successor = Self::successor(state, current, direct);
+        let mut candidates = vec![(direct, direct_successor.clone())];
+        let mut seen = HashSet::from([direct_successor]);
+
+        for before in 0..blockers.len() {
+            for held in 1..=blockers.len() - before {
+                for during in 0..=blockers.len() - before - held {
+                    let decision = TargetBlockDecision {
+                        before,
+                        held,
+                        during,
+                    };
+                    let successor = Self::successor(state, current, decision);
+                    let destination = if source == StackId::A {
+                        &successor.b
+                    } else {
+                        &successor.a
+                    };
+                    if Self::descending_target_prefix(destination, current) == 0 {
+                        continue;
+                    }
+                    if seen.insert(successor.clone()) {
+                        candidates.push((decision, successor));
+                    }
+                }
+            }
+        }
+        candidates
+    }
+
+    fn value(&mut self, state: ActiveBucketState, current: usize) -> usize {
+        let (forced, current, state) = IncrementalRhlPlanner::remove_forced(state, current);
+        self.stats.forced_targets += forced;
+        if current == 0 {
+            return forced;
+        }
+
+        let key = state.clone().canonical();
+        if let Some(&cost) = self.memo.get(&key) {
+            self.stats.cache_hits += 1;
+            return forced + cost;
+        }
+
+        let blockers = IncrementalRhlPlanner::source_and_blockers(&state, current)
+            .1
+            .len();
+        let candidates = Self::candidates(&state, current);
+        self.stats.max_candidates = self.stats.max_candidates.max(candidates.len());
+        self.stats.transitions += candidates.len();
+        let pass_cost = 2 * blockers + 1;
+        let best = candidates
+            .into_iter()
+            .map(|(_, successor)| pass_cost + self.value(successor, current - 1))
+            .min()
+            .expect("direct finalization is always a candidate");
+        self.memo.insert(key, best);
+        self.stats.states = self.memo.len();
+        forced + best
+    }
+
+    fn best_decision(&mut self, state: &ActiveBucketState, current: usize) -> TargetBlockDecision {
+        let blockers = IncrementalRhlPlanner::source_and_blockers(state, current)
+            .1
+            .len();
+        let candidates = Self::candidates(state, current);
+        self.stats.max_candidates = self.stats.max_candidates.max(candidates.len());
+        self.stats.transitions += candidates.len();
+        let pass_cost = 2 * blockers + 1;
+        let mut candidates = candidates.into_iter();
+        let (mut best_decision, successor) = candidates.next().expect("direct candidate");
+        let mut best = pass_cost + self.value(successor, current - 1);
+        for (decision, successor) in candidates {
+            let candidate = pass_cost + self.value(successor, current - 1);
+            if candidate < best {
+                best = candidate;
+                best_decision = decision;
+            }
+        }
+        best_decision
+    }
+}
+
+impl TargetBlockRolloutPlanner {
+    fn best_decision(&mut self, state: &ActiveBucketState, current: usize) -> TargetBlockDecision {
+        let candidates = TargetBlockDpPlanner::candidates(state, current);
+        self.stats.max_candidates = self.stats.max_candidates.max(candidates.len());
+        self.stats.transitions += candidates.len();
+        let mut candidates = candidates.into_iter();
+        let (mut best_decision, successor) = candidates.next().expect("direct candidate");
+        let mut best = self.suffix.base_cost(successor, current - 1);
+        for (decision, successor) in candidates {
+            let candidate = self.suffix.base_cost(successor, current - 1);
+            if candidate < best {
+                best = candidate;
+                best_decision = decision;
+            }
+        }
+        self.stats.states = self.suffix.memo.len();
+        self.stats.cache_hits = self.suffix.stats.base_cache_hits;
+        self.stats.forced_targets = self.suffix.stats.forced_targets_removed;
+        best_decision
+    }
+}
+
+fn apply_target_block_decision(
+    machine: &mut Machine,
+    current: usize,
+    decision: TargetBlockDecision,
+) -> Result<(), MachineError> {
+    let source = endpoint_containing(machine, current);
+    let destination = opposite_endpoint(source);
+    let blockers = blocker_count(machine, source, current);
+    let after = blockers - decision.before - decision.held - decision.during;
+    move_cards(machine, decision.before, source, destination)?;
+    move_cards(machine, decision.held, source, StackId::D)?;
+    move_cards(machine, decision.during, source, destination)?;
+    move_cards(machine, decision.held, StackId::D, destination)?;
+    move_cards(machine, after, source, destination)?;
+    move_cards(machine, 1, source, StackId::D)
+}
+
+fn extract_with_target_block_dp(
+    machine: &mut Machine,
+    mut current: usize,
+    stop_after: usize,
+) -> Result<TargetBlockDpStats, MachineError> {
+    let mut planner = TargetBlockDpPlanner::default();
+    while current > stop_after {
+        let source = endpoint_containing(machine, current);
+        if endpoint_top(machine, source) == current {
+            move_cards(machine, 1, source, StackId::D)?;
+            current -= 1;
+            continue;
+        }
+        let state = IncrementalRhlPlanner::from_machine(machine, stop_after + 1, current);
+        let decision = planner.best_decision(&state, current - stop_after);
+        apply_target_block_decision(machine, current, decision)?;
+        current -= 1;
+    }
+    Ok(planner.stats)
+}
+
+/// Sorts one complete bucket initially occupying A using the globally optimal
+/// policy within the consecutive-target block family.
+///
+/// At target `t`, a candidate either transfers all blockers directly or opens
+/// one contiguous parked block on D, passes another source segment above it,
+/// and closes the block early. Only outcomes that build a destination prefix
+/// `t-1, t-2, ...` are retained. That inverted target block then moves directly
+/// onto D as exposed targets.
+pub fn target_block_dp_selection_from_a(
+    cards: &[usize],
+) -> Result<TargetBlockDpResult, MachineError> {
+    let state = State::new(cards.to_vec(), Vec::new(), Vec::new())?;
+    let mut machine = Machine::from_state(state);
+    let stats = extract_with_target_block_dp(&mut machine, cards.len(), 0)?;
+    if machine.state() != &State::goal(cards.len()) {
+        return Err(MachineError::NotSorted(machine.state().clone()));
+    }
+    Ok(TargetBlockDpResult {
+        plan: machine.take_plan(),
+        stats,
+    })
+}
+
+/// Receding-horizon version of [`target_block_dp_selection_from_a`].
+///
+/// Every one-block reversal candidate is scored by exact ordinary-lookahead
+/// completion, only the first decision is committed, and the suffix-value
+/// cache persists across targets. This is the scalable reference policy while
+/// the global target-block DP still uses full physical states.
+pub fn target_block_rollout_selection_from_a(
+    cards: &[usize],
+) -> Result<TargetBlockDpResult, MachineError> {
+    let state = State::new(cards.to_vec(), Vec::new(), Vec::new())?;
+    let mut machine = Machine::from_state(state);
+    let stats = extract_with_target_block_rollout(&mut machine, cards.len(), 0)?;
+    if machine.state() != &State::goal(cards.len()) {
+        return Err(MachineError::NotSorted(machine.state().clone()));
+    }
+    Ok(TargetBlockDpResult {
+        plan: machine.take_plan(),
+        stats,
+    })
+}
+
+fn extract_with_target_block_rollout(
+    machine: &mut Machine,
+    mut current: usize,
+    stop_after: usize,
+) -> Result<TargetBlockDpStats, MachineError> {
+    let mut planner = TargetBlockRolloutPlanner::default();
+    while current > stop_after {
+        let source = endpoint_containing(machine, current);
+        if endpoint_top(machine, source) == current {
+            move_cards(machine, 1, source, StackId::D)?;
+            current -= 1;
+            continue;
+        }
+        let state = IncrementalRhlPlanner::from_machine(machine, stop_after + 1, current);
+        let decision = planner.best_decision(&state, current - stop_after);
+        apply_target_block_decision(machine, current, decision)?;
+        current -= 1;
+    }
+    Ok(planner.stats)
+}
+
+fn target_block_rollout_selection(
+    deck: &[usize],
+    algorithm: Algorithm,
+) -> Result<SortResult, MachineError> {
+    let mut machine = Machine::new(deck)?;
+    let current = active_prefix(deck);
+    move_cards(&mut machine, current, StackId::D, StackId::A)?;
+    let target_block_dp = extract_with_target_block_rollout(&mut machine, current, 0)?;
+    Ok(finish(
+        &mut machine,
+        algorithm,
+        SortStats {
+            target_block_dp,
+            ..SortStats::default()
+        },
+    ))
+}
+
 fn extract_with_incremental_rhl(
     machine: &mut Machine,
     mut current: usize,
@@ -904,6 +1282,115 @@ fn extract_with_incremental_rhl(
 enum DepthDecision {
     Stage,
     Bypass,
+}
+
+/// One stable-state event in an isolated depth-limited selection trace.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum DepthLimitedSelectionTraceEvent {
+    /// The initial state, before any selection action.
+    Start,
+    /// One or more exposed targets were flushed and placed on D.
+    PlaceTargets {
+        /// Highest target placed by this forced normalization.
+        first: usize,
+        /// Number of consecutively exposed targets placed.
+        count: usize,
+    },
+    /// A blocker was left temporarily on D.
+    Stage {
+        /// Card moved from the source endpoint.
+        card: usize,
+        /// Whether staging was the ordinary consecutive-lookahead choice.
+        greedy: bool,
+    },
+    /// A blocker crossed D to the other endpoint.
+    Bypass {
+        /// Card moved from the source endpoint.
+        card: usize,
+        /// Whether bypassing was the ordinary consecutive-lookahead choice.
+        greedy: bool,
+    },
+}
+
+/// One stable state in an isolated depth-limited selection trace.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DepthLimitedSelectionTraceStep {
+    /// Event that produced this state.
+    pub event: DepthLimitedSelectionTraceEvent,
+    /// Primitive moves used by this event.
+    pub primitive_cost: usize,
+    /// Next target to place, or zero after completing the `1..=n` bucket.
+    pub current: usize,
+    /// Number of blockers currently staged at the top of D.
+    pub held: usize,
+    /// Next consecutive card preferred by the greedy policy.
+    pub next_capture: usize,
+    /// Physical state after the event, with stacks stored top-to-bottom.
+    pub state: State,
+}
+
+/// Trace of depth-limited selection for one bucket from a recorded configuration.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DepthLimitedSelectionTrace {
+    /// Configured blocker-decision horizon.
+    pub depth: usize,
+    /// Lowest target included in this selection bucket.
+    pub low: usize,
+    /// Total primitive move count in the isolated selection.
+    pub cost: usize,
+    /// Initial state and every stable state following an atomic selection event.
+    pub steps: Vec<DepthLimitedSelectionTraceStep>,
+}
+
+/// Initial physical and partial-pass state for a depth-limited selection trace.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct DepthLimitedSelectionTraceConfig {
+    /// Arbitrary valid physical configuration, stored top-to-bottom.
+    pub state: State,
+    /// Lowest target included in the selection bucket.
+    pub low: usize,
+    /// Next target to place on D.
+    pub current: usize,
+    /// Number of temporary cards currently staged at the top of D.
+    pub held: usize,
+    /// Next consecutive card preferred by ordinary lookahead.
+    pub next_capture: usize,
+}
+
+impl DepthLimitedSelectionTraceConfig {
+    /// Infers a full-deck selection state from an arbitrary physical state.
+    ///
+    /// The maximal goal suffix at the bottom of D is treated as already in
+    /// place. Every card above it on D is treated as staged. `next_capture` is
+    /// reconstructed by replaying those staged cards in encounter order.
+    #[must_use]
+    pub fn inferred(state: State) -> Self {
+        let n = state.len();
+        let mut expected = n;
+        let mut in_place = 0;
+        for &card in state.d.iter().rev() {
+            if card != expected {
+                break;
+            }
+            in_place += 1;
+            expected = expected.saturating_sub(1);
+        }
+        let current = n - in_place;
+        let held = state.d.len() - in_place;
+        let mut next_capture = current.saturating_sub(1);
+        for &card in state.d[..held].iter().rev() {
+            if card == next_capture {
+                next_capture = next_capture.saturating_sub(1);
+            }
+        }
+        Self {
+            state,
+            low: 1,
+            current,
+            held,
+            next_capture,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
@@ -1284,6 +1771,157 @@ fn extract_with_depth_limited_rhl(
     Ok(())
 }
 
+/// Traces depth-limited selection from an arbitrary physical and partial state.
+///
+/// Trace points are recorded after complete stage, bypass, and forced-placement
+/// events; the transient midpoint of the two-move bypass is intentionally
+/// omitted. Cards in the fixed portion `state.d[held..]` must fall outside the
+/// active target interval `low..=current`.
+pub fn trace_depth_limited_selection(
+    config: DepthLimitedSelectionTraceConfig,
+    depth: usize,
+) -> Result<DepthLimitedSelectionTrace, MachineError> {
+    config.state.validate()?;
+    let n = config.state.len();
+    if config.low == 0 || config.low > n.saturating_add(1) {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "selection trace has invalid lower target",
+        ));
+    }
+    if config.current > n {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "selection trace current target exceeds card count",
+        ));
+    }
+    if config.held > config.state.d.len() {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "selection trace held count exceeds D length",
+        ));
+    }
+    if config.current >= config.low && config.next_capture >= config.current {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "selection trace next capture must be below current",
+        ));
+    }
+    if config.current < config.low && config.held != 0 {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "finished selection trace cannot retain staged cards",
+        ));
+    }
+    if config.state.d[config.held..]
+        .iter()
+        .any(|&card| (config.low..=config.current).contains(&card))
+    {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "active target is trapped in the fixed portion of D",
+        ));
+    }
+
+    let source = if config.current < config.low || config.state.a.contains(&config.current) {
+        StackId::A
+    } else if config.state.b.contains(&config.current) {
+        StackId::B
+    } else {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "current selection target must be on A or B",
+        ));
+    };
+    let mut partial = DepthLimitedState {
+        state: config.state,
+        low: config.low,
+        current: config.current,
+        source,
+        destination: opposite_endpoint(source),
+        held: config.held,
+        next_capture: config.next_capture,
+    };
+    let mut planner = DepthLimitedRhlPlanner::default();
+    let mut cost = 0;
+    let mut steps = vec![DepthLimitedSelectionTraceStep {
+        event: DepthLimitedSelectionTraceEvent::Start,
+        primitive_cost: 0,
+        current: partial.current,
+        held: partial.held,
+        next_capture: partial.next_capture,
+        state: partial.state.clone(),
+    }];
+
+    while !partial.finished() {
+        let first = partial.current;
+        let (forced_cost, forced) = force_depth_targets(partial)?;
+        partial = forced;
+        if partial.current < first {
+            cost += forced_cost;
+            steps.push(DepthLimitedSelectionTraceStep {
+                event: DepthLimitedSelectionTraceEvent::PlaceTargets {
+                    first,
+                    count: first - partial.current,
+                },
+                primitive_cost: forced_cost,
+                current: partial.current,
+                held: partial.held,
+                next_capture: partial.next_capture,
+                state: partial.state.clone(),
+            });
+        }
+        if partial.finished() {
+            break;
+        }
+
+        let card = partial.top_source();
+        let greedy_decision = partial.greedy_decision();
+        let decision = planner.best_decision(&partial, depth)?;
+        let (decision_cost, child) = apply_depth_decision(partial, decision)?;
+        partial = child;
+        cost += decision_cost;
+        let greedy = decision == greedy_decision;
+        let event = match decision {
+            DepthDecision::Stage => DepthLimitedSelectionTraceEvent::Stage { card, greedy },
+            DepthDecision::Bypass => DepthLimitedSelectionTraceEvent::Bypass { card, greedy },
+        };
+        steps.push(DepthLimitedSelectionTraceStep {
+            event,
+            primitive_cost: decision_cost,
+            current: partial.current,
+            held: partial.held,
+            next_capture: partial.next_capture,
+            state: partial.state.clone(),
+        });
+    }
+
+    Ok(DepthLimitedSelectionTrace {
+        depth,
+        low: config.low,
+        cost,
+        steps,
+    })
+}
+
+/// Traces one complete depth-limited selection bucket initially occupying A.
+///
+/// `cards` and all recorded stacks use top-to-bottom order.
+pub fn trace_depth_limited_selection_from_a(
+    cards: &[usize],
+    depth: usize,
+) -> Result<DepthLimitedSelectionTrace, MachineError> {
+    if cards.is_empty() {
+        return Err(MachineError::InvalidAlgorithmParameter(
+            "selection trace requires at least one card",
+        ));
+    }
+    let state = State::new(cards.to_vec(), Vec::new(), Vec::new())?;
+    trace_depth_limited_selection(
+        DepthLimitedSelectionTraceConfig {
+            state,
+            low: 1,
+            current: cards.len(),
+            held: 0,
+            next_capture: cards.len().saturating_sub(1),
+        },
+        depth,
+    )
+}
+
 fn project_interval_stack(stack: &[usize], low: usize, high: usize) -> Vec<usize> {
     stack
         .iter()
@@ -1429,6 +2067,18 @@ fn extract_partition_tree(
             LeafSelection::DepthLimitedRhl { depth } => {
                 extract_with_depth_limited_rhl(machine, high, low - 1, depth, stats)
             }
+            LeafSelection::TargetBlock => {
+                let leaf = extract_with_target_block_rollout(machine, high, low - 1)?;
+                stats.target_block_dp.states += leaf.states;
+                stats.target_block_dp.transitions += leaf.transitions;
+                stats.target_block_dp.max_candidates = stats
+                    .target_block_dp
+                    .max_candidates
+                    .max(leaf.max_candidates);
+                stats.target_block_dp.cache_hits += leaf.cache_hits;
+                stats.target_block_dp.forced_targets += leaf.forced_targets;
+                Ok(())
+            }
             LeafSelection::Perfect => extract_with_perfect_selection(machine, low, high),
         };
     }
@@ -1465,6 +2115,7 @@ enum LeafSelection {
     Rollout,
     IncrementalRhl,
     DepthLimitedRhl { depth: usize },
+    TargetBlock,
     Perfect,
 }
 
@@ -2119,6 +2770,22 @@ mod tests {
             Algorithm::from_name("2k-partitioning-perfect-selection:0"),
             None
         );
+
+        let target_block = Algorithm::TargetBlockRolloutSelectionExperimental;
+        assert_eq!(
+            Algorithm::from_name(&target_block.name()),
+            Some(target_block)
+        );
+        let partitioned_target_block =
+            Algorithm::TargetBlockRolloutTwoKPartitionSelectionExperimental(2);
+        assert_eq!(
+            Algorithm::from_name(&partitioned_target_block.name()),
+            Some(partitioned_target_block)
+        );
+        assert_eq!(
+            Algorithm::from_name("target-block-rollout-2k-partition-selection-experimental:0"),
+            None
+        );
     }
 
     #[test]
@@ -2331,6 +2998,142 @@ mod tests {
                             "value mismatch for n={n}, cut={cut}, depth={depth}, permutation={permutation:?}"
                         );
                     }
+                }
+            });
+        }
+    }
+
+    #[test]
+    fn isolated_depth_limited_selection_trace_records_stable_d_shape() {
+        for n in 1..=6 {
+            let mut cards: Vec<_> = (1..=n).collect();
+            permutations(&mut cards, 0, &mut |permutation| {
+                let trace = trace_depth_limited_selection_from_a(permutation, 7).unwrap();
+                assert_eq!(
+                    trace.cost,
+                    trace
+                        .steps
+                        .iter()
+                        .map(|step| step.primitive_cost)
+                        .sum::<usize>()
+                );
+                assert_eq!(trace.steps.last().unwrap().state, State::goal(n));
+                for step in &trace.steps {
+                    let expected_suffix: Vec<_> = (step.current + 1..=n).collect();
+                    assert_eq!(step.state.d.len(), step.held + expected_suffix.len());
+                    assert_eq!(&step.state.d[step.held..], expected_suffix);
+                }
+            });
+        }
+
+        let counterexample =
+            trace_depth_limited_selection_from_a(&[1, 4, 2, 3, 5, 6, 7], 7).unwrap();
+        assert!(counterexample
+            .steps
+            .iter()
+            .any(|step| step.state.d == [6, 4]));
+    }
+
+    #[test]
+    fn depth_limited_selection_trace_accepts_arbitrary_configurations() {
+        let midpass = State::new(vec![7], vec![6, 4], vec![5, 3, 2, 1]).unwrap();
+        let inferred = DepthLimitedSelectionTraceConfig::inferred(midpass);
+        assert_eq!(inferred.current, 7);
+        assert_eq!(inferred.held, 2);
+        assert_eq!(inferred.next_capture, 5);
+        let trace = trace_depth_limited_selection(inferred, 7).unwrap();
+        assert_eq!(trace.steps[0].state.d, [6, 4]);
+        assert_eq!(trace.steps.last().unwrap().state, State::goal(7));
+
+        let on_b = State::new(Vec::new(), Vec::new(), vec![2, 5, 1, 4, 3]).unwrap();
+        let trace =
+            trace_depth_limited_selection(DepthLimitedSelectionTraceConfig::inferred(on_b), 7)
+                .unwrap();
+        assert_eq!(trace.steps.last().unwrap().state, State::goal(5));
+
+        let bucket = State::new(vec![6, 5, 4, 1, 2, 3], vec![7], Vec::new()).unwrap();
+        let trace = trace_depth_limited_selection(
+            DepthLimitedSelectionTraceConfig {
+                state: bucket,
+                low: 4,
+                current: 6,
+                held: 0,
+                next_capture: 5,
+            },
+            7,
+        )
+        .unwrap();
+        assert_eq!(trace.low, 4);
+        assert_eq!(
+            trace.steps.last().unwrap().state,
+            State::new(vec![1, 2, 3], vec![4, 5, 6, 7], Vec::new()).unwrap()
+        );
+        assert_eq!(trace.steps.last().unwrap().current, 3);
+
+        let trapped = State::new(vec![3], vec![2], vec![1]).unwrap();
+        assert!(trace_depth_limited_selection(
+            DepthLimitedSelectionTraceConfig {
+                state: trapped,
+                low: 1,
+                current: 3,
+                held: 0,
+                next_capture: 2,
+            },
+            7,
+        )
+        .is_err());
+    }
+
+    #[test]
+    fn target_block_algebra_matches_primitive_execution() {
+        for n in 2..=6 {
+            let mut cards: Vec<_> = (1..=n).collect();
+            permutations(&mut cards, 0, &mut |permutation| {
+                let active = ActiveBucketState {
+                    a: permutation.to_vec(),
+                    b: Vec::new(),
+                };
+                for (decision, expected) in TargetBlockDpPlanner::candidates(&active, n) {
+                    let state = State::new(permutation.to_vec(), Vec::new(), Vec::new()).unwrap();
+                    let mut machine = Machine::from_state(state);
+                    apply_target_block_decision(&mut machine, n, decision).unwrap();
+                    let actual = IncrementalRhlPlanner::from_machine(&machine, 1, n - 1);
+                    assert_eq!(actual, expected, "n={n}, permutation={permutation:?}");
+                }
+            });
+        }
+    }
+
+    #[test]
+    fn target_block_dp_sorts_every_a_stack_permutation_through_seven() {
+        for n in 0..=7 {
+            let mut cards: Vec<_> = (1..=n).collect();
+            permutations(&mut cards, 0, &mut |permutation| {
+                let result = target_block_dp_selection_from_a(permutation).unwrap();
+                let start = State::new(permutation.to_vec(), Vec::new(), Vec::new()).unwrap();
+                assert_eq!(crate::replay(&start, &result.plan).unwrap(), State::goal(n));
+            });
+        }
+
+        let captured = target_block_dp_selection_from_a(&[1, 4, 2, 3, 5, 6, 7]).unwrap();
+        assert_eq!(captured.plan.len(), 19);
+        let excluded = target_block_dp_selection_from_a(&[4, 2, 6, 1, 5, 7, 3]).unwrap();
+        assert_eq!(excluded.plan.len(), 25);
+    }
+
+    #[test]
+    fn target_block_dp_algorithm_sorts_standard_inputs() {
+        let algorithms = [
+            Algorithm::TargetBlockRolloutSelectionExperimental,
+            Algorithm::TargetBlockRolloutTwoKPartitionSelectionExperimental(1),
+            Algorithm::TargetBlockRolloutTwoKPartitionSelectionExperimental(2),
+        ];
+        for n in 0..=7 {
+            let mut deck: Vec<_> = (1..=n).collect();
+            permutations(&mut deck, 0, &mut |permutation| {
+                for algorithm in algorithms {
+                    let result = solve(algorithm, permutation).unwrap();
+                    validate_sort_plan(permutation, &result.plan).unwrap();
                 }
             });
         }

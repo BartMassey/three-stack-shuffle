@@ -1439,8 +1439,196 @@ policy, but it did not remove the expensive tail. `K=1` retains the stronger
 mean but still produced samples above 400; `K=2` has lower variance but still
 reached 394.
 
+#### Isolated selection diagnostic
 
-### 6.5 Experimental 2K PARTITIONING PERFECT SELECTION
+The `selection-diagnostic` binary runs one depth-limited bucket with every
+card initially on `A`, avoiding the surrounding partition phase. A chosen
+top-to-bottom permutation can be traced with:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --trace 1,4,2,3,5,6,7 --depth 7
+```
+
+It also accepts an arbitrary physical configuration, with omitted stacks
+treated as empty and `-` available as an explicit empty-stack spelling:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --a 7 --d 6,4 --b 5,3,2,1 --depth 7
+```
+
+By default, the maximal goal suffix on `D` is considered in place, every card
+above it is considered staged, and `current`, `held`, and `next_capture` are
+inferred. Mid-pass metadata and sub-bucket bounds may instead be supplied with
+`--current`, `--held`, `--next-capture`, and `--low`.
+
+Adding `--optimal` replaces the depth-limited continuation with a complete
+reverse-BFS analysis of every shortest sort from the supplied physical state:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --trace 1,4,2,3,5,6,7 --optimal
+```
+
+The optimal-path DAG is checked by dynamic programming for both a
+property-preserving shortest path and a property-violating shortest path. The
+report covers ascending and descending rank-contiguous prefixes separately and
+also allows either direction, so conclusions do not depend on the orientation
+terminology.
+
+The same optimal-DAG pass audits temporary parking histories. An immediate
+endpoint-to-`D`-to-opposite-endpoint visit is classified as transit. A visit
+that begins during the sort, survives at least one intervening primitive move,
+and later leaves `D` is one temporary parking event. A terminal visit that
+leaves the card sorted on `D` is not temporary parking, and a card initially on
+`D` has not landed there during the observed sort. The augmented-state audit
+reports separately whether property-preserving and property-violating optimal
+sorts exist.
+
+To check that condition over every all-on-`A` input permutation:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --audit --optimal --n 7 --examples 5
+```
+
+The exhaustive `n=7` audit found:
+
+```text
+every optimal sort parks each card at most once: 4284 inputs
+both preserving and violating optima exist:       749 inputs
+every optimal sort parks some card twice:            7 inputs
+```
+
+For example, `[4,2,6,1,5,7,3]` has a unique 19-move
+optimum in which card 6 completes two temporary parking visits before its
+terminal placement on `D`.
+
+An exhaustive permutation audit is available for small `n`:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --audit --n 7 --depth 7 --examples 5
+```
+
+The trace records stable states after complete `STAGE`, `BYPASS`, and forced
+placement events; it deliberately omits the transient midpoint of the
+two-move bypass. The audit separately checks the staged-prefix/in-place-suffix
+shape of `D`, reversed stage order, rank contiguity, nongreedy staging, and
+stage runs split by bypasses.
+
+
+### 6.5 Experimental TARGET-BLOCK ROLLOUT
+
+#### Restricted reversal family
+
+This experiment assumes temporary use of `D` is part of constructing an
+inverted block of successive target values on an endpoint. Suppose `current`
+is on `source`, with blocker sequence `X`, and the other endpoint is
+`destination`. A candidate factors the blockers as:
+
+```text
+X = U ++ H ++ P ++ V
+```
+
+It executes:
+
+```text
+bypass U to destination
+park H on D
+bypass P above H to destination
+move H from D to destination
+bypass V to destination
+place current on D
+```
+
+The resulting destination prefix is:
+
+```text
+reverse(V) ++ H ++ reverse(P) ++ reverse(U)
+```
+
+Only candidates whose destination begins with a nonempty run
+
+```text
+current-1, current-2, ...
+```
+
+are retained, plus the direct candidate that bypasses all of `X`. Every
+candidate costs exactly `2|X|+1` primitive moves immediately. Once `current`
+is placed, the descending endpoint run reverses onto `D` through ordinary
+one-move final placements.
+
+There are `O(|X|^3)` choices of the three cut positions. This avoids arbitrary
+stage/bypass masks and captures, for example, the optimal reversal around card
+4 in the all-on-`A` input `[1,4,2,3,5,6,7]`.
+
+#### Global reference and scalable policy
+
+The implementation includes two forms:
+
+1. A global memoized DP over full physical endpoint states. It is exact within
+   the one-parked-block-per-target family and is used only as a small-deck
+   reference.
+2. A scalable receding-horizon rollout. It scores every candidate by exact
+   ordinary-consecutive-lookahead completion, commits the first reversal
+   choice, and retains the suffix-value cache for later targets.
+
+The physical-state global DP is not polynomial in practice: one random
+52-card case exceeded one minute. The compact interval DP suggested by the
+restricted family remains unimplemented because different reversal choices
+leave materially different endpoint remainders. The rollout is therefore the
+selectable sorting algorithm; it should not be described as the completed
+`O(n^2)` or `O(n^3)` formulation.
+
+#### Exact small-deck comparison
+
+Over all `7! = 5040` inputs initially occupying `A`:
+
+| Policy | Exactly optimal | Mean moves | Mean exact optimum | Mean gap | Maximum gap |
+|---|---:|---:|---:|---:|---:|
+| Global restricted DP | 2329 | 19.335714 | 17.352778 | 1.982937 | 12 |
+| Receding-horizon rollout | 2329 | 19.348810 | 17.352778 | 1.996032 | 12 |
+
+The original `[1,4,2,3,5,6,7]` example is solved optimally in 19 moves by
+both policies. The unavoidable double-parking example
+`[4,2,6,1,5,7,3]` costs 25 versus the exact optimum of 19, as expected from a
+family that permits only one parked reversal while exposing a target.
+
+Reproduce this audit with:
+
+```text
+cargo run --release --bin selection-diagnostic -- \
+  --audit --target-block --n 7 --examples 5
+```
+
+#### `n=52` measurements
+
+On 2,000 random permutations with seed `24301`, the scalable standard sorter
+measured:
+
+| Configuration | Mean | Standard error | Min | Max | Time |
+|---|---:|---:|---:|---:|---:|
+| No value partition | 731.477 | 1.671 | 530 | 1034 | 14.884 s |
+| `K=1` (two buckets) | 428.897 | 0.859 | 310 | 566 | 1.666 s |
+| `K=2` (four buckets) | 375.640 | 0.456 | 310 | 450 | 0.330 s |
+
+This improves ordinary lookahead (`810.586` without partitioning, about
+`457.627` for `K=1`, and about `385.342` for `K=2`) but does not match the
+roughly `329`-move `K=1`, depth-7 RHL result. The target-block restriction is
+useful and inexpensive, but its quality loss is real rather than just a
+planning artifact.
+
+Selectable names:
+
+```text
+target-block-rollout-selection-experimental
+target-block-rollout-2k-partition-selection-experimental:K
+```
+
+
+### 6.6 Experimental 2K PARTITIONING PERFECT SELECTION
 
 `2K PARTITIONING PERFECT SELECTION` keeps the same balanced value-partition
 tree as `2K`-PARTITION LOOKAHEAD SELECTION, but replaces each leaf extraction
@@ -2408,6 +2596,7 @@ All figures count legal adjacent-stack moves.
 | `2K`-PARTITION LOOKAHEAD SELECTION SORT | 0 | measured 457.627 (`K=1`), 385.342 (`K=2`), 394.401 (`K=3`), 401.068 (`K=4`) | <=1404, 832, 676, 600 certified | Gene Welborn's combined ideas |
 | INCREMENTAL RHL | same as corresponding RHL | exactly the same move sequence as RHL | inherits corresponding RHL bound | about 2x planning speedup at `K=2`; insufficient alone |
 | DEPTH-LIMITED RHL | 0 | measured 328.829 (`K=1`, depth 7, 5,000 samples), 341.610 (`K=2`, depth 13, 200 samples) | inherits greedy-policy bound | most benefit from short binary lookahead; tail remains expensive |
+| TARGET-BLOCK ROLLOUT | 0 | measured 731.477 standalone, 428.897 (`K=1`), 375.640 (`K=2`) | inherits the corresponding all-bypass selection bound | polynomial candidate family; modest gain over ordinary lookahead |
 | BINARY-PRESORT ADAPTIVE SELECTION SORT | 0 | 554 baseline | 1404 exact | — |
 | MERGE SORT | 0 | 1200 baseline | 1200 exact | — |
 | MSB RADIX SORT | 0 | 880 baseline | 880 exact | — |

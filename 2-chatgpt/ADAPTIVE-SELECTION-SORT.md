@@ -870,7 +870,46 @@ larger sample; `K=2` had lower variance but still reached 394.
 
 ---
 
-## 9. Perfect Leaf Selection by A*
+## 9. Consecutive-Target Block Rollout
+
+This experiment replaces arbitrary stage/bypass masks with one explicit
+reversal block. While exposing `current`, factor its blockers as:
+
+```text
+X = U ++ H ++ P ++ V
+```
+
+Bypass `U`, park `H` on `D`, bypass `P` above it, flush `H`, and then bypass
+`V`. The other endpoint receives:
+
+```text
+reverse(V) ++ H ++ reverse(P) ++ reverse(U)
+```
+
+Only outcomes beginning `current-1, current-2, ...` are retained, plus direct
+finalization. All candidates have the same immediate cost. The scalable
+policy scores them with exact ordinary-lookahead completion and commits one
+reversal; a global full-physical-state DP is retained only as a small-deck
+reference because it does not scale polynomially in practice.
+
+On all 5,040 seven-card all-on-`A` permutations, the global restricted DP was
+exactly optimal 2,329 times and had mean gap `1.982937`; the scalable rollout
+had the same exact count and mean gap `1.996032`. On 2,000 random 52-card
+permutations with seed `24301`, rollout measured:
+
+| Configuration | Mean | Standard error | Minimum | Maximum |
+|---|---:|---:|---:|---:|
+| Standalone | 731.477 | 1.671 | 530 | 1034 |
+| `K=1` | 428.897 | 0.859 | 310 | 566 |
+| `K=2` | 375.640 | 0.456 | 310 | 450 |
+
+This is a real improvement over ordinary lookahead, but not competitive with
+depth-limited RHL. See `ALGORITHMS.md` for the full recurrence, diagnostics,
+complexity caveat, and command-line names.
+
+---
+
+## 10. Perfect Leaf Selection by A*
 
 ### Description
 
@@ -969,7 +1008,7 @@ is left on the table.
 
 ---
 
-## 10. Summary
+## 11. Summary
 
 The progression is:
 
@@ -982,6 +1021,7 @@ selection sort
     -> receding-horizon lookahead
     -> incremental receding-horizon lookahead
     -> depth-limited receding-horizon lookahead
+    -> consecutive-target block rollout
     -> exact A* leaf selection
 ```
 
