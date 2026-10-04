@@ -154,22 +154,23 @@ void build(Database& db) {
 std::vector<std::pair<int, int>> side_options(const State& state,
                                             int first, int last) {
     std::vector<std::pair<int, int>> result{{-1, 0}};
-    for (int index = first; index < last; ++index) {
-        int threshold = state.cards.at(index);
-        std::array<int, 24> lengths{};
-        int maximum = 0;
-        for (int position = first; position < last; ++position) {
-            int card = state.cards.at(position);
-            if (card > threshold) continue;
-            lengths.at(position) = 1;
-            for (int earlier = first; earlier < position; ++earlier)
-                if (state.cards.at(earlier) > card)
-                    lengths.at(position) = std::max(lengths.at(position),
-                                                    lengths.at(earlier) + 1);
-            maximum = std::max(maximum, lengths.at(position));
-        }
-        result.emplace_back(threshold, maximum);
+    std::array<int, 24> lengths{};
+    std::array<int, 24> by_rank{};
+    for (int position = last - 1; position >= first; --position) {
+        int card = state.cards.at(position);
+        lengths.at(position) = 1;
+        for (int later = position + 1; later < last; ++later)
+            if (state.cards.at(later) < card)
+                lengths.at(position) = std::max(lengths.at(position),
+                                                lengths.at(later) + 1);
+        by_rank.at(card) = lengths.at(position);
     }
+    int maximum = 0;
+    for (int rank = 0; rank < int(by_rank.size()); ++rank)
+        if (by_rank.at(rank) > maximum) {
+            maximum = by_rank.at(rank);
+            result.emplace_back(rank, maximum);
+        }
     return result;
 }
 
@@ -185,25 +186,29 @@ int residual_bound(const State& state, int n) {
     auto right_options = side_options(state, state.a + state.d, n);
     int width = n + 1;
     std::array<int8_t, 625> current;
+    std::array<int, 625> occupied{};
+    int occupied_count = 0;
     current.fill(-1);
+    auto insert = [&](int first, int second, int count) {
+        if (first > second) std::swap(first, second);
+        int key = first * width + second;
+        if (current.at(key) < 0) occupied.at(occupied_count++) = key;
+        current.at(key) = std::max<int>(current.at(key), count);
+    };
     for (auto [left, left_count] : left_options)
         for (auto [right, right_count] : right_options)
-            current.at((left + 1) * width + right + 1) = left_count + right_count;
+            insert(left + 1, right + 1, left_count + right_count);
     for (int index = state.a; index < state.a + active_d; ++index) {
         int card = state.cards.at(index) + 1;
-        auto following = current;
-        for (int first = 0; first < width; ++first)
-            for (int second = 0; second < width; ++second) {
-                int count = current.at(first * width + second);
-                if (count < 0) continue;
-                if (card > first)
-                    following.at(card * width + second) = std::max<int>(
-                        following.at(card * width + second), count + 1);
-                if (card > second)
-                    following.at(first * width + card) = std::max<int>(
-                        following.at(first * width + card), count + 1);
-            }
-        current = following;
+        int previous_count = occupied_count;
+        for (int entry = 0; entry < previous_count; ++entry) {
+            int key = occupied.at(entry);
+            int first = key / width;
+            int second = key % width;
+            int count = current.at(key);
+            if (card > first) insert(card, second, count + 1);
+            if (card > second) insert(first, card, count + 1);
+        }
     }
     int maximum = *std::max_element(current.begin(), current.end());
     return baseline + 2 * (side_cards + active_d - maximum);
@@ -222,6 +227,8 @@ struct Search {
     int limit = 0;
     size_t capacity = 1000000;
     bool use_residual_structural = false;
+    bool use_residual_partition = false;
+    bool use_selected_residual_partition = false;
 
     Search(int size, Database& database) : n(size), pdb(database) {}
 
@@ -253,6 +260,32 @@ struct Search {
         return pdb.distances.at(pdb.id(abstract)) + outside;
     }
 
+    int partition_value(const State& state, const Pattern& pattern) const {
+        State abstract;
+        State complement;
+        Cards omitted_labels{};
+        int omitted_size = 0;
+        for (int card = 0; card < n; ++card)
+            if (!(pattern.mask & (1u << card)))
+                omitted_labels.at(card) = omitted_size++;
+        int selected_size = 0;
+        int complement_size = 0;
+        for (int i = 0; i < n; ++i) {
+            int card = state.cards.at(i);
+            if (pattern.mask & (1u << card)) {
+                abstract.cards.at(selected_size++) = pattern.labels.at(card);
+                if (i < state.a) ++abstract.a;
+                else if (i < state.a + state.d) ++abstract.d;
+            } else {
+                complement.cards.at(complement_size++) = omitted_labels.at(card);
+                if (i < state.a) ++complement.a;
+                else if (i < state.a + state.d) ++complement.d;
+            }
+        }
+        return pdb.distances.at(pdb.id(abstract))
+               + residual_bound(complement, complement_size);
+    }
+
     int heuristic(const State& state) const {
         Cards minimum{};
         int suffix = 0;
@@ -267,22 +300,35 @@ struct Search {
             baseline += cost;
         }
         int result = baseline;
-        for (const auto& pattern : patterns)
-            result = std::max(result, pattern_value(state, pattern, minimum, baseline));
+        const Pattern* strongest_pattern = nullptr;
+        int strongest_value = -1;
+        for (const auto& pattern : patterns) {
+            int value = pattern_value(state, pattern, minimum, baseline);
+            result = std::max(result, value);
+            if (value > strongest_value) {
+                strongest_value = value;
+                strongest_pattern = &pattern;
+            }
+        }
         if (use_residual_structural)
             result = std::max(result, residual_bound(state, n));
+        if (use_residual_partition)
+            for (const auto& pattern : patterns)
+                result = std::max(result, partition_value(state, pattern));
+        if (use_selected_residual_partition && strongest_pattern != nullptr)
+            result = std::max(result, partition_value(state, *strongest_pattern));
         int parity = (n - state.d) % 2;
         if (result % 2 != parity) ++result;
         return result;
     }
 
-    bool dfs(const State& state, int depth, int previous) {
+    bool dfs(const State& state, int depth, int previous, int cached_estimate = -1) {
         ++nodes;
         if ((nodes & 4095) == 0 && Clock::now() >= deadline) {
             interrupted = true;
             return false;
         }
-        int estimate = heuristic(state);
+        int estimate = cached_estimate >= 0 ? cached_estimate : heuristic(state);
         if (depth + estimate > limit) return false;
         if (estimate == 0) return true;
         auto state_key = key(state, previous);
@@ -309,7 +355,9 @@ struct Search {
             auto successor = state;
             move(successor, code, n);
             path.push_back(code);
-            if (dfs(successor, depth + 1, code)) return true;
+            int following_estimate = use_residual_structural
+                                     ? choices.at(i).first : -1;
+            if (dfs(successor, depth + 1, code, following_estimate)) return true;
             path.pop_back();
             if (interrupted) return false;
         }
@@ -363,9 +411,11 @@ int main(int argc, char** argv) {
         }
         if (argc == 8) {
             int enabled = std::stoi(argv[7]);
-            if (enabled != 0 && enabled != 1)
-                throw std::runtime_error("RESIDUAL_STRUCTURAL must be 0 or 1");
+            if (enabled < 0 || enabled > 3)
+                throw std::runtime_error("RESIDUAL_STRUCTURAL must be 0, 1, 2 or 3");
             search.use_residual_structural = enabled != 0;
+            search.use_residual_partition = enabled == 2;
+            search.use_selected_residual_partition = enabled == 3;
         }
         int initial_heuristic = search.heuristic(initial);
         lower = std::max(lower, initial_heuristic);
@@ -393,6 +443,8 @@ int main(int argc, char** argv) {
                   << ",\"pdb_states\":" << pdb.distances.size()
                   << ",\"patterns\":" << search.patterns.size()
                   << ",\"residual_structural\":" << (search.use_residual_structural ? "true" : "false")
+                  << ",\"residual_partition\":" << (search.use_residual_partition ? "true" : "false")
+                  << ",\"selected_residual_partition\":" << (search.use_selected_residual_partition ? "true" : "false")
                   << ",\"nodes\":" << search.nodes
                   << ",\"transposition_hits\":" << search.transposition_hits
                   << ",\"tt_entries\":" << search.seen.size()

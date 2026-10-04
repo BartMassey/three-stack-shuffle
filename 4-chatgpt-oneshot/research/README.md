@@ -1,6 +1,6 @@
 # Research notes and reproduction
 
-Updated 4 October 2026, after the second bounded campaign.
+Updated 4 October 2026, after the third bounded campaign.
 Run commands from the `4-chatgpt-oneshot` directory.
 
 ## Read these first
@@ -11,6 +11,8 @@ Run commands from the `4-chatgpt-oneshot` directory.
   experiments, negative results, and next priorities.
 - [Second campaign](second-campaign-summary.md): stronger
   construction, residual bounds, and revised next gates.
+- [Third campaign](third-campaign-summary.md): ternary
+  recursion, cost partitioning, and ensemble limitations.
 - [Living log](../STATUS.md): decisions and checkpoints.
 - [Original plan](../RESEARCH_PLAN.md): historical baseline,
   proposed experiments, and an execution outcome table.
@@ -24,6 +26,10 @@ historical investigations; this index covers this project.
 
 | Topic | Detailed note |
 |---|---|
+| Ternary recursion and lower host cost | [Ternary merge](third-ternary.md) |
+| Residual consistency and cost partitioning | [Residual follow-up](third-residual.md) |
+| Selected increasing-pair feasibility | [Pair follow-up](third-pairs.md) |
+| Confidence, LP barriers, rational duals | [Ensemble follow-up](third-ensemble.md) |
 | Direct-output merge and the 352 construction | [Oriented merge](oriented-merge.md) |
 | Intermediate-state structural bounds | [Residual bounds](residual-bounds.md) |
 | Improved XP exponent 2r+2 | [Parameter algorithm](parameter-complexity.md) |
@@ -45,6 +51,14 @@ Hardness for this exact machine is still unproved.
 The direct-output controller averages 284.72 moves on
 100 new targets, or 273.8 with a wider split window.
 This later sample is distinct from both original holdouts.
+
+The new large-n construction uses `2n log3(n)+O(n)` moves.
+Its finite routine through 64 is unchanged. A 99% lower
+confidence bound of 172.08938 assumes IID-uniform targets;
+it is separate from the exact mean theorem. The stronger
+chain/group LP supplies a portable certificate of 176
+on one target, matching its prior integer certificate.
+The tested n=18 exact interval remains [64,66].
 
 ## Earlier studies
 

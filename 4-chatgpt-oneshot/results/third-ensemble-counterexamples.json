@@ -1,0 +1,123 @@
+{
+  "gap_not_pattern_monotone": {
+    "smaller_target": [
+      2,
+      1,
+      4,
+      3,
+      0
+    ],
+    "smaller_distance": 14,
+    "smaller_bound": 12,
+    "larger_target": [
+      2,
+      1,
+      5,
+      4,
+      0,
+      3
+    ],
+    "larger_distance": 16,
+    "larger_bound": 16,
+    "deleted_card": 3
+  },
+  "shape_does_not_determine_gap": {
+    "shape": [
+      2,
+      2,
+      1
+    ],
+    "first": [
+      [
+        2,
+        1,
+        4,
+        0,
+        3
+      ],
+      12,
+      0
+    ],
+    "second": [
+      [
+        2,
+        1,
+        4,
+        3,
+        0
+      ],
+      14,
+      2
+    ]
+  },
+  "fixed_five_rank_pattern_I2_strata": {
+    "6": [
+      132,
+      0
+    ],
+    "5": [
+      356,
+      3
+    ],
+    "4": [
+      206,
+      3
+    ],
+    "3": [
+      25,
+      0
+    ],
+    "2": [
+      1,
+      0
+    ]
+  },
+  "unconditional_fixed_pattern_probability": {
+    "numerator": "1",
+    "denominator": "120",
+    "decimal": 0.008333333333333333
+  },
+  "expected_two_chain_candidate_counts": {
+    "16": {
+      "numerator": "8947946553152539",
+      "denominator": "510935040",
+      "decimal": 17512884.91224352
+    },
+    "18": {
+      "numerator": "969591731765755",
+      "denominator": "304570368",
+      "decimal": 3183473.619356677
+    },
+    "20": {
+      "numerator": "7714450906424977",
+      "denominator": "22693478400",
+      "decimal": 339941.3157581421
+    },
+    "22": {
+      "numerator": "1666473855291874577",
+      "denominator": "75684168806400",
+      "decimal": 22018.79047591462
+    },
+    "24": {
+      "numerator": "98756689772296741237",
+      "denominator": "111407096483020800",
+      "decimal": 886.4488249843935
+    },
+    "26": {
+      "numerator": "904003544838716323631",
+      "denominator": "40025083557888000000",
+      "decimal": 22.58592523688957
+    },
+    "28": {
+      "numerator": "236020629933260912081",
+      "denominator": "639881850527023104000",
+      "decimal": 0.36885032719535377
+    },
+    "30": {
+      "numerator": "15489674267032696121",
+      "denominator": "3980958309199872000000",
+      "decimal": 0.0038909410910525077
+    }
+  },
+  "effective_word_growth_required_at_274": 1.7694344690270465
+}

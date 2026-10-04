@@ -7,6 +7,7 @@ from hybrid_variants import hybrid_window
 from merge_candidates import natural_merge, patience_merge, optimal_partition_merge
 from parked_leaf import parked_bounds, parked_recommended
 from oriented_merge import oriented_bounds, oriented_merge
+from ternary_merge import ternary_bounds, ternary_merge
 from radix_candidates import (
     radix, radix_gap, runs_radix, runs_radix_gap,
     runs_radix_gap_flexible,
@@ -28,6 +29,8 @@ def _bounds(n):
 
 
 def move_bound(n, algorithm="recommended"):
+    if algorithm == "ternary":
+        return ternary_bounds(n)[0]
     if algorithm in ("oriented", "oriented_window"):
         return oriented_bounds(n)[0]
     if algorithm == "parked" and n <= 64:
@@ -140,6 +143,15 @@ def oriented(initial: Sequence[int], target: Sequence[int], window=0) -> list[st
                                  invert(oriented_merge(target, initial, window=window))])
 
 
+def ternary(initial: Sequence[int], target: Sequence[int]) -> list[str]:
+    special = _special_case(initial, target)
+    if special is not None:
+        return special
+    return _choose_with_two_runs(initial, target,
+                                [ternary_merge(initial, target),
+                                 invert(ternary_merge(target, initial))])
+
+
 ALGORITHMS = {
     "radix": radix,
     "radix_gap": radix_gap,
@@ -161,4 +173,5 @@ ALGORITHMS = {
     "parked": parked,
     "oriented": oriented,
     "oriented_window": partial(oriented, window=4),
+    "ternary": ternary,
 }

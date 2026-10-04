@@ -1,4 +1,6 @@
 import itertools
+import json
+from pathlib import Path
 import random
 import unittest
 
@@ -58,6 +60,18 @@ class OrientedMergeTests(unittest.TestCase):
             machine.verify(target)
             self.assertLessEqual(len(word), move_bound(52, name))
             self.assertEqual(move_bound(52, name), 352)
+
+    def test_frozen_words_unchanged(self):
+        from three_stack import invert
+
+        root = Path(__file__).resolve().parent
+        source = json.loads((root / "results" / "oriented-holdout100.json").read_text())
+        for row in source["targets"]:
+            target = row["target"]
+            initial = list(range(len(target)))
+            forward = oriented_merge(initial, target)
+            backward = invert(oriented_merge(target, initial))
+            self.assertEqual(min((forward, backward), key=len), row["word"])
 
 
 if __name__ == "__main__":

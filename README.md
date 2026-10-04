@@ -26,6 +26,10 @@ and the limits of the approaches tested. Earlier numbered
 directories preserve separate stages of the investigation.
 The [direct-output follow-up](4-chatgpt-oneshot/research/oriented-merge.md)
 improves both the finite bound and the large-n leading term.
+The [third campaign](4-chatgpt-oneshot/research/third-campaign-summary.md)
+improves that leading term further to `2n log3(n)` and
+adds lower-bound cost partitioning and compact rational
+certificates. The 52-card universal bound remains 352.
 
 ## License
 

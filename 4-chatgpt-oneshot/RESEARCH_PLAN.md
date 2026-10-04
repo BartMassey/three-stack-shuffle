@@ -12,6 +12,15 @@ subsequently proved a 352 upper bound, improved residual
 certificates and the XP exponent, and established the
 next narrower stopping gates. The baseline below remains
 historical rather than being silently revised.
+The [third campaign](research/third-campaign-summary.md)
+has now executed those narrower gates. It improves the
+asymptotic construction to $2n\log_3 n+O(n)$, proves
+residual consistency and stronger disjoint cost bounds,
+and finds a severe limit of the elementary ensemble LP.
+Its 17-row rational certificate matches a previous
+176-move instance bound. The deterministic mean theorem
+and tested n=18 interval remain unchanged. The summary's
+section 5 gives the next bounded experiments.
 
 ### Execution outcomes
 

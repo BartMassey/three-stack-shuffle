@@ -47,6 +47,27 @@ approach is novel.
   relevant section/page from the edition consulted; this note does not
   assign page numbers.
 
+## Statistical confidence methods
+
+Third-campaign source check, 4 October 2026:
+
+- C. J. Clopper and E. S. Pearson, “The Use of Confidence
+  or Fiducial Limits Illustrated in the Case of the
+  Binomial,” *Biometrika* 26(4), 404–413, 1934.
+  [Publisher record](https://academic.oup.com/biomet/article-abstract/26/4/404/291538).
+  DOI: 10.1093/biomet/26.4.404. This is the source for
+  exact binomial confidence limits, not for the new
+  certified-gain application or its IID premise.
+- Wassily Hoeffding, “Probability Inequalities for Sums
+  of Bounded Random Variables,” *Journal of the American
+  Statistical Association* 58(301), 13–30, 1963.
+  [Publisher record](https://www.tandfonline.com/doi/abs/10.1080/01621459.1963.10500830).
+  DOI: 10.1080/01621459.1963.10500830. The publisher's
+  2012 online date is digitization, not publication year.
+  The ensemble note records a bounded-variable comparison;
+  its principal reported confidence result instead uses
+  exact binomial inversion with shared error allocation.
+
 ## Scope and wording
 
 The references above cover permutation generation and sorting

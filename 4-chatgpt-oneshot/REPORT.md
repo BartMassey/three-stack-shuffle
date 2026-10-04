@@ -16,7 +16,9 @@ exhaustively computed optimal plans for at most eight
 cards. Distinguishing central and side output contracts,
 and merging directly onto the required output stack,
 gives at most 352 moves for every 52-card permutation
-and $(4/3)n\log_2 n+O(n)$ moves in general.
+and $2n\log_3 n+O(n)$ moves in general. The latter
+uses an asymmetric split whose two-level expansion is
+a balanced ternary recursion.
 On 100 fresh held-out targets, the fast version averages
 284.72 moves, with maximum 300 and approximately 8.8 ms
 median planning time. A wider split search averages
@@ -944,6 +946,27 @@ cover all 23,115 states through six cards; an independent
 subset enumerator checks the relaxation through five.
 See [the residual proof](research/residual-bounds.md).
 
+Write this residual bound as $R=4m-s-2K$, where m is
+the active count and s counts active side cards. It is
+consistent: along any legal edge, $|R(x)-R(y)|\le1$.
+For a D departure, an ordinary successor set is feasible
+before the move. For a side return not extending the
+correct suffix, deleting that card from a successor set
+gives a predecessor set, so K increases by at most one.
+If a return extends the suffix, m,s,K each decrease by
+one and R decreases by exactly one. Reverse moves give
+the other inequality. Thus pathmax cannot improve R.
+
+A genuinely stronger bound partitions the cards into
+fixed disjoint sets P,Q and adds an exact pattern
+distance on P to R on Q. Deletion preserves legality,
+and the two terms charge disjoint moves. Taking the
+maximum over fixed partitions preserves consistency.
+Selecting just one partition adaptively remains
+admissible but need not be consistent. The
+[third residual study](research/third-residual.md)
+gives the complete argument and implementation checks.
+
 Separately, finite budget exhaustion gives group clauses:
 if a specified pair or triple of cards moves only twice,
 some card in a specified complementary group must move
@@ -956,6 +979,60 @@ increasing two-card candidate still evades every clause.
 This relaxation retains the 4m-4 ceiling. Details and
 selected 52-card improvements are in the
 [obstruction note](research/excursion-obstructions.md).
+
+### 5.11. An asymmetric split and a ternary recursion
+
+The side-output contract need not use the same split
+as the central contract. Set $a=\lfloor n/3\rfloor$,
+$b=n-a$, and split the central child into
+$c=\lfloor b/2\rfloor$, $d=\lceil b/2\rceil$.
+Substitution in the two endpoint recurrences gives
+
+$$
+\begin{aligned}
+ P(n)&\le P(a)+U(b)+n+a\\
+     &\le P(a)+P(c)+P(d)+2n.
+\end{aligned}
+$$
+
+The three child sizes differ by at most one. These are
+ordinary binary machine routines composed over two
+levels, not a new three-way machine operation.
+
+**Theorem 13.** There is a controller using
+$2n\log_3 n+O(n)$ moves for every n-card target.
+It retains the 352-move guarantee at n=52.
+
+*Proof.* In the parked macro recursion, each level has
+total active size at most n and toll at most 2n. Its
+depth is at most $\lceil\log_3 n\rceil$. The implemented
+finite leaves through 64 satisfy P(k)<=8k, giving
+$P(n)\le2n\lceil\log_3 n\rceil+8n$. A balanced central
+root has two parked children of total size n and toll n,
+so has the stated leading term. All compositions preserve
+protected bases. The finite controller through 64 is
+unchanged, so its 52-card bound remains 352. ∎
+
+The coefficient of $n\log_2 n$ is $2/\log_2 3$,
+approximately 1.26186, instead of 4/3. To see why thirds
+are natural, try supersolutions
+$U(n)=cn\log_2 n+un$, $P(n)=cn\log_2 n+pn$.
+With $\delta=p-u$ and binary entropy H, split fractions
+x for U and y for P require
+
+$$
+ cH(x)\ge1+\delta,\qquad
+ cH(y)\ge1+y-(1-y)\delta.
+$$
+
+Since H(x)<=1, these imply $c[H(y)+1-y]\ge2$.
+The bracket is maximized at y=1/3, with value
+$\log_2 3$; take x=1/2. This derivation explains the
+construction. It proves no lower bound on the machine,
+nor optimality outside this restricted supersolution
+ansatz. The [construction note](research/third-ternary.md)
+and [independent review](research/third-ternary-review.md)
+give implementation details and protected-base checks.
 
 ## 6. Computational experiments
 
@@ -1160,6 +1237,91 @@ width 99.2, with every recorded upper/lower ratio below
 1.695. This is a paired instance statement, not a new
 uniform-mean theorem.
 
+### 6.6. Third campaign: bounds and execution
+
+The third campaign kept the exact uniform-mean theorem
+at 166.87917. It also extracted a statistical conclusion
+from the earlier 100-target lower-bound sample. These
+are different kinds of statements.
+
+Let B be the structural bound and define the fixed
+latent statistic $G(\pi)=\min\{6,d(\pi)-B(\pi)\}$.
+Certified gains underestimate G, even if their search
+times are chosen adaptively. The sample has 100,98,87
+certified gains reaching thresholds 2,4,6 respectively.
+One-sided exact binomial inversion [12][clopper-pearson],
+with error 1/300 at each threshold, gives simultaneous
+lower probability bounds 0.944558,0.905985,0.754564.
+Since $E[G]=2\sum_{j=1}^3\Pr(G\ge2j)$, adding their
+contribution to the exact E[B] gives the 99% lower
+confidence bound
+
+$$
+ \mu_{52}\ge172.08938.
+$$
+
+This coverage statement assumes IID-uniform targets;
+the recorded seeded generator alone does not establish
+that ideal premise. It is not a deterministic replacement
+for (5). No independence between B and G is needed.
+An alternative Hoeffding calculation [13][hoeffding]
+is recorded separately, not selected after comparison
+without accounting for multiple testing.
+
+An elementary fractional relaxation has a severe limit.
+Let $t_i\in[0,1]$ indicate a twice-moved card and
+$e_i\ge0$ its extra excursions beyond four moves.
+Minimize $4m-2\sum t_i+2\sum e_i$, subject to total
+twice-card capacity I2, decreasing-triple constraints,
+and the catalog's linearized group implications.
+Whenever I2<=m/2, the assignment $t_i=I2/m,e_i=0$
+is feasible and attains B exactly. Exact shape/suffix
+counting puts 99.83144% of uniform 52-card targets in
+this class. Even granting the remaining class the
+relaxation's 4m−4 ceiling, its possible improvement in
+uniform mean is at most 0.084995 moves. This limitation
+does not apply to stronger chain constraints.
+
+Adding every decreasing-chain inequality
+$\sum_{i\in C}t_i\le2$ escapes this argument. On one
+52-card pilot, a rational dual with only 17 nonzero rows
+(eight group rows and nine chain rows) proves
+$\sum_i(t_i-e_i)\le16.5$. Therefore d>=175, hence
+d>=176 by parity. This matches an existing integer
+certificate; it is not a new instance bound. Discovery
+took about nine seconds. Verification reconstructs
+the rows and checks rational loads without an LP solver.
+The [ensemble note](research/third-ensemble.md) states
+both relaxations precisely and provides the certificate.
+
+The increasing-pair search found no obstruction among
+371 distinct selected seven-card target/pair cases:
+each admits a plan moving both selected cards twice
+and every other card at most four times. These cover
+94 targets, not all seven-card cases. The residual
+implementation became about 2.7 times faster in a
+ten-second n=18 pilot, but a 45-second follow-up still
+did not complete threshold 64. The certified interval
+remains [64,66]; no optimality is inferred from timeout.
+
+The ternary planner computes only requested endpoints
+above 64. A separate root optimization skips an unused
+parked calculation without changing any selected word.
+On three paired targets at each size, the new results
+are as follows; times are median bidirectional planning.
+
+| n | Oriented mean | Ternary mean | Oriented time | Ternary time |
+|---|---:|---:|---:|---:|
+| 52 | 284.00 | 284.00 | 4.24 ms | 4.19 ms |
+| 512 | 5054.00 | 4930.67 | 110.71 ms | 41.30 ms |
+| 4096 | 56854.67 | 55114.00 | 1007.48 ms | 333.03 ms |
+
+These small paired checks support scaling comparisons,
+not population estimates. Earlier timing tables remain
+historical measurements before the root optimization.
+The [third-campaign summary](research/third-campaign-summary.md)
+links the frozen data and all stopping decisions.
+
 ## 7. Controller complexity
 
 The decision problem asks whether d(pi)<=K for an
@@ -1186,7 +1348,7 @@ D alone, checking every departure and the final order.
 Form the graph whose vertices are excursions and whose
 edges join intervals with interleaving endpoints.
 
-**Lemma 13.** Such a schedule is realizable if and only
+**Lemma 14.** Such a schedule is realizable if and only
 if its D simulation is legal and its interval-crossing
 graph is bipartite.
 
@@ -1197,7 +1359,7 @@ on either side are nested or disjoint, so every return
 is exposed. The D check supplies the remaining legality
 conditions. ∎
 
-**Theorem 14.** After suffix trimming to m active cards,
+**Theorem 15.** After suffix trimming to m active cards,
 the decision problem is in XP for the parameter
 $r=\lfloor(K-2m)/2\rfloor$, when K>=2m.
 
@@ -1209,7 +1371,7 @@ order; their projected event sequence is fixed.
 
 Enumerate exceptional identities, allocations of extra
 excursions, event orders, and interleavings with the
-ordinary sequence. For each, apply Lemma 13 in quadratic
+ordinary sequence. For each, apply Lemma 14 in quadratic
 time. Every legal plan within budget appears in this
 enumeration, and every accepted schedule supplies a plan.
 A crude time bound is $f(r)(m+1)^{5r+2}$, polynomial for
@@ -1315,7 +1477,7 @@ priorities, proof obligations, and bounded experiments.
 Exact small-deck plans can be composed into a practical
 general algorithm because stack bases remain protected.
 Oriented central/side-output merging gives
-$(4/3)n\log_2 n+O(n)$ moves and a verified 352-move
+$2n\log_3 n+O(n)$ moves and a verified 352-move
 upper bound at n=52. The fast controller averages 284.72
 moves on 100 fresh targets; wider split search gives
 273.8 on those same targets.
@@ -1338,7 +1500,7 @@ exact tables or run target-specific exact search.
 Matplotlib is used only
 to regenerate the paper's figures.
 
-The test suite has 36 test groups, including replay of
+The test suite has 51 test groups, including replay of
 all 46,233 stored exact plans, optimal-distance checks,
 protected-base cases, recursive composition, arbitrary
 initial orders, and enumeration of the small
@@ -1353,6 +1515,7 @@ python3 shuffle.py --n 52 --algorithm thorough --summary
 python3 shuffle.py --n 52 --algorithm parked --summary
 python3 shuffle.py --n 52 --algorithm oriented --summary
 python3 shuffle.py --n 52 --algorithm oriented_window --summary
+python3 shuffle.py --n 512 --algorithm ternary --summary
 python3 -m unittest -v
 python3 benchmark.py --n 52 --samples 1000 \
   --algorithms radix runs_radix_flexible patience \
@@ -1407,6 +1570,10 @@ The [second-campaign summary](research/second-campaign-summary.md)
 indexes direct-output merging, group obstructions, residual
 certificates, the improved parameterized algorithm, and
 their independent reviews and fresh holdout records.
+The [third campaign](research/third-campaign-summary.md)
+adds ternary recursion, residual cost partitioning,
+increasing-pair witnesses, statistical coverage, and
+portable rational lower-bound certificates.
 
 ## Bibliography
 
@@ -1473,6 +1640,21 @@ and Queues.” *ESA 2008*, 417–429, 2008.
 “On Sorting with a Network of Two Stacks.”
 *ATMOS 2019*, OASIcs **75**, 3:1–3:12, 2019.
 [doi:10.4230/OASIcs.ATMOS.2019.3][mihalak].
+
+[12] C. J. Clopper and E. S. Pearson.
+“The Use of Confidence or Fiducial Limits Illustrated
+in the Case of the Binomial.”
+*Biometrika* **26**(4), 404–413, 1934.
+[doi:10.1093/biomet/26.4.404][clopper-pearson].
+
+[13] Wassily Hoeffding.
+“Probability Inequalities for Sums of Bounded Random
+Variables.” *Journal of the American Statistical
+Association* **58**(301), 13–30, 1963.
+[doi:10.1080/01621459.1963.10500830][hoeffding].
+
+[clopper-pearson]: https://doi.org/10.1093/biomet/26.4.404
+[hoeffding]: https://doi.org/10.1080/01621459.1963.10500830
 
 [felsner]: https://page.math.tu-berlin.de/~felsner/Paper/sqsort.pdf
 [koenig]: https://or.rwth-aachen.de/files/research/publications/stack-sorting.pdf

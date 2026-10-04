@@ -1,15 +1,19 @@
 # Work status
 
-Updated: 2026-10-04. Second bounded campaign completed.
+Updated: 2026-10-04. Third bounded campaign complete;
+integrated and verified; snapshot commit now authorized.
 The first campaign and documentation snapshot were committed
 as `441b201`; the user reports pushing that snapshot.
 The user authorized continued research. Parallel work on
 residual states, group obstructions, and parameterized
 algorithms is complete; root added direct-output merging.
-Current results and next gates are recorded in
-`research/second-campaign-summary.md`. No searches remain
-running. The user has requested this snapshot's local
-commit, followed by a third campaign. No push authorized.
+The second snapshot is committed as `d1f62f3`. Its results
+and gates remain in `research/second-campaign-summary.md`.
+Third-campaign streams completed residual strengthening
+and speed, increasing-pair checks, and ensemble bounds.
+Root added asymmetric endpoint recursion and reduced
+host work. No push was performed. The full synthesis is
+in `research/third-campaign-summary.md`.
 
 ## Objective and constraints
 
@@ -25,9 +29,10 @@ large-n asymptotics. Use code for exhaustive searches;
 do not extrapolate tiny-n results to 52 cards. Investigate
 the reported change in behavior across deck sizes.
 
-The second-campaign local commit is now authorized.
-Third-campaign research is authorized after that commit;
-it does not authorize a further commit or any push.
+The user authorized committing the third campaign,
+running a capped fourth campaign, and committing the
+updated final-release documents and verified results.
+No push is authorized.
 Exclude the unrelated untracked `../3-generic/` work.
 No unsafe code.
 No account-wide usage percentage is available to this
@@ -57,6 +62,30 @@ targets, seed 2026100402, their means are 284.72 and 273.8,
 with maxima 300 and 288. The prior parked controller
 averages 318.74 on these exact targets. Both new modes
 win all 100 comparisons. Existing default unchanged.
+
+The third campaign adds `--algorithm ternary`, retaining
+the same 52-card routine and improving the large-n bound
+to 2n log3(n)+O(n). A separate root-work optimization
+preserves all oriented words. On three paired n=4096
+targets, ternary averages 55,114 moves versus 56,854.67,
+with median planning 333 ms versus 1007 ms. Small pilot;
+not a population estimate. Earlier timings are historical.
+
+The exact uniform-mean theorem stays 166.87917. Under
+the ideal IID-uniform sampling premise, the original
+100-target lower holdout gives a separate 99% lower
+confidence bound of 172.08938. A 17-row rational dual
+certifies 176 on one target, matching the existing bound.
+The elementary fractional relaxation can improve the
+uniform mean by at most 0.084995; stronger decreasing-
+chain constraints escape that specific limitation.
+
+Residual R is consistent; disjoint PDB+R partitions are
+stronger. Faster R evaluates about 2.7 times as many
+n=18 search nodes in the ten-second pilot, but the
+45-second follow-up still leaves [64,66]. All 371
+selected increasing-pair cases are feasible. No larger
+blind search was launched after these stopping gates.
 
 Default: exact lookup through eight cards; otherwise
 merge sort with exact leaves, midpoint +/-4 split search,
@@ -108,6 +137,57 @@ No agent push was performed.
 
 ## Research log
 
+- Third-campaign final verification: all 51 test groups
+  pass in 16.359s. The five ensemble tests also pass
+  with assertions disabled. The exact-search C++ build
+  is warning-clean; root repeats the n=14 threshold
+  proof with the same 671,869 nodes and optimum 50.
+  A seeded n=512 ternary CLI plan verifies at 4950 moves.
+  All 109 result JSON files parse; 113 local links in
+  12 current Markdown documents resolve. Pandoc renders
+  99 report and four plan MathML nodes without merror.
+  Whitespace checks pass. No search remains running.
+  Commit d1f62f3 contains the preceding campaign only;
+  no new commit or push was performed. Unrelated sibling
+  work and all existing frozen result files are untouched.
+- Third-campaign lower-bound closure: the chain/group LP
+  pilot produced 17 exact rational rows certifying 176,
+  matching the old integer certificate. Its independent
+  verifier rejects malformed data even under Python -O.
+  The elementary LP has at most 0.084995 potential mean
+  gain at n=52; full chain inequalities evade that limit.
+  Discovery was not faster, so broader runs were deferred.
+- Third campaign checkpoint: ternary parked macro-step
+  gives 2n log3(n)+O(n) moves, coefficient about 1.26186
+  in base-two notation. Independent review confirmed the
+  construction and corrected a finite-leaf constant to 8.
+  The 52-card guarantee and words are unchanged. Skipping
+  an unused oriented root endpoint preserves all 100 frozen
+  fast holdout words. Three n=4096 paired cases average
+  55,114 versus 56,854.67 moves; current median planning
+  is about 0.333s versus 1.007s. New optional mode: ternary.
+- Third campaign checkpoint: increasing-pair gate produced
+  371 distinct n=7 target/pair budget witnesses, no failure
+  and no timeout. This is negative finite evidence, not
+  a theorem for all pairs or sizes. Residual optimization
+  gives about 2.7 times the n=18 search throughput, but its
+  45-second gate still leaves [64,66]. Stronger disjoint
+  cost partitions are admissible; per-node cost limits
+  their tested practical benefit.
+- Third campaign checkpoint: exact binomial inversion of
+  the old capped-gain sample gives a model-based 99% lower
+  confidence bound 172.08938, assuming ideal IID uniform
+  targets. It does not replace the deterministic theorem
+  166.87917. A stronger chain-constrained LP pilot is in
+  progress; no floating-point solver output is accepted
+  as a certificate without exact verification.
+- Third campaign start: separate agent-owned files for
+  residual bounds, targeted increasing-pair budget tests,
+  and exact population inequalities. C++ exact-search
+  integration belongs exclusively to the residual stream.
+  Root is checking a ternary parked recurrence suggested
+  by the new endpoint contracts. Preserve all existing
+  data; use new third-campaign artifacts and finite gates.
 - Second-campaign final verification: 36 tests pass in
   14.483s. All 130 local Markdown links resolve; Pandoc
   renders the report with 72 MathML elements and no math
@@ -391,7 +471,7 @@ No agent push was performed.
    n=18 search. The new bound settled n=14 and n=16, but
    the latter used nearly its full 45-second allowance.
 
-`research/second-campaign-summary.md` records current work and
+`research/third-campaign-summary.md` records current work and
 narrower next gates. The immediate priority is to constrain
 executions with few twice-moved cards, beyond the current
 conditional relaxation's 4m−4 ceiling. Ordinary

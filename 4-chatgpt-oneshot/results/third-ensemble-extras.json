@@ -1,0 +1,357 @@
+{
+  "target": [
+    31,
+    5,
+    50,
+    20,
+    0,
+    21,
+    42,
+    12,
+    37,
+    9,
+    49,
+    39,
+    38,
+    17,
+    8,
+    51,
+    32,
+    22,
+    7,
+    6,
+    4,
+    27,
+    40,
+    46,
+    35,
+    48,
+    33,
+    23,
+    36,
+    3,
+    18,
+    26,
+    25,
+    43,
+    14,
+    2,
+    47,
+    29,
+    34,
+    16,
+    10,
+    19,
+    13,
+    24,
+    41,
+    30,
+    44,
+    28,
+    11,
+    45,
+    1,
+    15
+  ],
+  "I2": 19,
+  "structural_bound": 170,
+  "selected_triggers": 8,
+  "group_constraints": 132,
+  "chain_constraints": 260,
+  "floating_lower_bound": 175.0,
+  "verified_lower_bound": {
+    "numerator": "175",
+    "denominator": "1",
+    "decimal": 175.0
+  },
+  "even_lower_bound": 176,
+  "dual": [
+    {
+      "coefficients": {
+        "17": 1,
+        "20": 1,
+        "55": -1,
+        "62": -1,
+        "66": -1
+      },
+      "rhs": 1,
+      "weight": {
+        "numerator": "1",
+        "denominator": "1",
+        "decimal": 1.0
+      }
+    },
+    {
+      "coefficients": {
+        "0": 1,
+        "5": 1,
+        "22": 1,
+        "53": -1,
+        "83": -1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "14": 1,
+        "22": 1,
+        "89": -1,
+        "90": -1,
+        "91": -1
+      },
+      "rhs": 1,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "0": 1,
+        "5": 1,
+        "24": 1,
+        "53": -1,
+        "83": -1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "34": 1,
+        "36": 1,
+        "65": -1,
+        "80": -1,
+        "82": -1
+      },
+      "rhs": 1,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "34": 1,
+        "37": 1,
+        "65": -1,
+        "80": -1,
+        "82": -1
+      },
+      "rhs": 1,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "44": 1,
+        "45": 1,
+        "46": 1,
+        "63": -1,
+        "67": -1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "44": 1,
+        "45": 1,
+        "47": 1,
+        "63": -1,
+        "67": -1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "49": 1,
+        "46": 1,
+        "43": 1,
+        "29": 1,
+        "16": 1,
+        "10": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "37": 1,
+        "32": 1,
+        "27": 1,
+        "23": 1,
+        "18": 1,
+        "16": 1,
+        "15": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "49": 1,
+        "48": 1,
+        "43": 1,
+        "41": 1,
+        "30": 1,
+        "28": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "51": 1,
+        "48": 1,
+        "47": 1,
+        "41": 1,
+        "30": 1,
+        "28": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "49": 1,
+        "39": 1,
+        "38": 1,
+        "35": 1,
+        "33": 1,
+        "26": 1,
+        "25": 1,
+        "24": 1,
+        "15": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "31": 1,
+        "21": 1,
+        "12": 1,
+        "9": 1,
+        "8": 1,
+        "7": 1,
+        "6": 1,
+        "4": 1,
+        "3": 1,
+        "2": 1,
+        "1": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "1",
+        "decimal": 1.0
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "42": 1,
+        "40": 1,
+        "36": 1,
+        "26": 1,
+        "25": 1,
+        "19": 1,
+        "13": 1,
+        "11": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "51": 1,
+        "40": 1,
+        "35": 1,
+        "33": 1,
+        "29": 1,
+        "19": 1,
+        "13": 1,
+        "11": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    },
+    {
+      "coefficients": {
+        "50": 1,
+        "42": 1,
+        "39": 1,
+        "38": 1,
+        "32": 1,
+        "27": 1,
+        "23": 1,
+        "18": 1,
+        "14": 1,
+        "10": 1
+      },
+      "rhs": 2,
+      "weight": {
+        "numerator": "1",
+        "denominator": "2",
+        "decimal": 0.5
+      }
+    }
+  ],
+  "elapsed_seconds": 2.3527043708600104
+}

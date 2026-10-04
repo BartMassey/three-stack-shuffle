@@ -28,6 +28,12 @@ Its fast version averages 284.72 moves on 100 fresh
 targets; window-four search averages 273.8. These are
 sample means, not optimality theorems.
 See its [results and next gates](research/second-campaign-summary.md).
+The [third campaign](research/third-campaign-summary.md)
+improves the leading term to `2n log3(n)` using a
+ternary parked macro recursion. It also adds faster
+residual search, disjoint lower-bound cost partitioning,
+and a compact rational instance certificate. The exact
+uniform-mean lower theorem is still 166.87917.
 It can be rendered with the same stylesheet:
 
 ```sh
@@ -65,6 +71,7 @@ python3 shuffle.py --n 52 --seed 42 --output plan.json
 python3 shuffle.py --n 52 --algorithm parked --summary
 python3 shuffle.py --n 52 --algorithm oriented --summary
 python3 shuffle.py --n 52 --algorithm oriented_window --summary
+python3 shuffle.py --n 512 --algorithm ternary --summary
 python3 shuffle.py --n 4 --target 3 1 4 2
 python3 shuffle.py --initial 40 10 30 --target 10 30 40
 python3 -m unittest -v
@@ -115,6 +122,19 @@ On 100 fresh targets the two versions average 284.72 and
 273.8 moves, with maxima 300 and 288. Indicative median
 planning is 8.8 and 134.9 ms. The existing default remains
 unchanged for reproducibility; specify a new mode to use it.
+
+`--algorithm ternary` uses the same finite routines through
+64 and an asymmetric endpoint recursion above that size.
+It guarantees `2n log3(n)+O(n)` moves and retains the
+352 bound at n=52. On three paired 4096-card targets its
+mean is 55,114 moves versus 56,854.67 for oriented, with
+median planning 333 ms versus 1007 ms. This is a small
+scaling pilot, not a population estimate.
+
+The current oriented implementation skips an unused root
+endpoint calculation. All chosen words are unchanged;
+the 8.8/134.9 ms timings above predate this optimization.
+See [the construction study](research/third-ternary.md).
 
 For library use:
 

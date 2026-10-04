@@ -94,6 +94,8 @@ def oriented_merge(initial, target, window=0, endpoint="D", max_n=64):
             candidate = _join((left[1], _swap(right[1]), merge))
             if central is None or len(candidate) < len(central):
                 central = candidate
+        if endpoint == "D" and start == 0 and end == len(values):
+            return tuple(central), (), ordered
         parked = min((_join((central, ["DA"] * length)),
                       _join((_swap(central), ["DA"] * length))), key=len)
         for split in splits(start, end, bounds[3]):

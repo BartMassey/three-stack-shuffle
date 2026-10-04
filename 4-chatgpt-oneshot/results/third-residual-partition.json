@@ -1,0 +1,5108 @@
+[
+  {
+    "n": 14,
+    "patterns": 32,
+    "states": 179,
+    "partition_improves_old_hybrid_states": 46,
+    "maximum_gain": 6,
+    "selected_improves_old_hybrid_states": 33,
+    "selected_mean_gain": {
+      "witness": 0.0,
+      "random_walk": 0.75
+    },
+    "mean_gain": {
+      "witness": 0.0,
+      "random_walk": 1.078125
+    },
+    "seconds": 0.15060003008693457,
+    "rows": [
+      {
+        "kind": "witness",
+        "depth": 0,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 1,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 2,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 3,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 4,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 5,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 6,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 7,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 8,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 9,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 10,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 11,
+        "partition": 37,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 12,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 13,
+        "partition": 37,
+        "old_hybrid": 37,
+        "gain": 0,
+        "selected_partition": 35,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 14,
+        "partition": 36,
+        "old_hybrid": 36,
+        "gain": 0,
+        "selected_partition": 34,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 15,
+        "partition": 35,
+        "old_hybrid": 35,
+        "gain": 0,
+        "selected_partition": 33,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 16,
+        "partition": 34,
+        "old_hybrid": 34,
+        "gain": 0,
+        "selected_partition": 32,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 17,
+        "partition": 33,
+        "old_hybrid": 33,
+        "gain": 0,
+        "selected_partition": 31,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 18,
+        "partition": 32,
+        "old_hybrid": 32,
+        "gain": 0,
+        "selected_partition": 30,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 19,
+        "partition": 31,
+        "old_hybrid": 31,
+        "gain": 0,
+        "selected_partition": 29,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 20,
+        "partition": 30,
+        "old_hybrid": 30,
+        "gain": 0,
+        "selected_partition": 28,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 21,
+        "partition": 29,
+        "old_hybrid": 29,
+        "gain": 0,
+        "selected_partition": 27,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 22,
+        "partition": 28,
+        "old_hybrid": 28,
+        "gain": 0,
+        "selected_partition": 26,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 23,
+        "partition": 27,
+        "old_hybrid": 27,
+        "gain": 0,
+        "selected_partition": 25,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 24,
+        "partition": 26,
+        "old_hybrid": 26,
+        "gain": 0,
+        "selected_partition": 26,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 25,
+        "partition": 25,
+        "old_hybrid": 25,
+        "gain": 0,
+        "selected_partition": 25,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 26,
+        "partition": 24,
+        "old_hybrid": 24,
+        "gain": 0,
+        "selected_partition": 24,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 27,
+        "partition": 23,
+        "old_hybrid": 23,
+        "gain": 0,
+        "selected_partition": 23,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 28,
+        "partition": 22,
+        "old_hybrid": 22,
+        "gain": 0,
+        "selected_partition": 22,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 29,
+        "partition": 21,
+        "old_hybrid": 21,
+        "gain": 0,
+        "selected_partition": 21,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 30,
+        "partition": 20,
+        "old_hybrid": 20,
+        "gain": 0,
+        "selected_partition": 20,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 31,
+        "partition": 19,
+        "old_hybrid": 19,
+        "gain": 0,
+        "selected_partition": 19,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 32,
+        "partition": 18,
+        "old_hybrid": 18,
+        "gain": 0,
+        "selected_partition": 18,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 33,
+        "partition": 17,
+        "old_hybrid": 17,
+        "gain": 0,
+        "selected_partition": 17,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 34,
+        "partition": 16,
+        "old_hybrid": 16,
+        "gain": 0,
+        "selected_partition": 16,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 35,
+        "partition": 15,
+        "old_hybrid": 15,
+        "gain": 0,
+        "selected_partition": 15,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 36,
+        "partition": 14,
+        "old_hybrid": 14,
+        "gain": 0,
+        "selected_partition": 14,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 37,
+        "partition": 13,
+        "old_hybrid": 13,
+        "gain": 0,
+        "selected_partition": 13,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 38,
+        "partition": 12,
+        "old_hybrid": 12,
+        "gain": 0,
+        "selected_partition": 12,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 39,
+        "partition": 11,
+        "old_hybrid": 11,
+        "gain": 0,
+        "selected_partition": 11,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 40,
+        "partition": 10,
+        "old_hybrid": 10,
+        "gain": 0,
+        "selected_partition": 10,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 41,
+        "partition": 9,
+        "old_hybrid": 9,
+        "gain": 0,
+        "selected_partition": 9,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 42,
+        "partition": 8,
+        "old_hybrid": 8,
+        "gain": 0,
+        "selected_partition": 8,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 43,
+        "partition": 7,
+        "old_hybrid": 7,
+        "gain": 0,
+        "selected_partition": 7,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 44,
+        "partition": 6,
+        "old_hybrid": 6,
+        "gain": 0,
+        "selected_partition": 6,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 45,
+        "partition": 5,
+        "old_hybrid": 5,
+        "gain": 0,
+        "selected_partition": 5,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 46,
+        "partition": 4,
+        "old_hybrid": 4,
+        "gain": 0,
+        "selected_partition": 4,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 47,
+        "partition": 3,
+        "old_hybrid": 3,
+        "gain": 0,
+        "selected_partition": 3,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 48,
+        "partition": 2,
+        "old_hybrid": 2,
+        "gain": 0,
+        "selected_partition": 2,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 49,
+        "partition": 1,
+        "old_hybrid": 1,
+        "gain": 0,
+        "selected_partition": 1,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 50,
+        "partition": 0,
+        "old_hybrid": 0,
+        "gain": 0,
+        "selected_partition": 0,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 0,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 1,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 2,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 3,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 4,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 5,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 6,
+        "partition": 43,
+        "old_hybrid": 41,
+        "gain": 2,
+        "selected_partition": 43,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 7,
+        "partition": 44,
+        "old_hybrid": 42,
+        "gain": 2,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 8,
+        "partition": 43,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 9,
+        "partition": 42,
+        "old_hybrid": 38,
+        "gain": 4,
+        "selected_partition": 42,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 10,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 11,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 12,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 13,
+        "partition": 42,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 14,
+        "partition": 41,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 15,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 16,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 17,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 18,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 19,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 20,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 21,
+        "partition": 40,
+        "old_hybrid": 38,
+        "gain": 2,
+        "selected_partition": 40,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 22,
+        "partition": 43,
+        "old_hybrid": 41,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 23,
+        "partition": 34,
+        "old_hybrid": 34,
+        "gain": 0,
+        "selected_partition": 32,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 24,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 25,
+        "partition": 44,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 26,
+        "partition": 37,
+        "old_hybrid": 33,
+        "gain": 4,
+        "selected_partition": 35,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 27,
+        "partition": 40,
+        "old_hybrid": 34,
+        "gain": 6,
+        "selected_partition": 38,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 28,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 29,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 30,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 31,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 32,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 33,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 34,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 35,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 36,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 37,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 38,
+        "partition": 41,
+        "old_hybrid": 37,
+        "gain": 4,
+        "selected_partition": 41,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 39,
+        "partition": 42,
+        "old_hybrid": 36,
+        "gain": 6,
+        "selected_partition": 40,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 40,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 41,
+        "partition": 44,
+        "old_hybrid": 42,
+        "gain": 2,
+        "selected_partition": 44,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 42,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 43,
+        "partition": 42,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 44,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 45,
+        "partition": 40,
+        "old_hybrid": 36,
+        "gain": 4,
+        "selected_partition": 40,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 46,
+        "partition": 37,
+        "old_hybrid": 35,
+        "gain": 2,
+        "selected_partition": 35,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 47,
+        "partition": 40,
+        "old_hybrid": 38,
+        "gain": 2,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 48,
+        "partition": 37,
+        "old_hybrid": 37,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 49,
+        "partition": 38,
+        "old_hybrid": 36,
+        "gain": 2,
+        "selected_partition": 34,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 50,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 51,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 52,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 53,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 54,
+        "partition": 39,
+        "old_hybrid": 35,
+        "gain": 4,
+        "selected_partition": 39,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 55,
+        "partition": 38,
+        "old_hybrid": 36,
+        "gain": 2,
+        "selected_partition": 38,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 56,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 57,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 58,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 59,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 60,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 61,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 62,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 63,
+        "partition": 42,
+        "old_hybrid": 40,
+        "gain": 2,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 64,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 65,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 66,
+        "partition": 39,
+        "old_hybrid": 37,
+        "gain": 2,
+        "selected_partition": 39,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 67,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 68,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 69,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 70,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 71,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 72,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 73,
+        "partition": 40,
+        "old_hybrid": 36,
+        "gain": 4,
+        "selected_partition": 40,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 74,
+        "partition": 41,
+        "old_hybrid": 35,
+        "gain": 6,
+        "selected_partition": 41,
+        "selected_gain": 6
+      },
+      {
+        "kind": "random_walk",
+        "depth": 75,
+        "partition": 40,
+        "old_hybrid": 38,
+        "gain": 2,
+        "selected_partition": 40,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 76,
+        "partition": 45,
+        "old_hybrid": 41,
+        "gain": 4,
+        "selected_partition": 45,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 77,
+        "partition": 40,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 78,
+        "partition": 37,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 79,
+        "partition": 36,
+        "old_hybrid": 34,
+        "gain": 2,
+        "selected_partition": 34,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 80,
+        "partition": 39,
+        "old_hybrid": 37,
+        "gain": 2,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 81,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 82,
+        "partition": 37,
+        "old_hybrid": 37,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 83,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 84,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 85,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 86,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 87,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 88,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 89,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 90,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 91,
+        "partition": 42,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 92,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 93,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 94,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 95,
+        "partition": 38,
+        "old_hybrid": 36,
+        "gain": 2,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 96,
+        "partition": 41,
+        "old_hybrid": 37,
+        "gain": 4,
+        "selected_partition": 39,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 97,
+        "partition": 38,
+        "old_hybrid": 36,
+        "gain": 2,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 98,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 99,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 100,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 101,
+        "partition": 40,
+        "old_hybrid": 38,
+        "gain": 2,
+        "selected_partition": 40,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 102,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 103,
+        "partition": 40,
+        "old_hybrid": 34,
+        "gain": 6,
+        "selected_partition": 36,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 104,
+        "partition": 41,
+        "old_hybrid": 37,
+        "gain": 4,
+        "selected_partition": 41,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 105,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 106,
+        "partition": 35,
+        "old_hybrid": 33,
+        "gain": 2,
+        "selected_partition": 35,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 107,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 108,
+        "partition": 39,
+        "old_hybrid": 33,
+        "gain": 6,
+        "selected_partition": 37,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 109,
+        "partition": 38,
+        "old_hybrid": 36,
+        "gain": 2,
+        "selected_partition": 38,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 110,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 111,
+        "partition": 42,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 112,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 113,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 114,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 115,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 116,
+        "partition": 47,
+        "old_hybrid": 45,
+        "gain": 2,
+        "selected_partition": 47,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 117,
+        "partition": 44,
+        "old_hybrid": 42,
+        "gain": 2,
+        "selected_partition": 44,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 118,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 119,
+        "partition": 42,
+        "old_hybrid": 40,
+        "gain": 2,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 120,
+        "partition": 41,
+        "old_hybrid": 39,
+        "gain": 2,
+        "selected_partition": 41,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 121,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 122,
+        "partition": 41,
+        "old_hybrid": 37,
+        "gain": 4,
+        "selected_partition": 41,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 123,
+        "partition": 40,
+        "old_hybrid": 38,
+        "gain": 2,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 124,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 125,
+        "partition": 40,
+        "old_hybrid": 34,
+        "gain": 6,
+        "selected_partition": 40,
+        "selected_gain": 6
+      },
+      {
+        "kind": "random_walk",
+        "depth": 126,
+        "partition": 39,
+        "old_hybrid": 35,
+        "gain": 4,
+        "selected_partition": 37,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 127,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      }
+    ]
+  },
+  {
+    "n": 16,
+    "patterns": 32,
+    "states": 187,
+    "partition_improves_old_hybrid_states": 41,
+    "maximum_gain": 6,
+    "selected_improves_old_hybrid_states": 24,
+    "selected_mean_gain": {
+      "witness": 0.0,
+      "random_walk": 0.515625
+    },
+    "mean_gain": {
+      "witness": 0.0,
+      "random_walk": 0.875
+    },
+    "seconds": 0.2027471219189465,
+    "rows": [
+      {
+        "kind": "witness",
+        "depth": 0,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 1,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 2,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 3,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 4,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 5,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 6,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 7,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 8,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 9,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 10,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 11,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 12,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 13,
+        "partition": 43,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 14,
+        "partition": 42,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 15,
+        "partition": 41,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 16,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 17,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 18,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 19,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 20,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 21,
+        "partition": 37,
+        "old_hybrid": 37,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 22,
+        "partition": 36,
+        "old_hybrid": 36,
+        "gain": 0,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 23,
+        "partition": 35,
+        "old_hybrid": 35,
+        "gain": 0,
+        "selected_partition": 35,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 24,
+        "partition": 34,
+        "old_hybrid": 34,
+        "gain": 0,
+        "selected_partition": 34,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 25,
+        "partition": 33,
+        "old_hybrid": 33,
+        "gain": 0,
+        "selected_partition": 33,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 26,
+        "partition": 32,
+        "old_hybrid": 32,
+        "gain": 0,
+        "selected_partition": 32,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 27,
+        "partition": 31,
+        "old_hybrid": 31,
+        "gain": 0,
+        "selected_partition": 31,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 28,
+        "partition": 30,
+        "old_hybrid": 30,
+        "gain": 0,
+        "selected_partition": 30,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 29,
+        "partition": 29,
+        "old_hybrid": 29,
+        "gain": 0,
+        "selected_partition": 29,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 30,
+        "partition": 28,
+        "old_hybrid": 28,
+        "gain": 0,
+        "selected_partition": 28,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 31,
+        "partition": 27,
+        "old_hybrid": 27,
+        "gain": 0,
+        "selected_partition": 27,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 32,
+        "partition": 26,
+        "old_hybrid": 26,
+        "gain": 0,
+        "selected_partition": 26,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 33,
+        "partition": 25,
+        "old_hybrid": 25,
+        "gain": 0,
+        "selected_partition": 25,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 34,
+        "partition": 24,
+        "old_hybrid": 24,
+        "gain": 0,
+        "selected_partition": 24,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 35,
+        "partition": 23,
+        "old_hybrid": 23,
+        "gain": 0,
+        "selected_partition": 23,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 36,
+        "partition": 22,
+        "old_hybrid": 22,
+        "gain": 0,
+        "selected_partition": 22,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 37,
+        "partition": 21,
+        "old_hybrid": 21,
+        "gain": 0,
+        "selected_partition": 21,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 38,
+        "partition": 20,
+        "old_hybrid": 20,
+        "gain": 0,
+        "selected_partition": 20,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 39,
+        "partition": 19,
+        "old_hybrid": 19,
+        "gain": 0,
+        "selected_partition": 19,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 40,
+        "partition": 18,
+        "old_hybrid": 18,
+        "gain": 0,
+        "selected_partition": 18,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 41,
+        "partition": 17,
+        "old_hybrid": 17,
+        "gain": 0,
+        "selected_partition": 17,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 42,
+        "partition": 16,
+        "old_hybrid": 16,
+        "gain": 0,
+        "selected_partition": 16,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 43,
+        "partition": 15,
+        "old_hybrid": 15,
+        "gain": 0,
+        "selected_partition": 15,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 44,
+        "partition": 14,
+        "old_hybrid": 14,
+        "gain": 0,
+        "selected_partition": 14,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 45,
+        "partition": 13,
+        "old_hybrid": 13,
+        "gain": 0,
+        "selected_partition": 13,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 46,
+        "partition": 12,
+        "old_hybrid": 12,
+        "gain": 0,
+        "selected_partition": 12,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 47,
+        "partition": 11,
+        "old_hybrid": 11,
+        "gain": 0,
+        "selected_partition": 11,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 48,
+        "partition": 10,
+        "old_hybrid": 10,
+        "gain": 0,
+        "selected_partition": 10,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 49,
+        "partition": 9,
+        "old_hybrid": 9,
+        "gain": 0,
+        "selected_partition": 9,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 50,
+        "partition": 8,
+        "old_hybrid": 8,
+        "gain": 0,
+        "selected_partition": 8,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 51,
+        "partition": 7,
+        "old_hybrid": 7,
+        "gain": 0,
+        "selected_partition": 7,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 52,
+        "partition": 6,
+        "old_hybrid": 6,
+        "gain": 0,
+        "selected_partition": 6,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 53,
+        "partition": 5,
+        "old_hybrid": 5,
+        "gain": 0,
+        "selected_partition": 5,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 54,
+        "partition": 4,
+        "old_hybrid": 4,
+        "gain": 0,
+        "selected_partition": 4,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 55,
+        "partition": 3,
+        "old_hybrid": 3,
+        "gain": 0,
+        "selected_partition": 3,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 56,
+        "partition": 2,
+        "old_hybrid": 2,
+        "gain": 0,
+        "selected_partition": 2,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 57,
+        "partition": 1,
+        "old_hybrid": 1,
+        "gain": 0,
+        "selected_partition": 1,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 58,
+        "partition": 0,
+        "old_hybrid": 0,
+        "gain": 0,
+        "selected_partition": 0,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 0,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 1,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 2,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 3,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 4,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 5,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 6,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 7,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 8,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 9,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 10,
+        "partition": 51,
+        "old_hybrid": 47,
+        "gain": 4,
+        "selected_partition": 49,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 11,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 12,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 13,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 14,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 15,
+        "partition": 50,
+        "old_hybrid": 48,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 16,
+        "partition": 51,
+        "old_hybrid": 49,
+        "gain": 2,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 17,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 18,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 19,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 20,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 21,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 22,
+        "partition": 49,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 23,
+        "partition": 50,
+        "old_hybrid": 48,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 24,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 25,
+        "partition": 44,
+        "old_hybrid": 42,
+        "gain": 2,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 26,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 27,
+        "partition": 46,
+        "old_hybrid": 42,
+        "gain": 4,
+        "selected_partition": 46,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 28,
+        "partition": 39,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 29,
+        "partition": 46,
+        "old_hybrid": 40,
+        "gain": 6,
+        "selected_partition": 46,
+        "selected_gain": 6
+      },
+      {
+        "kind": "random_walk",
+        "depth": 30,
+        "partition": 49,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 31,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 32,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 33,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 34,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 35,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 36,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 37,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 38,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 39,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 40,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 41,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 42,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 43,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 44,
+        "partition": 49,
+        "old_hybrid": 45,
+        "gain": 4,
+        "selected_partition": 49,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 45,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 46,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 47,
+        "partition": 46,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 48,
+        "partition": 47,
+        "old_hybrid": 43,
+        "gain": 4,
+        "selected_partition": 45,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 49,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 50,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 51,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 52,
+        "partition": 45,
+        "old_hybrid": 43,
+        "gain": 2,
+        "selected_partition": 45,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 53,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 54,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 55,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 56,
+        "partition": 45,
+        "old_hybrid": 43,
+        "gain": 2,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 57,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 58,
+        "partition": 49,
+        "old_hybrid": 45,
+        "gain": 4,
+        "selected_partition": 49,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 59,
+        "partition": 46,
+        "old_hybrid": 44,
+        "gain": 2,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 60,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 61,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 62,
+        "partition": 45,
+        "old_hybrid": 41,
+        "gain": 4,
+        "selected_partition": 45,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 63,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 64,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 65,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 66,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 67,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 68,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 69,
+        "partition": 52,
+        "old_hybrid": 50,
+        "gain": 2,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 70,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 71,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 72,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 73,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 74,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 75,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 76,
+        "partition": 47,
+        "old_hybrid": 45,
+        "gain": 2,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 77,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 78,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 79,
+        "partition": 50,
+        "old_hybrid": 48,
+        "gain": 2,
+        "selected_partition": 50,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 80,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 81,
+        "partition": 50,
+        "old_hybrid": 48,
+        "gain": 2,
+        "selected_partition": 50,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 82,
+        "partition": 49,
+        "old_hybrid": 47,
+        "gain": 2,
+        "selected_partition": 49,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 83,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 84,
+        "partition": 43,
+        "old_hybrid": 41,
+        "gain": 2,
+        "selected_partition": 43,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 85,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 86,
+        "partition": 51,
+        "old_hybrid": 49,
+        "gain": 2,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 87,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 88,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 89,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 90,
+        "partition": 45,
+        "old_hybrid": 43,
+        "gain": 2,
+        "selected_partition": 45,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 91,
+        "partition": 46,
+        "old_hybrid": 44,
+        "gain": 2,
+        "selected_partition": 46,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 92,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 93,
+        "partition": 50,
+        "old_hybrid": 46,
+        "gain": 4,
+        "selected_partition": 48,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 94,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 95,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 96,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 97,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 98,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 99,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 100,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 101,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 102,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 53,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 103,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 104,
+        "partition": 49,
+        "old_hybrid": 47,
+        "gain": 2,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 105,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 106,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 107,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 108,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 109,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 110,
+        "partition": 47,
+        "old_hybrid": 45,
+        "gain": 2,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 111,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 112,
+        "partition": 51,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 113,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 114,
+        "partition": 45,
+        "old_hybrid": 39,
+        "gain": 6,
+        "selected_partition": 45,
+        "selected_gain": 6
+      },
+      {
+        "kind": "random_walk",
+        "depth": 115,
+        "partition": 50,
+        "old_hybrid": 46,
+        "gain": 4,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 116,
+        "partition": 49,
+        "old_hybrid": 47,
+        "gain": 2,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 117,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 118,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 119,
+        "partition": 48,
+        "old_hybrid": 46,
+        "gain": 2,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 120,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 121,
+        "partition": 48,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 122,
+        "partition": 43,
+        "old_hybrid": 37,
+        "gain": 6,
+        "selected_partition": 41,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 123,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 124,
+        "partition": 51,
+        "old_hybrid": 49,
+        "gain": 2,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 125,
+        "partition": 44,
+        "old_hybrid": 40,
+        "gain": 4,
+        "selected_partition": 42,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 126,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 127,
+        "partition": 52,
+        "old_hybrid": 50,
+        "gain": 2,
+        "selected_partition": 52,
+        "selected_gain": 2
+      }
+    ]
+  },
+  {
+    "n": 18,
+    "patterns": 32,
+    "states": 195,
+    "partition_improves_old_hybrid_states": 34,
+    "maximum_gain": 4,
+    "selected_improves_old_hybrid_states": 9,
+    "selected_mean_gain": {
+      "witness": 0.0,
+      "random_walk": 0.1875
+    },
+    "mean_gain": {
+      "witness": 0.0,
+      "random_walk": 0.640625
+    },
+    "seconds": 0.26305799605324864,
+    "rows": [
+      {
+        "kind": "witness",
+        "depth": 0,
+        "partition": 64,
+        "old_hybrid": 64,
+        "gain": 0,
+        "selected_partition": 62,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 1,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 2,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 3,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 4,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 5,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 6,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 7,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 8,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 9,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 10,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 11,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 12,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 13,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 14,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 15,
+        "partition": 49,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 16,
+        "partition": 50,
+        "old_hybrid": 50,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 17,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 18,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 46,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 19,
+        "partition": 47,
+        "old_hybrid": 47,
+        "gain": 0,
+        "selected_partition": 45,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 20,
+        "partition": 46,
+        "old_hybrid": 46,
+        "gain": 0,
+        "selected_partition": 44,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 21,
+        "partition": 45,
+        "old_hybrid": 45,
+        "gain": 0,
+        "selected_partition": 43,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 22,
+        "partition": 44,
+        "old_hybrid": 44,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 23,
+        "partition": 43,
+        "old_hybrid": 43,
+        "gain": 0,
+        "selected_partition": 41,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 24,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 40,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 25,
+        "partition": 41,
+        "old_hybrid": 41,
+        "gain": 0,
+        "selected_partition": 39,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 26,
+        "partition": 40,
+        "old_hybrid": 40,
+        "gain": 0,
+        "selected_partition": 38,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 27,
+        "partition": 39,
+        "old_hybrid": 39,
+        "gain": 0,
+        "selected_partition": 37,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 28,
+        "partition": 38,
+        "old_hybrid": 38,
+        "gain": 0,
+        "selected_partition": 36,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 29,
+        "partition": 37,
+        "old_hybrid": 37,
+        "gain": 0,
+        "selected_partition": 35,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 30,
+        "partition": 36,
+        "old_hybrid": 36,
+        "gain": 0,
+        "selected_partition": 34,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 31,
+        "partition": 35,
+        "old_hybrid": 35,
+        "gain": 0,
+        "selected_partition": 33,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 32,
+        "partition": 34,
+        "old_hybrid": 34,
+        "gain": 0,
+        "selected_partition": 32,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 33,
+        "partition": 33,
+        "old_hybrid": 33,
+        "gain": 0,
+        "selected_partition": 31,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 34,
+        "partition": 32,
+        "old_hybrid": 32,
+        "gain": 0,
+        "selected_partition": 30,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 35,
+        "partition": 31,
+        "old_hybrid": 31,
+        "gain": 0,
+        "selected_partition": 29,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 36,
+        "partition": 30,
+        "old_hybrid": 30,
+        "gain": 0,
+        "selected_partition": 28,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 37,
+        "partition": 29,
+        "old_hybrid": 29,
+        "gain": 0,
+        "selected_partition": 27,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 38,
+        "partition": 28,
+        "old_hybrid": 28,
+        "gain": 0,
+        "selected_partition": 26,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 39,
+        "partition": 27,
+        "old_hybrid": 27,
+        "gain": 0,
+        "selected_partition": 25,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 40,
+        "partition": 26,
+        "old_hybrid": 26,
+        "gain": 0,
+        "selected_partition": 24,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 41,
+        "partition": 25,
+        "old_hybrid": 25,
+        "gain": 0,
+        "selected_partition": 25,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 42,
+        "partition": 24,
+        "old_hybrid": 24,
+        "gain": 0,
+        "selected_partition": 24,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 43,
+        "partition": 23,
+        "old_hybrid": 23,
+        "gain": 0,
+        "selected_partition": 23,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 44,
+        "partition": 22,
+        "old_hybrid": 22,
+        "gain": 0,
+        "selected_partition": 20,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 45,
+        "partition": 21,
+        "old_hybrid": 21,
+        "gain": 0,
+        "selected_partition": 21,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 46,
+        "partition": 20,
+        "old_hybrid": 20,
+        "gain": 0,
+        "selected_partition": 18,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 47,
+        "partition": 19,
+        "old_hybrid": 19,
+        "gain": 0,
+        "selected_partition": 19,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 48,
+        "partition": 18,
+        "old_hybrid": 18,
+        "gain": 0,
+        "selected_partition": 16,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 49,
+        "partition": 17,
+        "old_hybrid": 17,
+        "gain": 0,
+        "selected_partition": 17,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 50,
+        "partition": 16,
+        "old_hybrid": 16,
+        "gain": 0,
+        "selected_partition": 14,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 51,
+        "partition": 15,
+        "old_hybrid": 15,
+        "gain": 0,
+        "selected_partition": 15,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 52,
+        "partition": 14,
+        "old_hybrid": 14,
+        "gain": 0,
+        "selected_partition": 12,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 53,
+        "partition": 13,
+        "old_hybrid": 13,
+        "gain": 0,
+        "selected_partition": 13,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 54,
+        "partition": 12,
+        "old_hybrid": 12,
+        "gain": 0,
+        "selected_partition": 10,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 55,
+        "partition": 11,
+        "old_hybrid": 11,
+        "gain": 0,
+        "selected_partition": 11,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 56,
+        "partition": 10,
+        "old_hybrid": 10,
+        "gain": 0,
+        "selected_partition": 8,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 57,
+        "partition": 9,
+        "old_hybrid": 9,
+        "gain": 0,
+        "selected_partition": 9,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 58,
+        "partition": 8,
+        "old_hybrid": 8,
+        "gain": 0,
+        "selected_partition": 8,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 59,
+        "partition": 7,
+        "old_hybrid": 7,
+        "gain": 0,
+        "selected_partition": 7,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 60,
+        "partition": 6,
+        "old_hybrid": 6,
+        "gain": 0,
+        "selected_partition": 6,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 61,
+        "partition": 5,
+        "old_hybrid": 5,
+        "gain": 0,
+        "selected_partition": 5,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 62,
+        "partition": 4,
+        "old_hybrid": 4,
+        "gain": 0,
+        "selected_partition": 4,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 63,
+        "partition": 3,
+        "old_hybrid": 3,
+        "gain": 0,
+        "selected_partition": 3,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 64,
+        "partition": 2,
+        "old_hybrid": 2,
+        "gain": 0,
+        "selected_partition": 2,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 65,
+        "partition": 1,
+        "old_hybrid": 1,
+        "gain": 0,
+        "selected_partition": 1,
+        "selected_gain": 0
+      },
+      {
+        "kind": "witness",
+        "depth": 66,
+        "partition": 0,
+        "old_hybrid": 0,
+        "gain": 0,
+        "selected_partition": 0,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 0,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 1,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 2,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 3,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 4,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 5,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 6,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 7,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 8,
+        "partition": 61,
+        "old_hybrid": 59,
+        "gain": 2,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 9,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 10,
+        "partition": 55,
+        "old_hybrid": 53,
+        "gain": 2,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 11,
+        "partition": 60,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 12,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 13,
+        "partition": 58,
+        "old_hybrid": 56,
+        "gain": 2,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 14,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 15,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 16,
+        "partition": 57,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 17,
+        "partition": 56,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 18,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 19,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 20,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 21,
+        "partition": 52,
+        "old_hybrid": 50,
+        "gain": 2,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 22,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 49,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 23,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 24,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 25,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 26,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 27,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 28,
+        "partition": 55,
+        "old_hybrid": 53,
+        "gain": 2,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 29,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 30,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 31,
+        "partition": 56,
+        "old_hybrid": 54,
+        "gain": 2,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 32,
+        "partition": 55,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 33,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 34,
+        "partition": 53,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 35,
+        "partition": 54,
+        "old_hybrid": 52,
+        "gain": 2,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 36,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 37,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 38,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 39,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 40,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 41,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 42,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 43,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 44,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 45,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 46,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 47,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 48,
+        "partition": 55,
+        "old_hybrid": 53,
+        "gain": 2,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 49,
+        "partition": 52,
+        "old_hybrid": 52,
+        "gain": 0,
+        "selected_partition": 50,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 50,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 51,
+        "partition": 52,
+        "old_hybrid": 48,
+        "gain": 4,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 52,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 53,
+        "partition": 54,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 54,
+        "partition": 59,
+        "old_hybrid": 55,
+        "gain": 4,
+        "selected_partition": 57,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 55,
+        "partition": 52,
+        "old_hybrid": 48,
+        "gain": 4,
+        "selected_partition": 50,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 56,
+        "partition": 49,
+        "old_hybrid": 49,
+        "gain": 0,
+        "selected_partition": 47,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 57,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 58,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 59,
+        "partition": 54,
+        "old_hybrid": 52,
+        "gain": 2,
+        "selected_partition": 54,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 60,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 61,
+        "partition": 56,
+        "old_hybrid": 54,
+        "gain": 2,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 62,
+        "partition": 51,
+        "old_hybrid": 49,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 63,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 64,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 65,
+        "partition": 56,
+        "old_hybrid": 56,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 66,
+        "partition": 51,
+        "old_hybrid": 47,
+        "gain": 4,
+        "selected_partition": 49,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 67,
+        "partition": 60,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 68,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 69,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 70,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 71,
+        "partition": 50,
+        "old_hybrid": 46,
+        "gain": 4,
+        "selected_partition": 50,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 72,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 73,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 74,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 75,
+        "partition": 64,
+        "old_hybrid": 64,
+        "gain": 0,
+        "selected_partition": 62,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 76,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 77,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 78,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 79,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 80,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 81,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 82,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 83,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 62,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 84,
+        "partition": 57,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 85,
+        "partition": 58,
+        "old_hybrid": 56,
+        "gain": 2,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 86,
+        "partition": 55,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 87,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 88,
+        "partition": 59,
+        "old_hybrid": 57,
+        "gain": 2,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 89,
+        "partition": 54,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 90,
+        "partition": 51,
+        "old_hybrid": 51,
+        "gain": 0,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 91,
+        "partition": 50,
+        "old_hybrid": 48,
+        "gain": 2,
+        "selected_partition": 50,
+        "selected_gain": 2
+      },
+      {
+        "kind": "random_walk",
+        "depth": 92,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 93,
+        "partition": 56,
+        "old_hybrid": 54,
+        "gain": 2,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 94,
+        "partition": 57,
+        "old_hybrid": 55,
+        "gain": 2,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 95,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 96,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 97,
+        "partition": 52,
+        "old_hybrid": 48,
+        "gain": 4,
+        "selected_partition": 52,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 98,
+        "partition": 53,
+        "old_hybrid": 51,
+        "gain": 2,
+        "selected_partition": 51,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 99,
+        "partition": 52,
+        "old_hybrid": 54,
+        "gain": 0,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 100,
+        "partition": 55,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 101,
+        "partition": 42,
+        "old_hybrid": 42,
+        "gain": 0,
+        "selected_partition": 42,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 102,
+        "partition": 55,
+        "old_hybrid": 53,
+        "gain": 2,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 103,
+        "partition": 48,
+        "old_hybrid": 48,
+        "gain": 0,
+        "selected_partition": 48,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 104,
+        "partition": 53,
+        "old_hybrid": 53,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 105,
+        "partition": 54,
+        "old_hybrid": 52,
+        "gain": 2,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 106,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 107,
+        "partition": 50,
+        "old_hybrid": 46,
+        "gain": 4,
+        "selected_partition": 50,
+        "selected_gain": 4
+      },
+      {
+        "kind": "random_walk",
+        "depth": 108,
+        "partition": 63,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 61,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 109,
+        "partition": 62,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 110,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 111,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 112,
+        "partition": 61,
+        "old_hybrid": 63,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 113,
+        "partition": 60,
+        "old_hybrid": 58,
+        "gain": 2,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 114,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 59,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 115,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 56,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 116,
+        "partition": 59,
+        "old_hybrid": 59,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 117,
+        "partition": 60,
+        "old_hybrid": 62,
+        "gain": 0,
+        "selected_partition": 60,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 118,
+        "partition": 55,
+        "old_hybrid": 55,
+        "gain": 0,
+        "selected_partition": 53,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 119,
+        "partition": 60,
+        "old_hybrid": 60,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 120,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 121,
+        "partition": 56,
+        "old_hybrid": 54,
+        "gain": 2,
+        "selected_partition": 54,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 122,
+        "partition": 55,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 123,
+        "partition": 58,
+        "old_hybrid": 58,
+        "gain": 0,
+        "selected_partition": 58,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 124,
+        "partition": 57,
+        "old_hybrid": 57,
+        "gain": 0,
+        "selected_partition": 55,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 125,
+        "partition": 54,
+        "old_hybrid": 52,
+        "gain": 2,
+        "selected_partition": 52,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 126,
+        "partition": 61,
+        "old_hybrid": 61,
+        "gain": 0,
+        "selected_partition": 57,
+        "selected_gain": 0
+      },
+      {
+        "kind": "random_walk",
+        "depth": 127,
+        "partition": 60,
+        "old_hybrid": 58,
+        "gain": 2,
+        "selected_partition": 58,
+        "selected_gain": 0
+      }
+    ]
+  }
+]
