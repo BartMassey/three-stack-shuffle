@@ -1,0 +1,138 @@
+# Related-work source notes: stack sorting
+
+These source notes complement the consolidated
+[report bibliography](../REPORT.md#bibliography).
+The [complexity audit](campaign-complexity.md) records
+later communicating-stack sources and model mismatches;
+none establishes hardness for the exact model here.
+
+Prepared 2026-10-04. Bibliographic details below were checked against
+publisher or author-hosted primary records/full text. These papers
+provide context, not a direct theorem for our machine.
+
+## Tarjan (1972): networks of queues and stacks
+
+Robert E. Tarjan, “Sorting Using Networks of Queues and Stacks,”
+*Journal of the ACM* 19(2), 341–346 (April 1972).
+DOI: [10.1145/321694.321704](https://doi.org/10.1145/321694.321704).
+The JACM archive and Tarjan author index independently report the
+volume, issue, pagination, and month:
+[JACM volume index](https://projects.csail.mit.edu/jacm/jacm72.html),
+[Tarjan author index](https://projects.csail.mit.edu/jacm/Authors/tarjanrobertendre.html).
+
+Relevance: foundational formulation of sorting permutations via
+networks of stack/queue storage devices (railway-yard switching
+networks). This is a useful broad ancestor citation for networked
+stack sorting.
+
+Model caveat: Tarjan's network formulation concerns routing an input
+sequence through a prescribed network of storage devices; do not cite
+it as solving the specific A–D–B problem. Our machine has three stack
+locations in a path, unrestricted moves of the exposed top card in
+either direction across adjacent edges, starts and ends with all cards
+in the middle stack D, and has the complete target order known. Those
+state and move rules are not established as equivalent to a conventional
+one-way input/output switchyard by this citation. The ACM page was
+inaccessible to automated retrieval (403); the bibliographic record
+was checked via the JACM archive/author index and the DOI.
+
+## Albert and Bousquet-Mélou (2014): two stacks in parallel
+
+Michael Albert and Mireille Bousquet-Mélou, “Permutations sortable by
+two stacks in parallel and quarter plane walks,” *DMTCS Proceedings*,
+vol. AT, FPSAC 2014, 585–596 (2014).
+DOI: [10.46298/dmtcs.2425](https://doi.org/10.46298/dmtcs.2425).
+The journal's article page lists authors, venue, year, and DOI;
+the primary PDF gives the title, author names, proceedings, and pages:
+[journal record](https://dmtcs.episciences.org/2425),
+[article PDF](https://dmtcs.episciences.org/2425/pdf).
+
+Relevance: closest compact formal reference found for parallel stack
+permutation machines. It enumerates achievable permutations, using
+canonical operation sequences and generating functions. Its model has
+items arriving in fixed order 1…n, independently pushed onto either
+of two unbounded LIFO stacks and popped to a single output stream;
+each stack only has input and output operations. The article explicitly
+defines this model in its full text (PDF pp. 3–4 / printed pp. 588–589).
+
+Model caveat: this is not three stacks arranged A–D–B with arbitrary
+bidirectional adjacent top transfers. In particular, the parallel
+stacks receive items from an input stream and emit them to an output
+stream; the reference does not have one shared middle stack holding
+all items at both endpoints, nor does it analyze transfer count or
+optimal sorting cost in our graph. Cite for neighboring permutation
+sorting literature and name the difference explicitly.
+
+## Aldous and Diaconis (1999): patience sorting and LIS
+
+David Aldous and Persi Diaconis, “Longest Increasing Subsequences:
+From Patience Sorting to the Baik–Deift–Johansson Theorem,” *Bulletin
+of the American Mathematical Society* 36(4), 413–432 (1999).
+DOI: [10.1090/S0273-0979-99-00796-X](https://doi.org/10.1090/S0273-0979-99-00796-X).
+Primary author-hosted records:
+[UC eScholarship record](https://escholarship.org/uc/item/09j2v8d0),
+[Stanford Statistics report page](https://statistics.stanford.edu/technical-reports/longest-increasing-subsequences-patience-sorting-baik-deift-johansson-theorem).
+
+Relevance: authoritative exposition of patience sorting's relation to
+longest increasing subsequences and the Schensted correspondence.
+Useful if our related work uses LIS/patience-sort structure as an
+algorithmic inspiration or a sequence statistic.
+
+Model caveat: patience sorting is a card-game/algorithmic procedure
+that places cards into piles according to value, not a machine that
+rearranges a given permutation using legal stack-to-stack transfers.
+It does not establish reachability or optimal move bounds for A–D–B.
+The DOI and issue/pages are supported by the Stanford technical report
+record and standard AMS citation; eScholarship confirms authors, title,
+year, and DOI. Treat it as conceptual background, not direct machine
+precedent.
+
+## Safe related-work framing
+
+Suggested concise framing: “Our setting is related to classical
+permutation sorting by stack networks (Tarjan, 1972) and to permutation
+classes generated by parallel stacks (Albert and Bousquet-Mélou,
+2014). Patience sorting (Aldous and Diaconis, 1999) supplies useful
+LIS structure. These models differ from our fixed three-stack path
+A–D–B with arbitrary bidirectional adjacent top transfers and common
+initial/final storage at D, so their characterizations and bounds do
+not directly apply.”
+
+No exact-match result for the A–D–B transfer model was located in this
+bounded lookup; this is not an exhaustive literature search.
+
+## Structural and communicating-stack campaign sources
+
+The report records the full Greene (1974) and Dukes–Mullins
+(2025) citations used for the two-increasing-subsequence
+statistic and exact tableau averaging. See its bibliography,
+items 7–8, and [the derivation](next-lower-bounds.md).
+These are structural tools, not stack-distance theorems.
+
+The executed complexity audit relies on these records:
+
+- Stefan Felsner and Martin Pergel. “The Complexity of
+  Sorting with Networks of Stacks and Queues.”
+  *ESA 2008*, 417–429, 2008.
+  [Author manuscript](https://page.math.tu-berlin.de/~felsner/Paper/sqsort.pdf).
+- Felix G. König and Marco E. Lübbecke. “Sorting with
+  Complete Networks of Stacks.” *ISAAC 2008*, LNCS 5369,
+  895–906, 2008.
+  [Author manuscript](https://or.rwth-aachen.de/files/research/publications/stack-sorting.pdf).
+- Matúš Mihalák and Marc Pont. “On Sorting with a Network
+  of Two Stacks.” *ATMOS 2019*, OASIcs 75, 3:1–3:12, 2019.
+  [doi:10.4230/OASIcs.ATMOS.2019.3](https://doi.org/10.4230/OASIcs.ATMOS.2019.3).
+- Therese Biedl, Alexander Golynski, Angèle M. Hamel,
+  Alejandro López-Ortiz, and J. Ian Munro. “Sorting with
+  networks of data structures.” *Discrete Applied
+  Mathematics* 158(15), 1579–1586, 2010.
+  [doi:10.1016/j.dam.2010.06.007](https://doi.org/10.1016/j.dam.2010.06.007).
+  [Author manuscript](https://cs.uwaterloo.ca/~alopez-o/files/SwNoDS_2010.pdf).
+
+The last record was checked against the publisher during
+the documentation pass. The others retain the records
+checked during the campaign. See
+[the complexity audit](campaign-complexity.md) for the
+source/sink, loading, buffer-count, and cost mismatches.
+Its XP theorem is an internal result for the present model,
+not a corollary of a hardness theorem in these sources.

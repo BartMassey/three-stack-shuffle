@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+build/
+REPORT.html
+RESEARCH_PLAN.html
+showmd-*.html
+\#*#

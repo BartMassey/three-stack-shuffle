@@ -1,0 +1,4252 @@
+{
+  "summary": {
+    "n": 6,
+    "samples": 100,
+    "seed": 20261003,
+    "verified_certificates": 100,
+    "structural_mean": 14.04,
+    "pattern_mean": 14.32,
+    "combined_mean": 14.32,
+    "improved_targets": 14,
+    "total_seconds": 0.2706394400447607,
+    "max_seconds": 0.004287120886147022
+  },
+  "targets": [
+    {
+      "target": [
+        0,
+        4,
+        5,
+        1,
+        3,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.004287120886147022
+    },
+    {
+      "target": [
+        2,
+        4,
+        0,
+        5,
+        1,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0030580819584429264
+    },
+    {
+      "target": [
+        0,
+        5,
+        3,
+        1,
+        4,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027429950423538685
+    },
+    {
+      "target": [
+        4,
+        5,
+        0,
+        2,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002635661978274584
+    },
+    {
+      "target": [
+        1,
+        5,
+        2,
+        4,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002634471282362938
+    },
+    {
+      "target": [
+        2,
+        1,
+        0,
+        4,
+        5,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027249506674706936
+    },
+    {
+      "target": [
+        0,
+        1,
+        5,
+        2,
+        4,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002619211096316576
+    },
+    {
+      "target": [
+        2,
+        3,
+        1,
+        0,
+        4,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 10,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026071579195559025
+    },
+    {
+      "target": [
+        5,
+        1,
+        2,
+        3,
+        0,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026370659470558167
+    },
+    {
+      "target": [
+        1,
+        5,
+        0,
+        2,
+        3,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027382471598684788
+    },
+    {
+      "target": [
+        4,
+        1,
+        3,
+        0,
+        5,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002718167845159769
+    },
+    {
+      "target": [
+        5,
+        1,
+        4,
+        2,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0028270240873098373
+    },
+    {
+      "target": [
+        0,
+        3,
+        4,
+        2,
+        5,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027195708826184273
+    },
+    {
+      "target": [
+        4,
+        3,
+        2,
+        5,
+        0,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002726905047893524
+    },
+    {
+      "target": [
+        0,
+        2,
+        5,
+        4,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026695961132645607
+    },
+    {
+      "target": [
+        1,
+        3,
+        5,
+        0,
+        4,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002648476045578718
+    },
+    {
+      "target": [
+        0,
+        2,
+        5,
+        1,
+        3,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027252119034528732
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        2,
+        4,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026313848793506622
+    },
+    {
+      "target": [
+        1,
+        0,
+        5,
+        2,
+        3,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026148618198931217
+    },
+    {
+      "target": [
+        1,
+        5,
+        4,
+        3,
+        2,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 18,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002642845269292593
+    },
+    {
+      "target": [
+        2,
+        1,
+        0,
+        5,
+        4,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002632766030728817
+    },
+    {
+      "target": [
+        2,
+        1,
+        0,
+        5,
+        4,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027468432672321796
+    },
+    {
+      "target": [
+        1,
+        3,
+        5,
+        0,
+        2,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002661321312189102
+    },
+    {
+      "target": [
+        1,
+        4,
+        5,
+        0,
+        2,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0036652619019150734
+    },
+    {
+      "target": [
+        3,
+        1,
+        5,
+        4,
+        2,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0029233256354928017
+    },
+    {
+      "target": [
+        5,
+        4,
+        2,
+        3,
+        0,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002689074259251356
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        4,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002729139756411314
+    },
+    {
+      "target": [
+        5,
+        1,
+        3,
+        4,
+        2,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002607608214020729
+    },
+    {
+      "target": [
+        5,
+        4,
+        3,
+        1,
+        2,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 18,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026590959168970585
+    },
+    {
+      "target": [
+        1,
+        3,
+        2,
+        5,
+        4,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002629659604281187
+    },
+    {
+      "target": [
+        0,
+        5,
+        3,
+        2,
+        4,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002569337375462055
+    },
+    {
+      "target": [
+        5,
+        0,
+        4,
+        2,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002659187186509371
+    },
+    {
+      "target": [
+        0,
+        5,
+        1,
+        2,
+        3,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0025880406610667706
+    },
+    {
+      "target": [
+        4,
+        5,
+        2,
+        1,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026504797860980034
+    },
+    {
+      "target": [
+        1,
+        2,
+        3,
+        0,
+        5,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026197517290711403
+    },
+    {
+      "target": [
+        2,
+        1,
+        5,
+        3,
+        0,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002655318006873131
+    },
+    {
+      "target": [
+        3,
+        1,
+        2,
+        4,
+        0,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 12,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026878099888563156
+    },
+    {
+      "target": [
+        3,
+        2,
+        1,
+        4,
+        5,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002661130391061306
+    },
+    {
+      "target": [
+        5,
+        4,
+        1,
+        3,
+        0,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002611496951431036
+    },
+    {
+      "target": [
+        5,
+        1,
+        4,
+        2,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026489361189305782
+    },
+    {
+      "target": [
+        0,
+        1,
+        5,
+        2,
+        4,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.00261879013851285
+    },
+    {
+      "target": [
+        4,
+        2,
+        5,
+        3,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002612597309052944
+    },
+    {
+      "target": [
+        0,
+        4,
+        5,
+        2,
+        1,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002595225814729929
+    },
+    {
+      "target": [
+        0,
+        5,
+        4,
+        1,
+        3,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0025901561602950096
+    },
+    {
+      "target": [
+        4,
+        3,
+        1,
+        2,
+        0,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002654045820236206
+    },
+    {
+      "target": [
+        0,
+        1,
+        5,
+        3,
+        2,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002585346344858408
+    },
+    {
+      "target": [
+        1,
+        0,
+        5,
+        4,
+        2,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026425952091813087
+    },
+    {
+      "target": [
+        4,
+        0,
+        1,
+        3,
+        5,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002631444949656725
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        4,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002740610856562853
+    },
+    {
+      "target": [
+        2,
+        1,
+        4,
+        3,
+        5,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002671940252184868
+    },
+    {
+      "target": [
+        3,
+        0,
+        2,
+        1,
+        4,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 10,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002592559903860092
+    },
+    {
+      "target": [
+        4,
+        2,
+        0,
+        3,
+        1,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002647664863616228
+    },
+    {
+      "target": [
+        1,
+        4,
+        0,
+        5,
+        2,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0038241627626121044
+    },
+    {
+      "target": [
+        2,
+        5,
+        1,
+        4,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.00263303704559803
+    },
+    {
+      "target": [
+        2,
+        5,
+        3,
+        4,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026979800313711166
+    },
+    {
+      "target": [
+        2,
+        1,
+        3,
+        0,
+        5,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026472252793610096
+    },
+    {
+      "target": [
+        3,
+        0,
+        4,
+        1,
+        2,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027550291270017624
+    },
+    {
+      "target": [
+        3,
+        2,
+        0,
+        1,
+        4,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 10,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002573242876678705
+    },
+    {
+      "target": [
+        0,
+        2,
+        4,
+        1,
+        5,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0025877212174236774
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        4,
+        3,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002684263978153467
+    },
+    {
+      "target": [
+        4,
+        0,
+        3,
+        5,
+        1,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002819160930812359
+    },
+    {
+      "target": [
+        5,
+        2,
+        3,
+        1,
+        0,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002772020176053047
+    },
+    {
+      "target": [
+        2,
+        5,
+        4,
+        1,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026356708258390427
+    },
+    {
+      "target": [
+        5,
+        0,
+        4,
+        1,
+        3,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.00258212024345994
+    },
+    {
+      "target": [
+        0,
+        4,
+        2,
+        5,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.00268940394744277
+    },
+    {
+      "target": [
+        2,
+        3,
+        1,
+        4,
+        5,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026144729927182198
+    },
+    {
+      "target": [
+        3,
+        0,
+        4,
+        1,
+        2,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002655148971825838
+    },
+    {
+      "target": [
+        5,
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026154033839702606
+    },
+    {
+      "target": [
+        1,
+        0,
+        5,
+        4,
+        2,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026086498983204365
+    },
+    {
+      "target": [
+        2,
+        1,
+        3,
+        5,
+        4,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027199522592127323
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        3,
+        5,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002637264784425497
+    },
+    {
+      "target": [
+        1,
+        3,
+        0,
+        2,
+        5,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026655676774680614
+    },
+    {
+      "target": [
+        5,
+        0,
+        3,
+        4,
+        1,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002664976753294468
+    },
+    {
+      "target": [
+        0,
+        1,
+        3,
+        4,
+        2,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002932564355432987
+    },
+    {
+      "target": [
+        5,
+        0,
+        4,
+        2,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002847864292562008
+    },
+    {
+      "target": [
+        1,
+        4,
+        3,
+        2,
+        0,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026402599178254604
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        4,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0027093710377812386
+    },
+    {
+      "target": [
+        1,
+        3,
+        2,
+        4,
+        0,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 12,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002597068902105093
+    },
+    {
+      "target": [
+        4,
+        2,
+        5,
+        0,
+        1,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002602559980005026
+    },
+    {
+      "target": [
+        4,
+        2,
+        0,
+        5,
+        3,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026419232599437237
+    },
+    {
+      "target": [
+        5,
+        4,
+        2,
+        1,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 18,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002661509905010462
+    },
+    {
+      "target": [
+        5,
+        3,
+        4,
+        1,
+        2,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026691248640418053
+    },
+    {
+      "target": [
+        0,
+        5,
+        2,
+        4,
+        1,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026424461975693703
+    },
+    {
+      "target": [
+        3,
+        4,
+        2,
+        5,
+        1,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026142317801713943
+    },
+    {
+      "target": [
+        5,
+        3,
+        4,
+        0,
+        2,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 16,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002704281359910965
+    },
+    {
+      "target": [
+        4,
+        1,
+        2,
+        0,
+        5,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002676699310541153
+    },
+    {
+      "target": [
+        5,
+        4,
+        2,
+        1,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 18,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002747603226453066
+    },
+    {
+      "target": [
+        2,
+        3,
+        5,
+        4,
+        0,
+        1
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.00260475417599082
+    },
+    {
+      "target": [
+        0,
+        1,
+        2,
+        4,
+        5,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026316330768167973
+    },
+    {
+      "target": [
+        1,
+        2,
+        0,
+        3,
+        4,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 6,
+      "pattern_bound": 6,
+      "raw_numerator": "6",
+      "raw_denominator": "1",
+      "lp_objective": 6.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002640801016241312
+    },
+    {
+      "target": [
+        1,
+        2,
+        0,
+        4,
+        3,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002591058611869812
+    },
+    {
+      "target": [
+        1,
+        3,
+        5,
+        2,
+        0,
+        4
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002669515088200569
+    },
+    {
+      "target": [
+        2,
+        1,
+        0,
+        4,
+        3,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 12,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026579629629850388
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        5,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 16,
+      "raw_numerator": "16",
+      "raw_denominator": "1",
+      "lp_objective": 16.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 16,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026318239979445934
+    },
+    {
+      "target": [
+        1,
+        0,
+        2,
+        4,
+        3,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 10,
+      "pattern_bound": 10,
+      "raw_numerator": "10",
+      "raw_denominator": "1",
+      "lp_objective": 10.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026688757352530956
+    },
+    {
+      "target": [
+        0,
+        3,
+        4,
+        5,
+        1,
+        2
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              1
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              2
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              3
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              4
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          },
+          {
+            "cards": [
+              5
+            ],
+            "kind": "forced",
+            "distance": 2,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026415130123496056
+    },
+    {
+      "target": [
+        1,
+        4,
+        5,
+        2,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026759677566587925
+    },
+    {
+      "target": [
+        5,
+        4,
+        2,
+        1,
+        3,
+        0
+      ],
+      "status": "verified dual",
+      "structural_bound": 18,
+      "pattern_bound": 18,
+      "raw_numerator": "18",
+      "raw_denominator": "1",
+      "lp_objective": 18.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 18,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026497282087802887
+    },
+    {
+      "target": [
+        1,
+        4,
+        2,
+        0,
+        3,
+        5
+      ],
+      "status": "verified dual",
+      "structural_bound": 12,
+      "pattern_bound": 12,
+      "raw_numerator": "12",
+      "raw_denominator": "1",
+      "lp_objective": 12.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 12,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.0026435470208525658
+    },
+    {
+      "target": [
+        1,
+        4,
+        5,
+        2,
+        0,
+        3
+      ],
+      "status": "verified dual",
+      "structural_bound": 14,
+      "pattern_bound": 14,
+      "raw_numerator": "14",
+      "raw_denominator": "1",
+      "lp_objective": 14.0,
+      "pattern_count": 1,
+      "certificate": {
+        "denominator": 1000000000,
+        "entries": [
+          {
+            "cards": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "kind": "pattern",
+            "distance": 14,
+            "numerator": 1000000000
+          }
+        ]
+      },
+      "seconds": 0.002674706280231476
+    }
+  ]
+}

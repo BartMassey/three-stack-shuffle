@@ -1,0 +1,93 @@
+html {
+  color: #202a33;
+  background: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+body {
+  max-width: 48rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3 {
+  font-family: system-ui, sans-serif;
+  line-height: 1.25;
+}
+
+h1 { font-size: 1.9rem; }
+h2 { margin-top: 2rem; font-size: 1.45rem; }
+h3 { margin-top: 1.5rem; font-size: 1.15rem; }
+
+a { color: #1d567e; }
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+figure {
+  margin: 1.5rem 0;
+  text-align: center;
+  break-inside: avoid;
+}
+
+figcaption {
+  margin-top: .5rem;
+  font-size: .9rem;
+}
+
+.math.display, p:has(> math[display="block"]) {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: .5rem 0;
+}
+
+math { font-size: 1.05em; }
+
+table {
+  display: block;
+  max-width: 100%;
+  width: fit-content;
+  margin: 1.25rem auto;
+  border-collapse: collapse;
+  overflow-x: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+th, td {
+  border-bottom: 1px solid #ccd3d9;
+  padding: .3rem .6rem;
+}
+
+pre {
+  padding: .8rem;
+  background: #f3f5f6;
+  overflow-x: auto;
+  font-size: .85rem;
+  line-height: 1.4;
+}
+
+code { font-family: ui-monospace, monospace; }
+
+@media (max-width: 600px) {
+  html { font-size: 16px; }
+  body { margin: 1rem auto; }
+  figure img, figure svg { width: 100% !important; }
+}
+
+@media print {
+  @page { size: A4; margin: 18mm; }
+  html { font-size: 10pt; }
+  body { max-width: none; margin: 0; padding: 0; }
+  h1, h2, h3 { break-after: avoid; }
+  .math.display, p:has(> math[display="block"]) {
+    overflow: visible;
+  }
+  table { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

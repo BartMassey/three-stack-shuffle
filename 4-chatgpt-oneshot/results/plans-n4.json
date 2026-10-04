@@ -1,0 +1,7 @@
+{
+  "n": 4,
+  "move_codes": ["AD","DA","DB","BD"],
+  "encoding": "Start integer at 1; append moves in execution order by shifting left 2 and OR move code; decode low bits then reverse",
+  "target_order": "Lexicographic permutations of 0..N-1, top to bottom in D",
+  "plans": [1,88512,5744,91584,92656,1482176,412,104908,6512,103872,104944,1678784,6780,107980,108400,1734080,108016,1727936,109052,1744332,1744752,1483644,1744368,27909568]
+}

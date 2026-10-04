@@ -1,0 +1,254 @@
+{
+  "n": 8,
+  "schemes": [
+    {
+      "colors": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1
+      ],
+      "states": 3150,
+      "endpoints": 70,
+      "maximum": 16
+    },
+    {
+      "colors": [
+        0,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0,
+        1
+      ],
+      "states": 25200,
+      "endpoints": 560,
+      "maximum": 20
+    },
+    {
+      "colors": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "states": 3150,
+      "endpoints": 70,
+      "maximum": 16
+    },
+    {
+      "colors": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      "states": 25200,
+      "endpoints": 560,
+      "maximum": 22
+    },
+    {
+      "colors": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "states": 3150,
+      "endpoints": 70,
+      "maximum": 16
+    },
+    {
+      "colors": [
+        0,
+        0,
+        1,
+        1,
+        2,
+        2,
+        0,
+        0
+      ],
+      "states": 18900,
+      "endpoints": 420,
+      "maximum": 20
+    }
+  ],
+  "targets": 40320,
+  "color_mean": 17.926289682539682,
+  "structural_mean": 19.791815476190475,
+  "combined_mean": 19.809375,
+  "exact_mean": 20.35421626984127,
+  "improved_count": 351,
+  "improved_examples": [
+    {
+      "target": [
+        0,
+        1,
+        6,
+        4,
+        2,
+        5,
+        3,
+        7
+      ],
+      "color_bound": 18,
+      "structural_bound": 16,
+      "exact": 18
+    },
+    {
+      "target": [
+        0,
+        1,
+        6,
+        4,
+        2,
+        5,
+        7,
+        3
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    },
+    {
+      "target": [
+        0,
+        1,
+        7,
+        4,
+        2,
+        5,
+        6,
+        3
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    },
+    {
+      "target": [
+        0,
+        3,
+        6,
+        4,
+        1,
+        5,
+        2,
+        7
+      ],
+      "color_bound": 18,
+      "structural_bound": 16,
+      "exact": 18
+    },
+    {
+      "target": [
+        0,
+        3,
+        6,
+        4,
+        1,
+        5,
+        7,
+        2
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    },
+    {
+      "target": [
+        0,
+        3,
+        7,
+        4,
+        1,
+        5,
+        6,
+        2
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    },
+    {
+      "target": [
+        0,
+        6,
+        1,
+        4,
+        2,
+        5,
+        3,
+        7
+      ],
+      "color_bound": 18,
+      "structural_bound": 16,
+      "exact": 18
+    },
+    {
+      "target": [
+        0,
+        6,
+        1,
+        4,
+        2,
+        5,
+        7,
+        3
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    },
+    {
+      "target": [
+        0,
+        6,
+        3,
+        1,
+        4,
+        2,
+        5,
+        7
+      ],
+      "color_bound": 18,
+      "structural_bound": 16,
+      "exact": 18
+    },
+    {
+      "target": [
+        0,
+        6,
+        3,
+        1,
+        4,
+        2,
+        7,
+        5
+      ],
+      "color_bound": 20,
+      "structural_bound": 18,
+      "exact": 20
+    }
+  ],
+  "elapsed_seconds": 0.35199247719720006
+}

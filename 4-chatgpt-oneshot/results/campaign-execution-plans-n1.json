@@ -1,0 +1,11 @@
+{
+  "n": 1,
+  "endpoint": "A reversed sorted; D and B empty",
+  "initial_order": "Lexicographic permutations in D, normalized to sorted target ranks",
+  "move_codes": ["AD","DA","DB","BD"],
+  "encoding": "Strings of single-digit move codes in execution order",
+  "state_count": 3,
+  "plans": ["1"],
+  "elapsed_seconds": 0.000111561,
+  "distance_histogram": {"1":1}
+}

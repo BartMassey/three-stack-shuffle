@@ -1,0 +1,8387 @@
+{
+  "n": 6,
+  "physical_states": 20160,
+  "eligible_targets": 64,
+  "cases": [
+    {
+      "target": [
+        0,
+        3,
+        2,
+        5,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              6,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3531
+        }
+      ]
+    },
+    {
+      "target": [
+        0,
+        3,
+        5,
+        2,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              8,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3540
+        }
+      ]
+    },
+    {
+      "target": [
+        0,
+        5,
+        2,
+        1,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2161
+        }
+      ]
+    },
+    {
+      "target": [
+        0,
+        5,
+        3,
+        1,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        1,
+        3,
+        2,
+        5,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3826
+        }
+      ]
+    },
+    {
+      "target": [
+        1,
+        3,
+        5,
+        2,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          2,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          2,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        1,
+        5,
+        2,
+        0,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2168
+        }
+      ]
+    },
+    {
+      "target": [
+        1,
+        5,
+        3,
+        0,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        3,
+        5,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "AD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3818
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        4,
+        3,
+        5,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3819
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        4,
+        5,
+        3,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3819
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        5,
+        3,
+        0,
+        4
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3818
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        5,
+        3,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3818
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        1,
+        5,
+        4,
+        3,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              4
+            ],
+            "cost": 18
+          },
+          "oracle_states": 4554
+        },
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              4,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 5712
+        },
+        {
+          "cards": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              4,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 6409
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        3,
+        1,
+        5,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3818
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        3,
+        5,
+        1,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        3,
+        5,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        5,
+        3,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        4,
+        5,
+        1,
+        3,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        0,
+        3,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2165
+        },
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              6,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3531
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        1,
+        3,
+        0,
+        4
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        1,
+        3,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        1,
+        4,
+        3,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              4
+            ],
+            "cost": 18
+          },
+          "oracle_states": 4554
+        },
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              4,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 5730
+        },
+        {
+          "cards": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              4,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 6420
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        3,
+        0,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        2,
+        5,
+        4,
+        1,
+        3,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              4
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4598
+        },
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              4,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 5730
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        0,
+        2,
+        5,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              6,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3534
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        0,
+        5,
+        2,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              8,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3540
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        1,
+        2,
+        5,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 3826
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        1,
+        5,
+        2,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        2,
+        1,
+        5,
+        4,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              4,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 6406
+        },
+        {
+          "cards": [
+            1,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              2,
+              4,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 7052
+        },
+        {
+          "cards": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              4,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 7754
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        1,
+        4,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              4,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 6420
+        },
+        {
+          "cards": [
+            1,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              4,
+              2,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 7080
+        },
+        {
+          "cards": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              6,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 7785
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        4,
+        1,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              6,
+              6,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 7785
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        5,
+        0,
+        2,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              8,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3540
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        5,
+        1,
+        2,
+        4,
+        0
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3852
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        5,
+        2,
+        1,
+        4,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              2,
+              4,
+              2,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 7080
+        },
+        {
+          "cards": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              4,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 20
+          },
+          "oracle_states": 7789
+        }
+      ]
+    },
+    {
+      "target": [
+        3,
+        5,
+        2,
+        4,
+        1,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          4,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              8,
+              8,
+              2,
+              2,
+              2,
+              2
+            ],
+            "cost": 24
+          },
+          "oracle_states": 7807
+        }
+      ]
+    },
+    {
+      "target": [
+        4,
+        1,
+        0,
+        3,
+        5,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              6,
+              2
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2720
+        }
+      ]
+    },
+    {
+      "target": [
+        4,
+        2,
+        0,
+        3,
+        5,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            5
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              8,
+              2
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2724
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        0,
+        2,
+        1,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2165
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        0,
+        3,
+        1,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        2,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2165
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        3,
+        2,
+        4
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2168
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        3,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2167
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        4,
+        2,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2168
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        0,
+        4,
+        3,
+        2
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              4,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3438
+        },
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              4,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3733
+        },
+        {
+          "cards": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              4,
+              2,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3990
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        2,
+        0,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2168
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        1,
+        3,
+        0,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        0,
+        1,
+        4,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 16
+          },
+          "oracle_states": 2161
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        0,
+        3,
+        1,
+        4
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        0,
+        3,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        0,
+        4,
+        1,
+        3
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        0,
+        4,
+        3,
+        1
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          4
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          4
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              4,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 3458
+        },
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              4,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 3747
+        },
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              4,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 4267
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        1,
+        0,
+        4,
+        3
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          4,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              4,
+              2,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 3990
+        },
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              4,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 4267
+        },
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              4,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 18
+          },
+          "oracle_states": 4554
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        1,
+        4,
+        3,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              6,
+              2,
+              2,
+              2,
+              2,
+              6
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4597
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        3,
+        0,
+        4,
+        1
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          4,
+          4
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        2,
+        4,
+        1,
+        3,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              8,
+              2,
+              2,
+              2,
+              2,
+              4
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4598
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        0,
+        1,
+        4,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        0,
+        4,
+        1,
+        2
+      ],
+      "distance": 16,
+      "structural_bound": 14,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 16
+      },
+      "oracle_states": 34,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 18
+          },
+          "oracle_states": 2194
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        0,
+        4,
+        2,
+        1
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              4,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4001
+        },
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "BD",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              4,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4282
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        1,
+        0,
+        4,
+        2
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              4,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 3747
+        },
+        {
+          "cards": [
+            0,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              4,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4282
+        },
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              4,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4598
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        1,
+        4,
+        2,
+        0
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          4,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "AD",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD"
+            ],
+            "counts": [
+              4,
+              2,
+              2,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4598
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        3,
+        2,
+        0,
+        4,
+        1
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              4,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 3747
+        },
+        {
+          "cards": [
+            0,
+            1,
+            3,
+            4
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DA",
+              "DB",
+              "AD",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "BD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              4,
+              2,
+              2,
+              8
+            ],
+            "cost": 20
+          },
+          "oracle_states": 4001
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        4,
+        1,
+        0,
+        3,
+        2
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DB",
+              "DB",
+              "DA",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "AD",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              6,
+              6
+            ],
+            "cost": 20
+          },
+          "oracle_states": 3462
+        }
+      ]
+    },
+    {
+      "target": [
+        5,
+        4,
+        2,
+        0,
+        3,
+        1
+      ],
+      "distance": 18,
+      "structural_bound": 16,
+      "all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "optimal_all_at_most_four": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          4,
+          2
+        ],
+        "cost": 18
+      },
+      "oracle_states": 38,
+      "maximum_twice_sets": [
+        {
+          "cards": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "at_B_infeasible": true,
+          "other_cards_unlimited": true,
+          "feasible_witness": {
+            "moves": [
+              "DA",
+              "DA",
+              "DB",
+              "DB",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "DA",
+              "BD",
+              "DA",
+              "BD",
+              "AD",
+              "AD",
+              "DB",
+              "DB",
+              "AD",
+              "BD",
+              "BD",
+              "DA",
+              "DA",
+              "BD",
+              "AD",
+              "AD"
+            ],
+            "counts": [
+              2,
+              2,
+              2,
+              2,
+              8,
+              8
+            ],
+            "cost": 24
+          },
+          "oracle_states": 3480
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 0.9199183466844261,
+  "completed_cases": 64
+}

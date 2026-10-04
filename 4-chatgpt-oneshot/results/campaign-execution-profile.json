@@ -1,0 +1,748 @@
+{
+  "recommended": {
+    "cold_planning": {
+      "seconds": 0.05953826289623976,
+      "moves": 334,
+      "rss_kib": 17876
+    },
+    "profiled_target_count": 100,
+    "profiled_total_seconds": 15.320241515000001,
+    "top_self": [
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 19,
+        "function": "_join",
+        "primitive_calls": 2015200,
+        "calls": 2015200,
+        "self_seconds": 5.876424995000001,
+        "cumulative_seconds": 9.045111696000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 50,
+        "function": "_combine",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.555300727,
+        "cumulative_seconds": 13.632495634000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 10076000,
+        "calls": 10076000,
+        "self_seconds": 1.475941546,
+        "cumulative_seconds": 1.475941546
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 20256893,
+        "calls": 20256893,
+        "self_seconds": 1.46546503,
+        "cumulative_seconds": 1.46546503
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 37,
+        "function": "_merge",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.384039535,
+        "cumulative_seconds": 2.105715934
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "primitive_calls": 8045996,
+        "calls": 8045996,
+        "self_seconds": 0.799065643,
+        "cumulative_seconds": 0.799065643
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 15,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 0.751833743,
+        "cumulative_seconds": 15.229742796000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'pop' of 'list' objects>",
+        "primitive_calls": 6937219,
+        "calls": 6937219,
+        "self_seconds": 0.693329484,
+        "cumulative_seconds": 0.693329484
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 14,
+        "function": "_swap",
+        "primitive_calls": 1007600,
+        "calls": 1007600,
+        "self_seconds": 0.637434775,
+        "cumulative_seconds": 0.637434775
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/exact_solver.py",
+        "line": 15,
+        "function": "optimal",
+        "primitive_calls": 61481,
+        "calls": 61481,
+        "self_seconds": 0.424275744,
+        "cumulative_seconds": 0.743194789
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/three_stack.py",
+        "line": 9,
+        "function": "validate_problem",
+        "primitive_calls": 61581,
+        "calls": 61581,
+        "self_seconds": 0.097885307,
+        "cumulative_seconds": 0.11675673800000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 137400,
+        "calls": 137400,
+        "self_seconds": 0.06005544300000001,
+        "cumulative_seconds": 0.06005544300000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'index' of 'list' objects>",
+        "primitive_calls": 323281,
+        "calls": 323281,
+        "self_seconds": 0.04263836,
+        "cumulative_seconds": 0.04263836
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.min>",
+        "primitive_calls": 113700,
+        "calls": 113700,
+        "self_seconds": 0.032172879,
+        "cumulative_seconds": 0.032172879
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.max>",
+        "primitive_calls": 57617,
+        "calls": 57617,
+        "self_seconds": 0.0077876970000000005,
+        "cumulative_seconds": 0.007930012
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 74,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 3000,
+        "self_seconds": 0.004046714,
+        "cumulative_seconds": 0.07668999500000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 30,
+        "function": "_validate",
+        "primitive_calls": 400,
+        "calls": 400,
+        "self_seconds": 0.0030788770000000003,
+        "cumulative_seconds": 0.003208718
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/three_stack.py",
+        "line": 59,
+        "function": "invert",
+        "primitive_calls": 100,
+        "calls": 100,
+        "self_seconds": 0.0018049230000000002,
+        "cumulative_seconds": 0.0018049230000000002
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/solver.py",
+        "line": 62,
+        "function": "_two_run_plan",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0016018380000000002,
+        "cumulative_seconds": 0.002324809
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 7,
+        "function": "hybrid_window",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.001517986,
+        "cumulative_seconds": 15.314466816000001
+      }
+    ],
+    "top_cumulative": [
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/solver.py",
+        "line": 102,
+        "function": "recommended",
+        "primitive_calls": 100,
+        "calls": 100,
+        "self_seconds": 0.0006299210000000001,
+        "cumulative_seconds": 15.320227468
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 7,
+        "function": "hybrid_window",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.001517986,
+        "cumulative_seconds": 15.314466816000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 15,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 0.751833743,
+        "cumulative_seconds": 15.229742796000002
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 50,
+        "function": "_combine",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.555300727,
+        "cumulative_seconds": 13.632495634000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 19,
+        "function": "_join",
+        "primitive_calls": 2015200,
+        "calls": 2015200,
+        "self_seconds": 5.876424995000001,
+        "cumulative_seconds": 9.045111696000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 37,
+        "function": "_merge",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.384039535,
+        "cumulative_seconds": 2.105715934
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 10076000,
+        "calls": 10076000,
+        "self_seconds": 1.475941546,
+        "cumulative_seconds": 1.475941546
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 20256893,
+        "calls": 20256893,
+        "self_seconds": 1.46546503,
+        "cumulative_seconds": 1.46546503
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "primitive_calls": 8045996,
+        "calls": 8045996,
+        "self_seconds": 0.799065643,
+        "cumulative_seconds": 0.799065643
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/exact_solver.py",
+        "line": 15,
+        "function": "optimal",
+        "primitive_calls": 61481,
+        "calls": 61481,
+        "self_seconds": 0.424275744,
+        "cumulative_seconds": 0.743194789
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'pop' of 'list' objects>",
+        "primitive_calls": 6937219,
+        "calls": 6937219,
+        "self_seconds": 0.693329484,
+        "cumulative_seconds": 0.693329484
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 14,
+        "function": "_swap",
+        "primitive_calls": 1007600,
+        "calls": 1007600,
+        "self_seconds": 0.637434775,
+        "cumulative_seconds": 0.637434775
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/three_stack.py",
+        "line": 9,
+        "function": "validate_problem",
+        "primitive_calls": 61581,
+        "calls": 61581,
+        "self_seconds": 0.097885307,
+        "cumulative_seconds": 0.11675673800000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 67,
+        "function": "hybrid_merge",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.000751998,
+        "cumulative_seconds": 0.07907519
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 74,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 3000,
+        "self_seconds": 0.004046714,
+        "cumulative_seconds": 0.07668999500000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 137400,
+        "calls": 137400,
+        "self_seconds": 0.06005544300000001,
+        "cumulative_seconds": 0.06005544300000001
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'index' of 'list' objects>",
+        "primitive_calls": 323281,
+        "calls": 323281,
+        "self_seconds": 0.04263836,
+        "cumulative_seconds": 0.04263836
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.min>",
+        "primitive_calls": 113700,
+        "calls": 113700,
+        "self_seconds": 0.032172879,
+        "cumulative_seconds": 0.032172879
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.max>",
+        "primitive_calls": 57617,
+        "calls": 57617,
+        "self_seconds": 0.0077876970000000005,
+        "cumulative_seconds": 0.007930012
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 30,
+        "function": "_validate",
+        "primitive_calls": 400,
+        "calls": 400,
+        "self_seconds": 0.0030788770000000003,
+        "cumulative_seconds": 0.003208718
+      }
+    ]
+  },
+  "parked_recommended": {
+    "cold_planning": {
+      "seconds": 0.11688097007572651,
+      "moves": 324,
+      "rss_kib": 24304
+    },
+    "profiled_target_count": 100,
+    "profiled_total_seconds": 29.725832856000007,
+    "top_self": [
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 19,
+        "function": "_join",
+        "primitive_calls": 4953563,
+        "calls": 4953563,
+        "self_seconds": 9.891630685,
+        "cumulative_seconds": 15.377657899
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 18410289,
+        "calls": 18410289,
+        "self_seconds": 2.8366866820000003,
+        "cumulative_seconds": 2.8366866820000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 36363959,
+        "calls": 36363959,
+        "self_seconds": 2.7391168240000003,
+        "cumulative_seconds": 2.7391168240000003
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 37,
+        "function": "_merge",
+        "primitive_calls": 1006200,
+        "calls": 1006200,
+        "self_seconds": 2.732665127,
+        "cumulative_seconds": 4.188013602
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 68,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 2.580692603,
+        "cumulative_seconds": 14.339718074
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "primitive_calls": 15955772,
+        "calls": 15955772,
+        "self_seconds": 1.5961359830000001,
+        "cumulative_seconds": 1.5961359830000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 50,
+        "function": "_combine",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.5546155990000001,
+        "cumulative_seconds": 13.681753382
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'pop' of 'list' objects>",
+        "primitive_calls": 11006486,
+        "calls": 11006486,
+        "self_seconds": 1.1490628550000002,
+        "cumulative_seconds": 1.1490628550000002
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/exact_solver.py",
+        "line": 15,
+        "function": "optimal",
+        "primitive_calls": 121364,
+        "calls": 121364,
+        "self_seconds": 0.8510349300000001,
+        "cumulative_seconds": 1.487210949
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 14,
+        "function": "_swap",
+        "primitive_calls": 1219600,
+        "calls": 1219600,
+        "self_seconds": 0.805288196,
+        "cumulative_seconds": 0.805288196
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 15,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 0.7520990240000001,
+        "cumulative_seconds": 15.288245808000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 33,
+        "function": "parked_optimal",
+        "primitive_calls": 155200,
+        "calls": 155200,
+        "self_seconds": 0.686102266,
+        "cumulative_seconds": 1.3321094690000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method fromkeys>",
+        "primitive_calls": 325600,
+        "calls": 325600,
+        "self_seconds": 0.3676758,
+        "cumulative_seconds": 0.6712352410000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 30,
+        "function": "_validate",
+        "primitive_calls": 155800,
+        "calls": 155800,
+        "self_seconds": 0.314537404,
+        "cumulative_seconds": 0.36467263800000005
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 102,
+        "function": "<genexpr>",
+        "primitive_calls": 961600,
+        "calls": 961600,
+        "self_seconds": 0.30355944100000004,
+        "cumulative_seconds": 0.30355944100000004
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/three_stack.py",
+        "line": 9,
+        "function": "validate_problem",
+        "primitive_calls": 121464,
+        "calls": 121464,
+        "self_seconds": 0.19930888600000002,
+        "cumulative_seconds": 0.23788277300000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'index' of 'list' objects>",
+        "primitive_calls": 1317774,
+        "calls": 1317774,
+        "self_seconds": 0.16972655,
+        "cumulative_seconds": 0.16972655
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.sorted>",
+        "primitive_calls": 271800,
+        "calls": 271800,
+        "self_seconds": 0.121568457,
+        "cumulative_seconds": 0.121568457
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.min>",
+        "primitive_calls": 170600,
+        "calls": 170600,
+        "self_seconds": 0.038661094,
+        "cumulative_seconds": 0.038661094
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.max>",
+        "primitive_calls": 114417,
+        "calls": 114417,
+        "self_seconds": 0.015635364000000002,
+        "cumulative_seconds": 0.015779463
+      }
+    ],
+    "top_cumulative": [
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 109,
+        "function": "parked_recommended",
+        "primitive_calls": 100,
+        "calls": 100,
+        "self_seconds": 0.0007633280000000001,
+        "cumulative_seconds": 29.725821194
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/solver.py",
+        "line": 102,
+        "function": "recommended",
+        "primitive_calls": 100,
+        "calls": 100,
+        "self_seconds": 0.000668669,
+        "cumulative_seconds": 15.377774573000002
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 19,
+        "function": "_join",
+        "primitive_calls": 4953563,
+        "calls": 4953563,
+        "self_seconds": 9.891630685,
+        "cumulative_seconds": 15.377657899
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 7,
+        "function": "hybrid_window",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0015492840000000002,
+        "cumulative_seconds": 15.371905119000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_variants.py",
+        "line": 15,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 0.7520990240000001,
+        "cumulative_seconds": 15.288245808000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 53,
+        "function": "parked_hybrid",
+        "primitive_calls": 200,
+        "calls": 200,
+        "self_seconds": 0.0013349100000000001,
+        "cumulative_seconds": 14.345289902000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 68,
+        "function": "solve",
+        "primitive_calls": 200,
+        "calls": 134400,
+        "self_seconds": 2.580692603,
+        "cumulative_seconds": 14.339718074
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 50,
+        "function": "_combine",
+        "primitive_calls": 503800,
+        "calls": 503800,
+        "self_seconds": 1.5546155990000001,
+        "cumulative_seconds": 13.681753382
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 37,
+        "function": "_merge",
+        "primitive_calls": 1006200,
+        "calls": 1006200,
+        "self_seconds": 2.732665127,
+        "cumulative_seconds": 4.188013602
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'extend' of 'list' objects>",
+        "primitive_calls": 18410289,
+        "calls": 18410289,
+        "self_seconds": 2.8366866820000003,
+        "cumulative_seconds": 2.8366866820000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method builtins.len>",
+        "primitive_calls": 36363959,
+        "calls": 36363959,
+        "self_seconds": 2.7391168240000003,
+        "cumulative_seconds": 2.7391168240000003
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'append' of 'list' objects>",
+        "primitive_calls": 15955772,
+        "calls": 15955772,
+        "self_seconds": 1.5961359830000001,
+        "cumulative_seconds": 1.5961359830000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/exact_solver.py",
+        "line": 15,
+        "function": "optimal",
+        "primitive_calls": 121364,
+        "calls": 121364,
+        "self_seconds": 0.8510349300000001,
+        "cumulative_seconds": 1.487210949
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 33,
+        "function": "parked_optimal",
+        "primitive_calls": 155200,
+        "calls": 155200,
+        "self_seconds": 0.686102266,
+        "cumulative_seconds": 1.3321094690000002
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<method 'pop' of 'list' objects>",
+        "primitive_calls": 11006486,
+        "calls": 11006486,
+        "self_seconds": 1.1490628550000002,
+        "cumulative_seconds": 1.1490628550000002
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 14,
+        "function": "_swap",
+        "primitive_calls": 1219600,
+        "calls": 1219600,
+        "self_seconds": 0.805288196,
+        "cumulative_seconds": 0.805288196
+      },
+      {
+        "file": "~",
+        "line": 0,
+        "function": "<built-in method fromkeys>",
+        "primitive_calls": 325600,
+        "calls": 325600,
+        "self_seconds": 0.3676758,
+        "cumulative_seconds": 0.6712352410000001
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/hybrid_merge.py",
+        "line": 30,
+        "function": "_validate",
+        "primitive_calls": 155800,
+        "calls": 155800,
+        "self_seconds": 0.314537404,
+        "cumulative_seconds": 0.36467263800000005
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/parked_leaf.py",
+        "line": 102,
+        "function": "<genexpr>",
+        "primitive_calls": 961600,
+        "calls": 961600,
+        "self_seconds": 0.30355944100000004,
+        "cumulative_seconds": 0.30355944100000004
+      },
+      {
+        "file": "/usr/local/src/three-stack-shuffle/4-chatgpt-oneshot/three_stack.py",
+        "line": 9,
+        "function": "validate_problem",
+        "primitive_calls": 121464,
+        "calls": 121464,
+        "self_seconds": 0.19930888600000002,
+        "cumulative_seconds": 0.23788277300000002
+      }
+    ]
+  }
+}

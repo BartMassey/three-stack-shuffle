@@ -1,0 +1,70 @@
+{
+  "n": 52,
+  "partition_count": 281589,
+  "target_count": "80658175170943878571660636856403766975289505440883277824000000000000",
+  "tableau_square_weight_sum": "80658175170943878571660636856403766975289505440883277824000000000000",
+  "i2_sum_over_targets": "1656783367638594874823246686091916739777019165161562098019654697413807",
+  "suffix_sum_over_targets": "1582153806516928479880495049442062531016450082111552784920420940314",
+  "mean_lower_bound_numerator": "47731097137113840908862262779607325979589169862469413070151949515219",
+  "mean_lower_bound_denominator": "286021897769304533942058995944694209132232288797458432000000000000",
+  "mean_lower_bound": 166.87917082352942,
+  "elapsed_seconds": 3.7298950399272144,
+  "model": "Adjacent single-card moves on A-D-B; endpoints all on D",
+  "instance_bound_formula": "4*n - 2*I2(target) - 2*common_bottom_suffix",
+  "validation": [
+    {
+      "n": 1,
+      "mean_bound": 0.0,
+      "largest_gap": 0,
+      "checked_targets": 1
+    },
+    {
+      "n": 2,
+      "mean_bound": 2.0,
+      "largest_gap": 0,
+      "checked_targets": 2
+    },
+    {
+      "n": 3,
+      "mean_bound": 5.0,
+      "largest_gap": 0,
+      "checked_targets": 6
+    },
+    {
+      "n": 4,
+      "mean_bound": 8.083333333333334,
+      "largest_gap": 0,
+      "checked_targets": 24
+    },
+    {
+      "n": 5,
+      "mean_bound": 11.033333333333333,
+      "largest_gap": 2,
+      "checked_targets": 120
+    },
+    {
+      "n": 6,
+      "mean_bound": 13.925,
+      "largest_gap": 2,
+      "checked_targets": 720
+    },
+    {
+      "n": 7,
+      "mean_bound": 16.836904761904762,
+      "largest_gap": 4,
+      "checked_targets": 5040
+    },
+    {
+      "n": 8,
+      "mean_bound": 19.791815476190475,
+      "largest_gap": 4,
+      "checked_targets": 40320
+    },
+    {
+      "n": 9,
+      "mean_bound": 22.78551587301587,
+      "largest_gap": 6,
+      "checked_targets": 362880
+    }
+  ]
+}

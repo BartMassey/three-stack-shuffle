@@ -1,0 +1,11 @@
+{
+  "n": 4,
+  "endpoint": "A reversed sorted; D and B empty",
+  "initial_order": "Lexicographic permutations in D, normalized to sorted target ranks",
+  "move_codes": ["AD","DA","DB","BD"],
+  "encoding": "Strings of single-digit move codes in execution order",
+  "state_count": 360,
+  "plans": ["1111","112131","121311","12213311","121131","12213131","213111","21312131","22133111","2221333111","1202131131","112200311311","211311","21213311","22131311","2221331311","22113311","2221313311","211131","21213131","22131131","2221331131","22113131","2221313131"],
+  "elapsed_seconds": 0.00012154,
+  "distance_histogram": {"4":1,"6":6,"8":10,"10":6,"12":1}
+}

@@ -1,0 +1,12 @@
+{
+  "n": 3,
+  "endpoint": "A reversed sorted; D and B empty",
+  "initial_order": "Lexicographic permutations in D, normalized to sorted target ranks",
+  "move_codes": ["AD","DA","DB","BD"],
+  "encoding": "Strings of single-digit move codes in execution order",
+  "tie_breaking": "maximum terminal parking run",
+  "state_count": 60,
+  "plans": ["111","12131","21311","2213311","21131","2213131"],
+  "elapsed_seconds": 6.0034e-05,
+  "distance_histogram": {"3":1,"5":3,"7":2}
+}

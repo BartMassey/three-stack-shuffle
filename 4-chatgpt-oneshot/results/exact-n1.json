@@ -1,0 +1,20 @@
+{
+  "n": 1,
+  "model": "Three stacks A-D-B; only adjacent moves; move one top card to neighbor top; top-to-bottom sequences",
+  "initial_D": [0],
+  "state_count": 3,
+  "visited_state_count": 3,
+  "target_count": 1,
+  "distance_sum": 0,
+  "mean_numerator": 0,
+  "mean_denominator": 1,
+  "mean": 0,
+  "maximum": 0,
+  "reversal_distance": 0,
+  "elapsed_seconds": 3.517e-06,
+  "distance_histogram": {
+    "0": 1
+  },
+  "target_distance_order": "Lexicographic permutations of 0..N-1, top to bottom in D",
+  "target_distances": [0]
+}

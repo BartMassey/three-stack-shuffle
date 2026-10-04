@@ -1,0 +1,53 @@
+{
+  "model": "A-D-B, unit top transfers, identity to target on D",
+  "mode": "excess-one",
+  "restriction": "At most one excursion beyond one per active card",
+  "comparison_domain": "all targets, after common suffix trimming",
+  "memory_limit_mib": 512,
+  "time_limit_seconds": 50.0,
+  "sizes": [
+    {
+      "n": 1,
+      "targets": 1,
+      "at_most_one_extra_yes": 1,
+      "attempted_schedules": 0,
+      "elapsed_seconds": 7.984088733792305e-05
+    },
+    {
+      "n": 2,
+      "targets": 2,
+      "at_most_one_extra_yes": 2,
+      "attempted_schedules": 0,
+      "elapsed_seconds": 6.747804582118988e-05
+    },
+    {
+      "n": 3,
+      "targets": 6,
+      "at_most_one_extra_yes": 6,
+      "attempted_schedules": 17,
+      "elapsed_seconds": 0.0001924140378832817
+    },
+    {
+      "n": 4,
+      "targets": 24,
+      "at_most_one_extra_yes": 23,
+      "attempted_schedules": 2265,
+      "elapsed_seconds": 0.004657250829041004
+    },
+    {
+      "n": 5,
+      "targets": 120,
+      "at_most_one_extra_yes": 99,
+      "attempted_schedules": 88931,
+      "elapsed_seconds": 0.15763508016243577
+    },
+    {
+      "n": 6,
+      "targets": 720,
+      "at_most_one_extra_yes": 439,
+      "attempted_schedules": 2219484,
+      "elapsed_seconds": 3.959620099980384
+    }
+  ],
+  "elapsed_seconds": 4.122518248856068
+}

@@ -1,0 +1,14 @@
+from: markdown
+to: html5
+standalone: true
+embed-resources: true
+html-math-method:
+  method: mathml
+css:
+  - tools/report.css
+metadata:
+  pagetitle: Permutation Routing and Uniform Shuffling on Three Stacks
+  lang: en
+input-files:
+  - REPORT.md
+output-file: REPORT.html
