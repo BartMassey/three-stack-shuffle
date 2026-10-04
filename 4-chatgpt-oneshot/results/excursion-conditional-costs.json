@@ -1,0 +1,1851 @@
+{
+  "cases": [
+    {
+      "target": [
+        2,
+        1,
+        4,
+        3,
+        0
+      ],
+      "twice_cards": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        2,
+        2,
+        2
+      ],
+      "visited_states": 1,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 14,
+      "unrestricted_oracle_states": 1016,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          6,
+          2,
+          2,
+          2,
+          2
+        ],
+        "cost": 14
+      }
+    },
+    {
+      "target": [
+        2,
+        4,
+        0,
+        3,
+        1
+      ],
+      "twice_cards": [
+        0,
+        1,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        4,
+        2,
+        4
+      ],
+      "visited_states": 86,
+      "exact_distance": 12,
+      "minimum_with_selected_twice": 14,
+      "unrestricted_oracle_states": 903,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 14
+      }
+    },
+    {
+      "target": [
+        2,
+        4,
+        0,
+        3,
+        1
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "visited_states": 114,
+      "exact_distance": 12,
+      "minimum_with_selected_twice": 14,
+      "unrestricted_oracle_states": 1739,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          2,
+          2
+        ],
+        "cost": 14
+      }
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        3,
+        0
+      ],
+      "twice_cards": [
+        0,
+        1,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        4,
+        2,
+        4
+      ],
+      "visited_states": 29,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 906,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          6,
+          2,
+          4
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        2,
+        4,
+        1,
+        3,
+        0
+      ],
+      "twice_cards": [
+        1,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 41,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 1070,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        2,
+        4,
+        3,
+        1,
+        0
+      ],
+      "twice_cards": [
+        0,
+        1
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "visited_states": 149,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 1144,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          6,
+          4,
+          4
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        1,
+        4,
+        0,
+        2
+      ],
+      "twice_cards": [
+        0,
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        2,
+        2
+      ],
+      "visited_states": 21,
+      "exact_distance": 12,
+      "minimum_with_selected_twice": 14,
+      "unrestricted_oracle_states": 923,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          2,
+          2
+        ],
+        "cost": 14
+      }
+    },
+    {
+      "target": [
+        3,
+        1,
+        4,
+        2,
+        0
+      ],
+      "twice_cards": [
+        0,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 68,
+      "exact_distance": 12,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 1431,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          6,
+          2,
+          2
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        4,
+        1,
+        0,
+        3,
+        2
+      ],
+      "twice_cards": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 1,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 14,
+      "unrestricted_oracle_states": 587,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 14
+      }
+    },
+    {
+      "target": [
+        4,
+        1,
+        3,
+        0,
+        2
+      ],
+      "twice_cards": [
+        0,
+        2,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        4,
+        2
+      ],
+      "visited_states": 86,
+      "exact_distance": 12,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 1251,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          4,
+          2
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        4,
+        1,
+        3,
+        2,
+        0
+      ],
+      "twice_cards": [
+        0,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        4,
+        2
+      ],
+      "visited_states": 264,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 1801,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          6,
+          4,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        4,
+        1,
+        3,
+        2,
+        0
+      ],
+      "twice_cards": [
+        1,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 49,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 1071,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          6,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        4,
+        2,
+        0,
+        3,
+        1
+      ],
+      "twice_cards": [
+        0,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 65,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 987,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          6
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        4,
+        2,
+        0,
+        3,
+        1
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "visited_states": 57,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 16,
+      "unrestricted_oracle_states": 1754,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          6,
+          2,
+          2,
+          2
+        ],
+        "cost": 16
+      }
+    },
+    {
+      "target": [
+        4,
+        2,
+        1,
+        3,
+        0
+      ],
+      "twice_cards": [
+        1,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 39,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 1073,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          4,
+          2,
+          2,
+          2,
+          8
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        4,
+        3,
+        0,
+        2,
+        1
+      ],
+      "twice_cards": [
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 448,
+      "exact_distance": 14,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 2520,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          6,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        1,
+        5,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        0,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 299,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 10247,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          6,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        1,
+        5,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 335,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 8321,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        1,
+        5,
+        4,
+        0,
+        2
+      ],
+      "twice_cards": [
+        0,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        2,
+        4,
+        4
+      ],
+      "visited_states": 293,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 6091,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        0,
+        4,
+        1
+      ],
+      "twice_cards": [
+        0,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 278,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 10247,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          4,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        0,
+        4,
+        1
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 226,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 8422,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          4,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        1,
+        4,
+        0
+      ],
+      "twice_cards": [
+        1,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 69,
+      "exact_distance": 18,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 11115,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          8,
+          2,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        3,
+        2,
+        5,
+        1,
+        4,
+        0
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 111,
+      "exact_distance": 18,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 8424,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          6,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        3,
+        5,
+        1,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        0,
+        1,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        4,
+        4,
+        2,
+        4
+      ],
+      "visited_states": 169,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 6320,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          6
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        3,
+        5,
+        1,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 251,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 8321,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          2,
+          2,
+          2,
+          6
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        5,
+        1,
+        4,
+        0,
+        2
+      ],
+      "twice_cards": [
+        0,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        2,
+        4,
+        4
+      ],
+      "visited_states": 179,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 6091,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          2,
+          4,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        3,
+        5,
+        2,
+        0,
+        4,
+        1
+      ],
+      "twice_cards": [
+        0,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 150,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 7283,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          4,
+          6,
+          2,
+          2,
+          4
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        4,
+        1,
+        5,
+        0,
+        3,
+        2
+      ],
+      "twice_cards": [
+        0,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 373,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 10247,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          4,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        4,
+        2,
+        5,
+        0,
+        3,
+        1
+      ],
+      "twice_cards": [
+        0,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 305,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 10231,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "AD",
+          "BD",
+          "BD",
+          "BD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          6,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        4,
+        2,
+        5,
+        1,
+        3,
+        0
+      ],
+      "twice_cards": [
+        1,
+        4,
+        5
+      ],
+      "infeasible_budgets": [
+        4,
+        2,
+        4,
+        4,
+        2,
+        2
+      ],
+      "visited_states": 162,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 11071,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "DB",
+          "DA",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "BD",
+          "BD",
+          "AD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          2,
+          6,
+          2,
+          2,
+          2
+        ],
+        "cost": 18
+      }
+    },
+    {
+      "target": [
+        5,
+        3,
+        1,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        0,
+        1,
+        4
+      ],
+      "infeasible_budgets": [
+        2,
+        2,
+        4,
+        4,
+        2,
+        4
+      ],
+      "visited_states": 91,
+      "exact_distance": 18,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 6320,
+      "witness": {
+        "moves": [
+          "DA",
+          "DB",
+          "DA",
+          "DB",
+          "AD",
+          "DB",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "BD",
+          "DA",
+          "BD",
+          "AD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          2,
+          4,
+          4,
+          2,
+          6
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        5,
+        3,
+        1,
+        0,
+        4,
+        2
+      ],
+      "twice_cards": [
+        2,
+        3,
+        4
+      ],
+      "infeasible_budgets": [
+        4,
+        4,
+        2,
+        2,
+        2,
+        4
+      ],
+      "visited_states": 121,
+      "exact_distance": 18,
+      "minimum_with_selected_twice": 20,
+      "unrestricted_oracle_states": 8421,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "AD",
+          "BD",
+          "DA",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          4,
+          6,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 20
+      }
+    },
+    {
+      "target": [
+        5,
+        3,
+        1,
+        4,
+        0,
+        2
+      ],
+      "twice_cards": [
+        0,
+        2,
+        3
+      ],
+      "infeasible_budgets": [
+        2,
+        4,
+        2,
+        2,
+        4,
+        4
+      ],
+      "visited_states": 188,
+      "exact_distance": 16,
+      "minimum_with_selected_twice": 18,
+      "unrestricted_oracle_states": 6091,
+      "witness": {
+        "moves": [
+          "DA",
+          "DA",
+          "DA",
+          "DB",
+          "DB",
+          "DB",
+          "AD",
+          "AD",
+          "DB",
+          "AD",
+          "BD",
+          "BD",
+          "DA",
+          "DA",
+          "BD",
+          "AD",
+          "BD",
+          "AD"
+        ],
+        "counts": [
+          2,
+          6,
+          2,
+          2,
+          2,
+          4
+        ],
+        "cost": 18
+      }
+    }
+  ],
+  "elapsed_seconds": 0.17509843595325947
+}

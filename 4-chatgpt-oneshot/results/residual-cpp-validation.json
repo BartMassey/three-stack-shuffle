@@ -1,0 +1,44 @@
+[
+  {
+    "n": 1,
+    "states": 3,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.0035024010576307774
+  },
+  {
+    "n": 2,
+    "states": 12,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.0014192969538271427
+  },
+  {
+    "n": 3,
+    "states": 60,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.0018656020984053612
+  },
+  {
+    "n": 4,
+    "states": 360,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.006213384680449963
+  },
+  {
+    "n": 5,
+    "states": 2520,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.04857882810756564
+  },
+  {
+    "n": 6,
+    "states": 20160,
+    "formula_mismatches": 0,
+    "admissibility_violations": 0,
+    "seconds": 0.395948869176209
+  }
+]

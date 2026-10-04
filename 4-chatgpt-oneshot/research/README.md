@@ -1,6 +1,6 @@
 # Research notes and reproduction
 
-Updated 4 October 2026, after the first bounded campaign.
+Updated 4 October 2026, after the second bounded campaign.
 Run commands from the `4-chatgpt-oneshot` directory.
 
 ## Read these first
@@ -9,6 +9,8 @@ Run commands from the `4-chatgpt-oneshot` directory.
   performance, limitations, and bibliography.
 - [Campaign summary](campaign-summary.md): completed
   experiments, negative results, and next priorities.
+- [Second campaign](second-campaign-summary.md): stronger
+  construction, residual bounds, and revised next gates.
 - [Living log](../STATUS.md): decisions and checkpoints.
 - [Original plan](../RESEARCH_PLAN.md): historical baseline,
   proposed experiments, and an execution outcome table.
@@ -22,13 +24,17 @@ historical investigations; this index covers this project.
 
 | Topic | Detailed note |
 |---|---|
+| Direct-output merge and the 352 construction | [Oriented merge](oriented-merge.md) |
+| Intermediate-state structural bounds | [Residual bounds](residual-bounds.md) |
+| Improved XP exponent 2r+2 | [Parameter algorithm](parameter-complexity.md) |
+| Pair/triple-triggered group constraints | [Obstructions](excursion-obstructions.md) |
 | Parked endpoints and the 410 construction | [Execution](campaign-execution.md) |
 | Conditional six/eight-move certificates | [Structure](campaign-structure.md) |
 | Ensemble counts, LPs, color abstractions | [Counting](campaign-counting.md) |
 | Target-specific exact search | [Exact search](campaign-exact.md) |
 | Excursion schedules, XP, model mismatches | [Complexity](campaign-complexity.md) |
 
-At n=52 the proved optimal maximum lies in [204,410].
+At n=52 the proved optimal maximum lies in [204,352].
 The exact uniform-mean lower theorem remains 166.87917.
 The parked controller's 318.874 mean and 340 maximum
 are measurements on 1,000 held-out targets, not optima.
@@ -36,6 +42,9 @@ The separate 100-target lower holdout has mean certified
 interval [172.56,317.92]. Stored target lists identify
 the samples: sharing an RNG seed is not sufficient.
 Hardness for this exact machine is still unproved.
+The direct-output controller averages 284.72 moves on
+100 new targets, or 273.8 with a wider split window.
+This later sample is distinct from both original holdouts.
 
 ## Earlier studies
 

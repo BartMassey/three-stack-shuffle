@@ -13,13 +13,15 @@ target permutation uniformly.
 
 We give a recursive merge algorithm whose leaves use
 exhaustively computed optimal plans for at most eight
-cards. The algorithm uses O(n log n) moves. Computing
-leaves for their actual parked endpoints gives an upper
-bound of 410 moves for every 52-card permutation.
-The resulting controller averages 318.874 moves on
-1,000 held-out targets, with maximum 340 and approximately
-104 ms median planning time. Its faster predecessor
-averages 322.896 moves on the same targets at 53.5 ms.
+cards. Distinguishing central and side output contracts,
+and merging directly onto the required output stack,
+gives at most 352 moves for every 52-card permutation
+and $(4/3)n\log_2 n+O(n)$ moves in general.
+On 100 fresh held-out targets, the fast version averages
+284.72 moves, with maximum 300 and approximately 8.8 ms
+median planning time. A wider split search averages
+273.8 moves, with maximum 288. Its parked-leaf predecessor
+averages 318.74 on those same targets.
 
 We also compute exact optimal distances through nine
 cards and give counting and structural lower bounds.
@@ -858,6 +860,103 @@ failure of the universal 4(n−1) budget, regardless of
 how long its enumeration runs. A stronger model must
 constrain low-cardinality twice-moved sets as well.
 
+### 5.9. Direct side-output merging
+
+The parked recurrence in section 5.7 still makes a detour:
+it merges a composite child onto D before moving it to
+its required side. We can avoid that detour recursively.
+Let U(n) bound a central-output plan in a requested order,
+and P(n) bound a side-output plan in the reverse order.
+Either contract may request either orientation.
+
+To produce decreasing output on A, park the first a
+cards on B in increasing order, then sort the next b
+cards on D in increasing order. The first action uses
+P(a) with its requested orientation reversed. Merge by
+taking the smaller exposed rank: use DA for a D card,
+and BD DA for a B card. The intermediate BD does not
+lose access to the D head, since DA immediately removes
+the transferred card. This costs 2a+b transfers.
+
+For example, B=(1,4) and D=(2,3), both top first, merge
+onto A using BD DA, DA, DA, BD DA. The final A order
+is (4,3,2,1). Protected bases are untouched throughout,
+so the embedding invariant applies to both contracts.
+
+Consequently, for a+b=n,
+
+$$
+ U(n)\le P(a)+P(b)+n,\qquad
+ P(n)\le P(a)+U(b)+2a+b.
+$$
+
+Use the same exact leaves through eight cards and retain
+the old parking alternative. Optimizing the two fixed
+split recurrences independently gives P(23)<=125 and
+P(29)<=175. Thus every 52-card target has a construction
+of at most 52+125+175=352 moves. The implementation
+includes these certified splits even when a bounded
+search considers additional choices.
+
+There is also a better asymptotic constant. Choose
+a=floor(n/2), b=ceil(n/2), and adjusted costs
+V_U(n)=U(n), V_P(n)=P(n)-n/3. In the U recurrence the
+adjusted toll is 4n/3. In the P recurrence it is
+4n/3+(2/3)(a-b)<=4n/3. Summing over balanced levels
+and using singleton adjusted cost at most 2/3 proves
+
+$$
+ U(n)\le \tfrac43 n\lceil\log_2 n\rceil+\tfrac23 n
+       =\tfrac43 n\log_2 n+O(n).
+$$
+
+Exact leaves and bounded split improvements can only
+reduce this cost. Above 64 cards the controller uses
+balanced recursion with these same oriented contracts.
+[The construction note](research/oriented-merge.md)
+gives the full endpoint proof and independent review.
+
+### 5.10. Residual structural and group bounds
+
+The endpoint lower bound also extends to arbitrary states.
+Delete the longest correct bottom suffix of D, and let
+a,b,d be the remaining counts on A,B,D. The mandatory
+cost is M=a+b+2d. Call a card ordinary if it costs only
+its mandatory one or two moves. Every other card costs
+at least two more moves, by parity.
+
+Project onto ordinary cards. All D departures precede
+all returns. D cards assigned to either side form an
+increasing subsequence in initial D order. Retained
+initial-side cards form decreasing subsequences on their
+sides. Each retained D rank assigned to a side must
+exceed every retained initial-side rank there. These
+conditions are necessary and sufficient for the projected
+ordinary execution: depart the D cards, then merge the
+two decreasing sides back onto D.
+
+If K is the maximum cardinality satisfying these coupled
+conditions, then the residual distance is at least
+M+2(a+b+d-K). A weighted tail-pair dynamic program computes
+K in O(n³). Its maximum with the existing pattern-database
+bound is admissible. Exhaustive cross-language checks
+cover all 23,115 states through six cards; an independent
+subset enumerator checks the relaxation through five.
+See [the residual proof](research/residual-bounds.md).
+
+Separately, finite budget exhaustion gives group clauses:
+if a specified pair or triple of cards moves only twice,
+some card in a specified complementary group must move
+at least six times. Charging disjoint groups avoids
+double counting. The new five-card clauses close the
+previous six-card gap, and the full catalog through six
+cards matches 5032 of 5040 seven-card exact distances.
+However, all pair triggers found are decreasing, so an
+increasing two-card candidate still evades every clause.
+This relaxation retains the 4m-4 ceiling. Details and
+selected 52-card improvements are in the
+[obstruction note](research/excursion-obstructions.md).
+
 ## 6. Computational experiments
 
 ### 6.1. Method
@@ -1024,6 +1123,43 @@ Scaling was stopped; the residual heuristic, rather
 than the small width of an endpoint interval, controls
 the search difficulty.
 
+### 6.5. Direct-output merge holdout
+
+The new endpoint construction was developed on 20 targets
+from the original development sample. Two settings were
+then frozen: midpoint plus certified splits, and those
+splits with an additional window of four. A fresh sample
+of 100 targets uses seed 2026100402 and repeated
+`sample(range(52),52)`.
+
+| Controller | Mean | Sample max | Median planning |
+|---|---:|---:|---:|
+| Previous parked controller | 318.74 | 340 | about 103 ms |
+| Direct-output, fast | 284.72 | 300 | 8.8 ms |
+| Direct-output, window four | 273.80 | 288 | 134.9 ms |
+
+Both new settings improve every target in this sample.
+Every word was replayed; every cost is below the proved
+352 bound. Times are indicative measurements on a shared
+research host, not isolated timing guarantees. Neither
+the sample maximum 288 nor mean 273.8 is an optimality
+theorem. The earlier 1,000-target study and this fresh
+100-target study must not be combined as a paired sample.
+
+The residual structural bound also improves exact search.
+It exhausts the old n=14 threshold 48 in about 4.5 search
+seconds, proving optimum 50 with the existing replayed
+upper word. A 45-second follow-up at n=16 exhausts 56
+in about 43.66 seconds, proving optimum 58. The n=18
+ten-second pilot retains [64,66]; no completed threshold
+or new certificate is inferred from that timeout.
+
+On the original lower-bound holdout, the new window
+controller gives mean certified interval [172.56,271.76],
+width 99.2, with every recorded upper/lower ratio below
+1.695. This is a paired instance statement, not a new
+uniform-mean theorem.
+
 ## 7. Controller complexity
 
 The decision problem asks whether d(pi)<=K for an
@@ -1085,6 +1221,38 @@ to the two-increasing-subsequence characterization.
 The entire excess-one algorithm agrees with all 873
 targets through n=6, checking 2,310,697 schedules.
 
+The second campaign sharpens the exponent to 2r+2.
+In every plan, the first departures of all active cards
+occur in initial order, followed by their final returns
+in reverse target order. No final return can precede
+an active card's first departure: it would permanently
+block that card. This fixes a 2m-event skeleton.
+
+Every other return is temporary and must be matched by
+a later departure. While any such temporary card is on
+D, neither kind of skeleton event is possible. Extra
+events therefore form balanced, possibly nested blocks
+within gaps of the skeleton. For j<=r extra excursions,
+enumerate a balanced word with j pairs, m^j opening-card
+labels, and at most (2m+1)^j gap placements. Apply the
+same D simulation and bipartiteness test. Every legal
+plan occurs, yielding time $f(r)(m+1)^{2r+2}$.
+Complete checks recover every optimum through n=6 using
+r<=4. The [detailed proof](research/parameter-complexity.md)
+also explains why nested blocks cannot simply be replaced
+by independent side-to-side transfers.
+
+For fixed r, this exponent is constant; for unrestricted
+inputs it is not. Membership in P would require one
+constant exponent for all inputs. Binary search over K
+still takes only O(log m) decision calls, since the
+universal upper bound is polynomial. Its difficulty is
+the cost of those calls when r grows, not an excessive
+number of search steps. Even a linear upper bound 4m
+would leave r as large as m. An FPT bound g(r)m^c would
+improve the parameter dependence, but would not itself
+make all growing-r instances polynomial-time either.
+
 A tempting stronger normal form is false. Target
 (2,3,1,4,0) has optimum 12, but requiring D to drain
 completely before any return raises the optimum to 14.
@@ -1115,8 +1283,9 @@ Neither this observation nor the counting obstruction
 at n=212 locates the first failure of (6).
 
 At n=52, the optimal mean lower bound is 166.87917,
-whereas the default's sampled mean is approximately 323.
-The optimal maximum lies between 204 and 410. The gap
+whereas direct-output merging averages about 274 in its
+window-search holdout. The optimal maximum lies between
+204 and 352. The gap
 between lower bounds and constructions is substantial.
 
 A remaining direction is to retain richer sets of plans
@@ -1145,10 +1314,11 @@ priorities, proof obligations, and bounded experiments.
 
 Exact small-deck plans can be composed into a practical
 general algorithm because stack bases remain protected.
-Balanced merging gives O(n log n) moves. Exact parked
-leaves, reflection, and cancellation give a verified
-410-move upper bound at n=52. The parked controller
-averages 318.874 moves on its 1,000-target holdout.
+Oriented central/side-output merging gives
+$(4/3)n\log_2 n+O(n)$ moves and a verified 352-move
+upper bound at n=52. The fast controller averages 284.72
+moves on 100 fresh targets; wider split search gives
+273.8 on those same targets.
 Conditional excursion constraints improve certified
 instance bounds, though not the exact uniform-mean
 bound of 166.87917.
@@ -1168,7 +1338,7 @@ exact tables or run target-specific exact search.
 Matplotlib is used only
 to regenerate the paper's figures.
 
-The test suite has 25 test groups, including replay of
+The test suite has 36 test groups, including replay of
 all 46,233 stored exact plans, optimal-distance checks,
 protected-base cases, recursive composition, arbitrary
 initial orders, and enumeration of the small
@@ -1181,6 +1351,8 @@ bound tests against complete small-instance tables.
 python3 shuffle.py --n 52 --summary
 python3 shuffle.py --n 52 --algorithm thorough --summary
 python3 shuffle.py --n 52 --algorithm parked --summary
+python3 shuffle.py --n 52 --algorithm oriented --summary
+python3 shuffle.py --n 52 --algorithm oriented_window --summary
 python3 -m unittest -v
 python3 benchmark.py --n 52 --samples 1000 \
   --algorithms radix runs_radix_flexible patience \
@@ -1231,6 +1403,10 @@ parked endpoint tables, holdout measurements, and
 complexity proofs. Runtime code remains standard-library
 Python; SciPy is needed only for the experimental LP
 and MILP scripts, not for the integer conditional bound.
+The [second-campaign summary](research/second-campaign-summary.md)
+indexes direct-output merging, group obstructions, residual
+certificates, the improved parameterized algorithm, and
+their independent reviews and fresh holdout records.
 
 ## Bibliography
 

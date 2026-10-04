@@ -1,0 +1,68 @@
+{
+  "checks": [
+    {
+      "n": 1,
+      "targets": 1,
+      "improved_structural": 0,
+      "improved_old": 0,
+      "matched_exact": 1,
+      "bound_sum": 0,
+      "exact_distance_sum": 0
+    },
+    {
+      "n": 2,
+      "targets": 2,
+      "improved_structural": 0,
+      "improved_old": 0,
+      "matched_exact": 2,
+      "bound_sum": 4,
+      "exact_distance_sum": 4
+    },
+    {
+      "n": 3,
+      "targets": 6,
+      "improved_structural": 0,
+      "improved_old": 0,
+      "matched_exact": 6,
+      "bound_sum": 30,
+      "exact_distance_sum": 30
+    },
+    {
+      "n": 4,
+      "targets": 24,
+      "improved_structural": 0,
+      "improved_old": 0,
+      "matched_exact": 24,
+      "bound_sum": 194,
+      "exact_distance_sum": 194
+    },
+    {
+      "n": 5,
+      "targets": 120,
+      "improved_structural": 4,
+      "improved_old": 0,
+      "matched_exact": 120,
+      "bound_sum": 1332,
+      "exact_distance_sum": 1332
+    },
+    {
+      "n": 6,
+      "targets": 720,
+      "improved_structural": 68,
+      "improved_old": 1,
+      "matched_exact": 720,
+      "bound_sum": 10162,
+      "exact_distance_sum": 10162
+    },
+    {
+      "n": 7,
+      "targets": 5040,
+      "improved_structural": 861,
+      "improved_old": 76,
+      "matched_exact": 5028,
+      "bound_sum": 86600,
+      "exact_distance_sum": 86624
+    }
+  ],
+  "elapsed_seconds": 1.554860316682607
+}

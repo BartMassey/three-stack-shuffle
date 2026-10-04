@@ -7,6 +7,11 @@ See [results and stopping gates](research/campaign-summary.md).
 The original baseline and proposed budgets below are
 retained as a record; current bounds and measurements
 are in [REPORT.md](REPORT.md) and [STATUS.md](STATUS.md).
+The [second campaign](research/second-campaign-summary.md)
+subsequently proved a 352 upper bound, improved residual
+certificates and the XP exponent, and established the
+next narrower stopping gates. The baseline below remains
+historical rather than being silently revised.
 
 ### Execution outcomes
 

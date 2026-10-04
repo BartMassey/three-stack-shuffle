@@ -1,12 +1,15 @@
 # Work status
 
-Updated: 2026-10-04. First autonomous campaign completed.
-Tests, certificate replay, documentation links, and browser
-rendering are verified. No searches remain running.
-The user authorized
-execution without intervention; bounded experiments and
-their stopping gates are recorded in
-`research/campaign-summary.md`.
+Updated: 2026-10-04. Second bounded campaign completed.
+The first campaign and documentation snapshot were committed
+as `441b201`; the user reports pushing that snapshot.
+The user authorized continued research. Parallel work on
+residual states, group obstructions, and parameterized
+algorithms is complete; root added direct-output merging.
+Current results and next gates are recorded in
+`research/second-campaign-summary.md`. No searches remain
+running. The user has requested this snapshot's local
+commit, followed by a third campaign. No push authorized.
 
 ## Objective and constraints
 
@@ -22,8 +25,9 @@ large-n asymptotics. Use code for exhaustive searches;
 do not extrapolate tiny-n results to 52 cards. Investigate
 the reported change in behavior across deck sizes.
 
-The user has authorized a local commit of this project
-and relevant documentation. No push is authorized.
+The second-campaign local commit is now authorized.
+Third-campaign research is authorized after that commit;
+it does not authorize a further commit or any push.
 Exclude the unrelated untracked `../3-generic/` work.
 No unsafe code.
 No account-wide usage percentage is available to this
@@ -42,8 +46,17 @@ cannot currently be measured. Keep experiments bounded.
 
 ## Current recommendation
 
-Run `python3 shuffle.py --n 52 --summary`.
+Try `python3 shuffle.py --n 52 --algorithm oriented --summary`.
 See `README.md` for usage, proofs, and reproduction.
+
+New optional direct-output merge modes: `oriented` is the
+fast version; `oriented_window` spends more time on splits.
+Both guarantee 352 moves for any 52-card target and use
+(4/3)n log2(n)+O(n) moves asymptotically. On 100 fresh
+targets, seed 2026100402, their means are 284.72 and 273.8,
+with maxima 300 and 288. The prior parked controller
+averages 318.74 on these exact targets. Both new modes
+win all 100 comparisons. Existing default unchanged.
 
 Default: exact lookup through eight cards; otherwise
 merge sort with exact leaves, midpoint +/-4 split search,
@@ -66,9 +79,10 @@ Timing excludes simulation and is indicative for this host.
 The final structured-deck shortcut changes none of these
 1000 random plans; timing was recorded before that addition.
 
-Proved bound for every 52-card target: **444 moves**.
-The new optional `--algorithm parked` improves this to
-**410 moves**, retaining the old plan as a candidate.
+Proved current upper bound for every 52-card target:
+**352 moves** (`oriented` and `oriented_window`).
+The unchanged original default guarantees 444, and the
+first campaign's optional parked mode guarantees 410.
 Proved optimal maximum lower bound: **204 moves**.
 Proved optimal uniform mean lower bound: **166.87917**.
 Reversal is optimal at exactly 4(n-1) for every n.
@@ -77,7 +91,7 @@ host time O(n log² n) and plan storage O(n log n).
 Full interval DP is bounded to 64 cards and is heuristic,
 not a globally optimal controller.
 
-Verification: all 25 unittest groups pass, including all
+Verification: the integrated tests pass, including all
 46,233 exact-table plans, independent simulator checks,
 untouched stack buffers, arbitrary initial labels,
 recursive merges, and Fisher–Yates choice enumeration.
@@ -89,11 +103,68 @@ interleaving, and reversed blocks.
 Artifacts: `results/comparison-52.json`,
 `results/thorough-52.json`, `results/scaling.json`,
 `results/structures-52.json`, and `results/hybrid-bounds.json`.
-No commits or pushes were made during the research
-campaign; the user has now requested its local commit.
+The first research snapshot is committed as `441b201`.
+No agent push was performed.
 
 ## Research log
 
+- Second-campaign final verification: 36 tests pass in
+  14.483s. All 130 local Markdown links resolve; Pandoc
+  renders the report with 72 MathML elements and no math
+  errors, and the plan also renders cleanly. All result
+  JSON parses. Root replays 306 new holdout and residual
+  upper witnesses and independently repeats the n=14
+  exhausted-threshold proof. No searches remain running.
+  All new work is uncommitted; unrelated sibling files
+  are untouched. No commit or push was performed.
+- Second campaign integrated: direct-output merge has a
+  proved 352 bound and (4/3)n log2(n)+O(n) moves. Fresh
+  100-target means are 284.72 (fast) and 273.8 (window4),
+  versus 318.74 for parked; all plans independently replay.
+  Original lower holdout now has paired interval mean
+  [172.56,271.76], width 99.2; largest instance ratio 1.695
+  after rounding upward. Three n=4096 runs average 56,882.67
+  moves versus 78,710, at about 1.05s versus 0.11s host time.
+  New modes are explicit; the old default stays unchanged.
+- Second campaign integrated: joint residual structural
+  bound is proved admissible, evaluated by O(n³) weighted
+  tail DP. Python/C++ and exact-distance checks cover all
+  23,115 states through six; independent subset review
+  covers all 2,955 through five. Root independently repeated
+  the n=14 proof of optimum 50 (671,869 nodes, threshold 48
+  exhausted), replaying its upper word. n=16 optimum 58
+  is certified after 43.66 search seconds; n=18 remains
+  [64,66] at the bounded pilot. The C++ flag is optional.
+- Second campaign integrated: pair/triple group clauses
+  recover all n<=6 optima and 5032/5040 n=7 optima; four
+  deliberately selected 52-card certificates improve by
+  2,2,2,4 moves. Increasing pairs still evade every rule,
+  so the 4m-4 ceiling remains. No ensemble-mean improvement.
+- Second campaign integrated: fixed first-departure/final-
+  return skeleton plus balanced temporary blocks proves
+  XP time f(r)(m+1)^(2r+2), replacing 5r+2. All excesses
+  through four recover every optimum through six. Fixed r
+  is not unrestricted P; binary search has few oracle calls
+  but those calls can involve growing r. Hardness open.
+- Second campaign checkpoint: fixed-skeleton enumeration
+  reduces the XP exponent from 5r+2 to 2r+2, with exhaustive
+  small-budget checks. Residual joint-subsequence bounds
+  pass all 23,115 physical states through six cards.
+  Root found direct side-output merging, implemented in
+  `oriented_merge.py`: the preliminary universal recurrence
+  gives 352 at n=52. Protected-base tests pass. A 20-target
+  development pilot averages 284.4 versus parked 320.5,
+  with median new bidirectional planning about 8.7 ms.
+  Independent proof review and broader validation pending;
+  this pilot is not a held-out population estimate.
+- Second campaign start: prioritize residual-state lower
+  bounds and constraints on executions with few twice-moved
+  cards. Independent agents own separate new tools, notes,
+  and result files. A third investigates improving the XP
+  algorithm. Root handles synthesis, independent checks,
+  and the fixed-parameter versus unrestricted distinction.
+  Keep finite experiments bounded and preserve frozen
+  first-campaign evidence. No unbounded 52-card search.
 - 2026-10-04 documentation and commit preparation: refreshed
   the project and repository indexes, marked historical
   studies and plans with their current successors, and
@@ -311,16 +382,16 @@ campaign; the user has now requested its local commit.
    cutoff is an implementation choice, not evidence of it.
 2. Close the large gap between the proved optimal uniform
    mean lower bound 166.87917 and measured controller mean
-   about 319 at n=52. Conditional instance certificates
+   about 274 at n=52. Conditional instance certificates
    narrow the gap, but optimality remains unresolved.
 3. Explore retaining several boundary-compatible plans
    per interval. Current DP keeps only one shortest local
    plan, which can lose better parent cancellations.
-4. Strengthen arbitrary-state residual bounds before
-   expanding targeted exact searches. The nearly reversed
-   n=14–18 trials stalled despite two-move endpoint gaps.
+4. Strengthen or accelerate residual bounds before more
+   n=18 search. The new bound settled n=14 and n=16, but
+   the latter used nearly its full 45-second allowance.
 
-`research/campaign-summary.md` records completed work and
+`research/second-campaign-summary.md` records current work and
 narrower next gates. The immediate priority is to constrain
 executions with few twice-moved cards, beyond the current
 conditional relaxation's 4m−4 ceiling. Ordinary

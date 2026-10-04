@@ -25,6 +25,41 @@ fixed excess above the 2m bound has a polynomial exact
 algorithm. This is **not** an FPT claim in r, and it is
 not a polynomial algorithm when r grows with m.
 
+Second-campaign update: a fixed skeleton for all cards
+and balanced temporary D blocks reduce the exponent
+to 2r+2. See [the improved enumeration](parameter-complexity.md).
+The original proof below remains valid but is superseded
+as an enumeration bound. The XP/P distinction is unchanged.
+
+### Fixed excess does not imply membership in P
+
+For each fixed r, the exponent 5r+2 is a constant as m
+grows. Polynomial time for unrestricted input would
+require one exponent independent of both m and r.
+The distinction is called XP versus P here; an FPT
+algorithm would instead have time g(r)m^c with a single
+constant c, although g(r) could still make growing r
+intractable. The displayed bound establishes XP only;
+it does not rule out a better algorithm.
+
+Binary search on K is valid because feasibility is
+monotone. The radix upper bound is O(m log m), so only
+O(log m) decision queries are needed. The difficulty is
+the cost of each query: r can grow as O(m log m), and
+substituting that value in the XP bound does not give
+polynomial time. Even a hypothetical universal upper
+bound 4m would leave r as large as m. A polynomial-size
+search interval is not a polynomial-time decision oracle.
+
+At m=52, the first campaign's 410 upper bound corresponds
+to r=153; the newer 352 construction reduces that to
+r=124. These are still large parameters. The theorem is
+therefore a result
+about a restricted low-excursion regime, not a practical
+exact algorithm across the present 52-card interval.
+
+### Scope of the derivation
+
 The derivation below is specific to the current model.
 It does not depend on a reduction from stack-network
 literature. No claim of novelty across that literature

@@ -1,0 +1,87 @@
+{
+  "algorithm": "fixed skeleton plus balanced temporary blocks",
+  "time_bound": "f(r) (m+1)^(2r+2)",
+  "max_excess": 1,
+  "sizes": [
+    {
+      "n": 1,
+      "targets": 1,
+      "decisions": 2,
+      "yes_by_excess": {
+        "0": 1,
+        "1": 1
+      },
+      "attempted_schedules": 0,
+      "elapsed_seconds": 7.348880171775818e-05
+    },
+    {
+      "n": 2,
+      "targets": 2,
+      "decisions": 4,
+      "yes_by_excess": {
+        "0": 2,
+        "1": 2
+      },
+      "attempted_schedules": 0,
+      "elapsed_seconds": 8.034193888306618e-05
+    },
+    {
+      "n": 3,
+      "targets": 6,
+      "decisions": 12,
+      "yes_by_excess": {
+        "0": 5,
+        "1": 6
+      },
+      "attempted_schedules": 4,
+      "elapsed_seconds": 0.00019852584227919579
+    },
+    {
+      "n": 4,
+      "targets": 24,
+      "decisions": 48,
+      "yes_by_excess": {
+        "0": 14,
+        "1": 23
+      },
+      "attempted_schedules": 100,
+      "elapsed_seconds": 0.0011609168723225594
+    },
+    {
+      "n": 5,
+      "targets": 120,
+      "decisions": 240,
+      "yes_by_excess": {
+        "0": 42,
+        "1": 99
+      },
+      "attempted_schedules": 1728,
+      "elapsed_seconds": 0.01347147487103939
+    },
+    {
+      "n": 6,
+      "targets": 720,
+      "decisions": 1440,
+      "yes_by_excess": {
+        "0": 132,
+        "1": 439
+      },
+      "attempted_schedules": 24856,
+      "elapsed_seconds": 0.17616064520552754
+    },
+    {
+      "n": 7,
+      "targets": 5040,
+      "decisions": 10080,
+      "yes_by_excess": {
+        "0": 429,
+        "1": 1930
+      },
+      "attempted_schedules": 323433,
+      "elapsed_seconds": 2.3460493530146778
+    }
+  ],
+  "memory_limit_mib": 512,
+  "time_limit_seconds": 50.0,
+  "elapsed_seconds": 2.5374129619449377
+}

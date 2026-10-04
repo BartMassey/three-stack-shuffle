@@ -1,0 +1,415 @@
+[
+  {
+    "n": 1,
+    "states": 3,
+    "pattern_size": 1,
+    "patterns": 1,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 0.6666666666666666,
+      "mandatory": 0.6666666666666666,
+      "independent": 0.6666666666666666,
+      "joint": 0.6666666666666666,
+      "pdb": 0.6666666666666666,
+      "hybrid": 0.6666666666666666
+    },
+    "joint_exact_states": 3,
+    "joint_beats_independent_states": 0,
+    "joint_beats_pdb_states": 0,
+    "joint_minus_independent_histogram": {
+      "0": 3
+    },
+    "joint_minus_pdb_histogram": {
+      "0": 3
+    },
+    "joint_gap_histogram": {
+      "0": 3
+    },
+    "examples": [],
+    "seconds": 0.00014380225911736488
+  },
+  {
+    "n": 2,
+    "states": 12,
+    "pattern_size": 2,
+    "patterns": 1,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 2.3333333333333335,
+      "mandatory": 2.0,
+      "independent": 2.3333333333333335,
+      "joint": 2.3333333333333335,
+      "pdb": 2.3333333333333335,
+      "hybrid": 2.3333333333333335
+    },
+    "joint_exact_states": 12,
+    "joint_beats_independent_states": 0,
+    "joint_beats_pdb_states": 0,
+    "joint_minus_independent_histogram": {
+      "0": 12
+    },
+    "joint_minus_pdb_histogram": {
+      "0": 12
+    },
+    "joint_gap_histogram": {
+      "0": 12
+    },
+    "examples": [],
+    "seconds": 0.0005184020847082138
+  },
+  {
+    "n": 3,
+    "states": 60,
+    "pattern_size": 3,
+    "patterns": 1,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 4.566666666666666,
+      "mandatory": 3.466666666666667,
+      "independent": 4.3,
+      "joint": 4.433333333333334,
+      "pdb": 4.566666666666666,
+      "hybrid": 4.566666666666666
+    },
+    "joint_exact_states": 56,
+    "joint_beats_independent_states": 4,
+    "joint_beats_pdb_states": 0,
+    "joint_minus_independent_histogram": {
+      "0": 56,
+      "2": 4
+    },
+    "joint_minus_pdb_histogram": {
+      "-2": 4,
+      "0": 56
+    },
+    "joint_gap_histogram": {
+      "0": 56,
+      "2": 4
+    },
+    "examples": [],
+    "seconds": 0.002651409711688757
+  },
+  {
+    "n": 4,
+    "states": 360,
+    "pattern_size": 4,
+    "patterns": 1,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 7.127777777777778,
+      "mandatory": 4.911111111111111,
+      "independent": 6.372222222222222,
+      "joint": 6.6722222222222225,
+      "pdb": 7.127777777777778,
+      "hybrid": 7.127777777777778
+    },
+    "joint_exact_states": 288,
+    "joint_beats_independent_states": 52,
+    "joint_beats_pdb_states": 0,
+    "joint_minus_independent_histogram": {
+      "0": 308,
+      "2": 50,
+      "4": 2
+    },
+    "joint_minus_pdb_histogram": {
+      "-4": 10,
+      "-2": 62,
+      "0": 288
+    },
+    "joint_gap_histogram": {
+      "0": 288,
+      "2": 62,
+      "4": 10
+    },
+    "examples": [],
+    "seconds": 0.021534061059355736
+  },
+  {
+    "n": 5,
+    "states": 2520,
+    "pattern_size": 4,
+    "patterns": 5,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 9.920634920634921,
+      "mandatory": 6.32063492063492,
+      "independent": 8.507936507936508,
+      "joint": 8.977777777777778,
+      "pdb": 9.614285714285714,
+      "hybrid": 9.658730158730158
+    },
+    "joint_exact_states": 1596,
+    "joint_beats_independent_states": 554,
+    "joint_beats_pdb_states": 56,
+    "joint_minus_independent_histogram": {
+      "0": 1966,
+      "2": 516,
+      "4": 38
+    },
+    "joint_minus_pdb_histogram": {
+      "-4": 112,
+      "-2": 634,
+      "0": 1718,
+      "2": 56
+    },
+    "joint_gap_histogram": {
+      "0": 1596,
+      "2": 684,
+      "4": 216,
+      "6": 24
+    },
+    "examples": [
+      {
+        "state": [
+          [
+            2
+          ],
+          [
+            0,
+            4,
+            3
+          ],
+          [
+            1
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 8,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            4
+          ],
+          [
+            2
+          ],
+          [
+            3,
+            0,
+            1
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            3
+          ],
+          [
+            2
+          ],
+          [
+            4,
+            0,
+            1
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            1
+          ],
+          [
+            0,
+            4,
+            3
+          ],
+          [
+            2
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 8,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      }
+    ],
+    "seconds": 0.19450198905542493
+  },
+  {
+    "n": 6,
+    "states": 20160,
+    "pattern_size": 4,
+    "patterns": 15,
+    "admissibility_violations": 0,
+    "consistency_violating_states": 0,
+    "means": {
+      "exact_distance": 12.899503968253969,
+      "mandatory": 7.7067460317460315,
+      "independent": 10.697519841269841,
+      "joint": 11.337400793650794,
+      "pdb": 11.870436507936509,
+      "hybrid": 12.039583333333333
+    },
+    "joint_exact_states": 9466,
+    "joint_beats_independent_states": 5834,
+    "joint_beats_pdb_states": 1674,
+    "joint_minus_independent_histogram": {
+      "0": 14326,
+      "2": 5218,
+      "4": 616
+    },
+    "joint_minus_pdb_histogram": {
+      "-4": 850,
+      "-2": 5378,
+      "0": 12258,
+      "2": 1643,
+      "4": 31
+    },
+    "joint_gap_histogram": {
+      "0": 9466,
+      "2": 6552,
+      "4": 3284,
+      "6": 806,
+      "8": 52
+    },
+    "examples": [
+      {
+        "state": [
+          [
+            4
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0,
+            1
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            3
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            4,
+            0,
+            1
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            4,
+            0,
+            1
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            3
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [
+            3,
+            0,
+            1
+          ],
+          [
+            2,
+            5
+          ],
+          [
+            4
+          ]
+        ],
+        "distance": 10,
+        "mandatory": 6,
+        "independent": 8,
+        "joint": 10,
+        "pdb": 8
+      },
+      {
+        "state": [
+          [],
+          [
+            5
+          ],
+          [
+            3,
+            4,
+            0,
+            1,
+            2
+          ]
+        ],
+        "distance": 11,
+        "mandatory": 5,
+        "independent": 11,
+        "joint": 11,
+        "pdb": 9
+      }
+    ],
+    "seconds": 2.3801213167607784
+  }
+]

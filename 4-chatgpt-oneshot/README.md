@@ -20,6 +20,14 @@ The first bounded research campaign is complete. See its
 and the [research index](research/README.md).
 [RESEARCH_PLAN.md](RESEARCH_PLAN.md) preserves the original
 plan, with an outcome summary and links to the evidence.
+The second campaign adds
+[direct side-output merging](research/oriented-merge.md):
+a **352-move** universal 52-card bound and a leading
+move term `(4/3)n log2(n)`, rather than `2n log2(n)`.
+Its fast version averages 284.72 moves on 100 fresh
+targets; window-four search averages 273.8. These are
+sample means, not optimality theorems.
+See its [results and next gates](research/second-campaign-summary.md).
 It can be rendered with the same stylesheet:
 
 ```sh
@@ -29,7 +37,7 @@ pandoc RESEARCH_PLAN.md -s --embed-resources --mathml \
 ```
 
 Executable exploration of the prompts in `prompts/`.
-The current recommendation is merge sort with optimal
+The original default is merge sort with optimal
 small-block plans and a bounded search over merge splits.
 It handles arbitrary target permutations, is optimal for
 up to eight cards, and has O(n log n) card-move complexity.
@@ -55,6 +63,8 @@ Development and measurements used Python 3.13.5.
 python3 shuffle.py --n 52 --summary
 python3 shuffle.py --n 52 --seed 42 --output plan.json
 python3 shuffle.py --n 52 --algorithm parked --summary
+python3 shuffle.py --n 52 --algorithm oriented --summary
+python3 shuffle.py --n 52 --algorithm oriented_window --summary
 python3 shuffle.py --n 4 --target 3 1 4 2
 python3 shuffle.py --initial 40 10 30 --target 10 30 40
 python3 -m unittest -v
@@ -82,13 +92,29 @@ Its 410-move guarantee is proved, not a sample estimate.
 `solver.move_bound(52, "parked")` returns 410; the default
 `solver.move_bound(52)` still returns 444.
 
-All four use exact lookup through n=8, recognize identity
+These four use exact lookup through n=8, recognize identity
 and reversal, and try a single merge pass when cards can
 be distributed into two increasing subsequences. This
 handles patterns such as disjoint adjacent swaps cheaply.
 They retain the balanced construction's bound.
 Above 64 cards, the search modes use balanced recursion.
 The cutoff bounds host work; it is not a machine transition.
+
+Two new research settings are now available:
+
+- `--algorithm oriented`: direct-output merging with
+  midpoint and certified splits in both directions.
+- `--algorithm oriented_window`: also search midpoint
+  plus/minus four at sizes up to 64.
+
+Both keep the exact small-n and structured special cases,
+and guarantee 352 at n=52. Above 64, both use balanced
+oriented recursion, retaining the improved asymptotic
+constant. `solver.move_bound(52, "oriented")` returns 352.
+On 100 fresh targets the two versions average 284.72 and
+273.8 moves, with maxima 300 and 288. Indicative median
+planning is 8.8 and 134.9 ms. The existing default remains
+unchanged for reproducibility; specify a new mode to use it.
 
 For library use:
 
@@ -301,6 +327,12 @@ optimal worst and uniform mean costs are Omega(n log n).
   certificates, negative experiments, and stopping gates.
 - [Research index](research/README.md): historical notes,
   current results, dependencies, and reproduction routes.
+- [Direct-output merging](research/oriented-merge.md):
+  352 bound, endpoint contracts, and better asymptotics.
+- [Residual bounds](research/residual-bounds.md): admissible
+  structural bounds for intermediate physical states.
+- [Improved XP algorithm](research/parameter-complexity.md):
+  fixed event skeleton and exponent 2r+2.
 - `parked_leaf.py`: exact parked endpoints and 410 bound.
 - `tools/campaign_structure.py`: conditional card-budget
   certificates; standard-library Python, no LP solver.

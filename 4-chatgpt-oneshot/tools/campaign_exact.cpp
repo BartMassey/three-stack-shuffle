@@ -151,6 +151,64 @@ void build(Database& db) {
     if (queue.size() != count) throw std::runtime_error("incomplete database");
 }
 
+std::vector<std::pair<int, int>> side_options(const State& state,
+                                            int first, int last) {
+    std::vector<std::pair<int, int>> result{{-1, 0}};
+    for (int index = first; index < last; ++index) {
+        int threshold = state.cards.at(index);
+        std::array<int, 24> lengths{};
+        int maximum = 0;
+        for (int position = first; position < last; ++position) {
+            int card = state.cards.at(position);
+            if (card > threshold) continue;
+            lengths.at(position) = 1;
+            for (int earlier = first; earlier < position; ++earlier)
+                if (state.cards.at(earlier) > card)
+                    lengths.at(position) = std::max(lengths.at(position),
+                                                    lengths.at(earlier) + 1);
+            maximum = std::max(maximum, lengths.at(position));
+        }
+        result.emplace_back(threshold, maximum);
+    }
+    return result;
+}
+
+int residual_bound(const State& state, int n) {
+    int suffix = 0;
+    while (suffix < state.d
+           && state.cards.at(state.a + state.d - 1 - suffix) == n - 1 - suffix)
+        ++suffix;
+    int active_d = state.d - suffix;
+    int side_cards = n - state.d;
+    int baseline = side_cards + 2 * active_d;
+    auto left_options = side_options(state, 0, state.a);
+    auto right_options = side_options(state, state.a + state.d, n);
+    int width = n + 1;
+    std::array<int8_t, 625> current;
+    current.fill(-1);
+    for (auto [left, left_count] : left_options)
+        for (auto [right, right_count] : right_options)
+            current.at((left + 1) * width + right + 1) = left_count + right_count;
+    for (int index = state.a; index < state.a + active_d; ++index) {
+        int card = state.cards.at(index) + 1;
+        auto following = current;
+        for (int first = 0; first < width; ++first)
+            for (int second = 0; second < width; ++second) {
+                int count = current.at(first * width + second);
+                if (count < 0) continue;
+                if (card > first)
+                    following.at(card * width + second) = std::max<int>(
+                        following.at(card * width + second), count + 1);
+                if (card > second)
+                    following.at(first * width + card) = std::max<int>(
+                        following.at(first * width + card), count + 1);
+            }
+        current = following;
+    }
+    int maximum = *std::max_element(current.begin(), current.end());
+    return baseline + 2 * (side_cards + active_d - maximum);
+}
+
 struct Search {
     int n;
     Database& pdb;
@@ -163,6 +221,7 @@ struct Search {
     bool interrupted = false;
     int limit = 0;
     size_t capacity = 1000000;
+    bool use_residual_structural = false;
 
     Search(int size, Database& database) : n(size), pdb(database) {}
 
@@ -210,6 +269,8 @@ struct Search {
         int result = baseline;
         for (const auto& pattern : patterns)
             result = std::max(result, pattern_value(state, pattern, minimum, baseline));
+        if (use_residual_structural)
+            result = std::max(result, residual_bound(state, n));
         int parity = (n - state.d) % 2;
         if (result % 2 != parity) ++result;
         return result;
@@ -258,8 +319,8 @@ struct Search {
 
 int main(int argc, char** argv) {
     try {
-        if (argc != 7)
-            throw std::runtime_error("usage: campaign_exact TARGET_CSV UPPER LOWER SECONDS PATTERNS TT_CAPACITY");
+        if (argc != 7 && argc != 8)
+            throw std::runtime_error("usage: campaign_exact TARGET_CSV UPPER LOWER SECONDS PATTERNS TT_CAPACITY [RESIDUAL_STRUCTURAL]");
         std::stringstream input(argv[1]);
         std::vector<int> target;
         std::string item;
@@ -300,6 +361,12 @@ int main(int argc, char** argv) {
             if (int(search.patterns.size()) >= pattern_limit) break;
             search.patterns.push_back(candidate.second);
         }
+        if (argc == 8) {
+            int enabled = std::stoi(argv[7]);
+            if (enabled != 0 && enabled != 1)
+                throw std::runtime_error("RESIDUAL_STRUCTURAL must be 0 or 1");
+            search.use_residual_structural = enabled != 0;
+        }
         int initial_heuristic = search.heuristic(initial);
         lower = std::max(lower, initial_heuristic);
         if (lower % 2) ++lower;
@@ -325,6 +392,7 @@ int main(int argc, char** argv) {
                   << ",\"upper\":" << upper << ",\"initial_heuristic\":" << initial_heuristic
                   << ",\"pdb_states\":" << pdb.distances.size()
                   << ",\"patterns\":" << search.patterns.size()
+                  << ",\"residual_structural\":" << (search.use_residual_structural ? "true" : "false")
                   << ",\"nodes\":" << search.nodes
                   << ",\"transposition_hits\":" << search.transposition_hits
                   << ",\"tt_entries\":" << search.seen.size()
@@ -341,6 +409,7 @@ int main(int argc, char** argv) {
             for (size_t i = 0; i < search.path.size(); ++i)
                 std::cout << (i ? "," : "") << '"' << names.at(search.path.at(i)) << '"';
         std::cout << "]}\n";
+        return 0;
     } catch (const std::exception& error) {
         std::cerr << error.what() << '\n';
         return 1;

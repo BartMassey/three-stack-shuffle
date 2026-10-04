@@ -8,7 +8,7 @@ from time import monotonic
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from solver import parked
+from solver import ALGORITHMS, move_bound
 from three_stack import Machine
 
 
@@ -18,6 +18,8 @@ def main():
                         default=Path("results/campaign-structure-52-paired.json"))
     parser.add_argument("--output", type=Path,
                         default=Path("results/campaign-intervals-52.json"))
+    parser.add_argument("--algorithm", choices=("parked", "oriented", "oriented_window"),
+                        default="parked")
     args = parser.parse_args()
     source = json.loads(args.input.read_text())
     rows = []
@@ -25,13 +27,13 @@ def main():
         target = item["target"]
         initial = list(range(len(target)))
         started = monotonic()
-        word = parked(initial, target)
+        word = ALGORITHMS[args.algorithm](initial, target)
         seconds = monotonic() - started
         machine = Machine(initial)
         machine.run(word)
         machine.verify(target)
         lower = item["certified_lower_bound"]
-        assert lower <= len(word) <= 410
+        assert lower <= len(word) <= move_bound(len(target), args.algorithm)
         rows.append({"target": target, "lower": lower, "upper": len(word),
                      "structural_bound": item["structural_bound"],
                      "lower_search_interrupted": item["halted"] is not None,
@@ -47,6 +49,7 @@ def main():
                "planning_seconds": sum(x["planning_seconds"] for x in rows),
                "process_VmHWM": high_water}
     result = {"lower_source": str(args.input), "seed": source["seed"],
+              "algorithm": args.algorithm,
               "sampling": source["sampling"], "summary": summary, "targets": rows}
     args.output.write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(summary, indent=2))
