@@ -8,7 +8,9 @@ from parked_leaf import parked_optimal
 from three_stack import invert
 
 
-def _select(words, width):
+def _select(words, width, policy="shortest"):
+    if policy not in ("shortest", "boundary"):
+        raise ValueError("policy must be shortest or boundary")
     representatives = {}
     for word in words:
         word = tuple(word)
@@ -16,13 +18,32 @@ def _select(words, width):
         old = representatives.get(signature)
         if old is None or (len(word), word) < (len(old), old):
             representatives[signature] = word
-    return tuple(sorted(representatives.values(), key=lambda word: (len(word), word))[:width])
+    ordered = sorted(representatives.values(), key=lambda word: (len(word), word))
+    if policy == "shortest" or not ordered:
+        return tuple(ordered[:width])
+
+    def score(word):
+        first = last = 0
+        for operation in word:
+            if operation != word[0]:
+                break
+            first += 1
+        for operation in reversed(word):
+            if operation != word[-1]:
+                break
+            last += 1
+        return len(word) - 2 * max(first, last), len(word), word
+
+    return tuple(ordered[:1] + sorted(ordered[1:], key=score)[:width - 1])
 
 
-def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None):
+def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None,
+                        *, policy="shortest"):
     values = _validate(initial, target)
     if width not in (2, 4):
         raise ValueError("width must be two or four")
+    if policy not in ("shortest", "boundary"):
+        raise ValueError("policy must be shortest or boundary")
     if endpoint not in ("A", "D", "B"):
         raise ValueError("endpoint must be A, D, or B")
     if len(values) > 64:
@@ -47,12 +68,12 @@ def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None):
         length = end - start
         if length <= 8:
             central = optimal(segment, ordered)
-            central = _select((central, _swap(central)), width)
+            central = _select((central, _swap(central)), width, policy)
             parked = [parked_optimal(segment, ordered)]
             if length:
                 parked.append(parked_optimal(segment, ordered, prefer_tail=True))
             parked.extend(_join((word, ["DA"] * length)) for word in central)
-            return central, _select(parked, width), ordered
+            return central, _select(parked, width, policy), ordered
         bounds = oriented_bounds(length)
         central = [()] if tuple(segment) == ordered else []
         for split in splits(start, end, bounds[2]):
@@ -64,7 +85,7 @@ def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None):
                 for second in right[1]:
                     word = _join((first, _swap(second), merge))
                     central.extend((word, _swap(word)))
-        central = _select(central, width)
+        central = _select(central, width, policy)
         if endpoint == "D" and start == 0 and end == len(values):
             return central, (), ordered
         parked = [_join((word, ["DA"] * length)) for word in central]
@@ -78,7 +99,7 @@ def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None):
                 for second in right[0]:
                     for reflected in (second, _swap(second)):
                         parked.append(_join((_swap(first), reflected, merge)))
-        return central, _select(parked, width), ordered
+        return central, _select(parked, width, policy), ordered
 
     try:
         central, parked, _ = solve(0, len(values), False)
@@ -89,11 +110,14 @@ def endpoint_candidates(initial, target, width=2, endpoint="D", deadline=None):
         solve.cache_clear()
 
 
-def endpoint_portfolio(initial, target, width=2, seconds=8.0, details=None):
+def endpoint_portfolio(initial, target, width=2, seconds=8.0, details=None,
+                       *, policy="shortest"):
     from solver import ALGORITHMS
 
     if width not in (2, 4):
         raise ValueError("width must be two or four")
+    if policy not in ("shortest", "boundary"):
+        raise ValueError("policy must be shortest or boundary")
     if seconds < 0:
         raise ValueError("seconds must be nonnegative")
     started = perf_counter()
@@ -108,7 +132,7 @@ def endpoint_portfolio(initial, target, width=2, seconds=8.0, details=None):
                                                (target, initial, True)):
             try:
                 words = endpoint_candidates(source, destination, width=width,
-                                            deadline=deadline)
+                                            deadline=deadline, policy=policy)
             except TimeoutError:
                 timed_out = True
                 break

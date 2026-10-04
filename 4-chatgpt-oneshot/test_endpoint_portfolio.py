@@ -53,6 +53,39 @@ class EndpointPortfolioTests(unittest.TestCase):
         words = ((), ("DA", "DB", "AD", "BD"))
         self.assertEqual(_select(words, 2), words)
 
+    def test_policy_default_and_selection(self):
+        words = ((), ("DA", "DB", "DA"), ("DB",) * 5,
+                 ("DA", "DB", "AD", "BD"))
+        self.assertEqual(_select(words, 2), _select(words, 2, "shortest"))
+        self.assertEqual(_select(words, 2, "boundary"), ((), ("DB",) * 5))
+        initial = list(range(9))
+        target = random.Random(2026100406).sample(initial, len(initial))
+        for endpoint in "ADB":
+            self.assertEqual(endpoint_candidates(initial, target, 4, endpoint),
+                             endpoint_candidates(initial, target, 4, endpoint,
+                                                 policy="shortest"))
+        self.assertEqual(endpoint_portfolio(initial, target, width=4),
+                         endpoint_portfolio(initial, target, width=4,
+                                            policy="shortest"))
+
+    def test_boundary_recursive_guarded_and_fallback(self):
+        initial = list(range(13))
+        target = random.Random(2026100406).sample(initial, len(initial))
+        for endpoint in "ADB":
+            for word in endpoint_candidates(initial, target, 4, endpoint,
+                                            policy="boundary"):
+                self.verify(initial, target, endpoint, word)
+        for seconds in (0, 8):
+            word = endpoint_portfolio(initial, target, width=4, seconds=seconds,
+                                      policy="boundary")
+            self.verify(initial, target, "D", word)
+            self.assertLessEqual(len(word), len(ALGORITHMS["oriented_window"](initial, target)))
+
+    def test_policy_validation(self):
+        self.assertRaises(ValueError, _select, [], 4, "unknown")
+        self.assertRaises(ValueError, endpoint_candidates, [0], [0], policy="unknown")
+        self.assertRaises(ValueError, endpoint_portfolio, [0], [0], policy="unknown")
+
     def test_longer_child_wins_parent_cancellation(self):
         initial = [5, 2, 4, 3, 8, 6, 7, 1, 0]
         left = endpoint_candidates(initial[:4], sorted(initial[:4]), 4, "A")

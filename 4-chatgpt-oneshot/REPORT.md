@@ -1438,6 +1438,26 @@ the main mathematical opportunity. The
 [release summary](research/fourth-campaign-summary.md)
 records the stopping decision and reproduction checks.
 
+### 6.8. A light endpoint follow-up
+
+One subsequent pilot changes only portfolio selection.
+After retaining the shortest representative, rank others
+by length minus twice the larger initial or final run
+of identical moves. This estimates possible cancellation;
+it is not a dominance rule. The default selection policy
+and full-plan fallback are unchanged.
+
+On ten fresh 52-card targets, seed 2026100406, the
+width-four boundary policy averages 271.2 moves versus
+273.4 for shortest selection and 274.2 for oriented_window.
+It wins seven comparisons against shortest and ties three.
+Sample maxima are 284,288,288; median planning times are
+0.807,0.760,0.102 seconds respectively. All 30 plans
+replay, with no timeouts. This small result supports an
+optional research policy, not a default change or a
+population claim. No further search follows this pilot.
+See [the endpoint follow-up](research/fifth-endpoints.md).
+
 ## 7. Controller complexity
 
 The decision problem asks whether d(pi)<=K for an
@@ -1621,7 +1641,7 @@ exact tables or run target-specific exact search.
 Matplotlib is used only
 to regenerate the paper's figures.
 
-The test suite has 64 test groups, including replay of
+The test suite has 67 test groups, including replay of
 all 46,233 stored exact plans, optimal-distance checks,
 protected-base cases, recursive composition, arbitrary
 initial orders, and enumeration of the small

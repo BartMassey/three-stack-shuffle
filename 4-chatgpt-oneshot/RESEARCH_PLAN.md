@@ -30,6 +30,9 @@ The portfolio is not promoted; the certificate methods
 are complementary rather than replacements. This is
 the stopping point for the present study. The proposals
 below remain historical, not an active work queue.
+A later [light endpoint follow-up](research/fifth-endpoints.md)
+tests one boundary-scoring policy on ten fresh targets
+and stops without changing defaults or extending search.
 
 ### Execution outcomes
 

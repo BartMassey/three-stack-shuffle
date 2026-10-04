@@ -2,6 +2,9 @@
 
 Final research release, 4 October 2026, after four
 bounded campaigns. No further experiment is scheduled.
+The [fifth light pilot](fifth-endpoints.md) subsequently
+tests one boundary-aware endpoint policy on ten targets;
+it is complete and remains an optional experiment.
 Run commands from the `4-chatgpt-oneshot` directory.
 
 ## Read these first

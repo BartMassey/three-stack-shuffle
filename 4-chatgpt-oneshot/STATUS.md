@@ -1,9 +1,12 @@
 # Work status
 
-Updated: 2026-10-04. Fourth closure campaign complete.
+Updated: 2026-10-04. Fifth light endpoint pilot complete.
+The user authorized its final commit and closing the
+study for now. No further work is scheduled.
 Third-campaign snapshot committed as `e3ffafb`.
 This log accompanies the verified final research release.
-No further campaign is scheduled; no push was performed.
+Fourth release committed as `0355d45`; no push performed.
+The user then requested one further light endpoint pilot.
 The first campaign and documentation snapshot were committed
 as `441b201`; the user reports pushing that snapshot.
 The user authorized continued research. Parallel work on
@@ -160,6 +163,24 @@ No agent push was performed.
 
 ## Research log
 
+- Fifth result: ten fresh targets, no timeouts. Boundary
+  scoring at width four averages 271.2 moves versus
+  273.4 for shortest selection and 274.2 for the baseline.
+  It wins seven and ties three against shortest; sample
+  maxima are 284 versus 288. Median times are 0.807,
+  0.760, and 0.102 seconds respectively. All 30 words
+  replay. Defaults and the 352 guarantee are unchanged.
+  See `research/fifth-endpoints.md`. Stop after this pilot;
+  the user subsequently authorized this final snapshot's
+  commit. Prior release is 0355d45.
+  All 67 tests pass in 20.432s; Pandoc rendering and
+  whitespace checks pass.
+- Fifth pilot: prior work is already committed, with no
+  pending project changes. Test one boundary-run scoring
+  policy at width four on ten fresh 52-card targets.
+  Keep the old policy and complete-plan fallback intact;
+  no parameter sweep, default changes, or further search.
+  New research will remain uncommitted pending direction.
 - Fourth final verification: all 64 test groups pass
   in 18.789s. With third-party site packages disabled,
   the suite passes in 18.449s with two optional SciPy

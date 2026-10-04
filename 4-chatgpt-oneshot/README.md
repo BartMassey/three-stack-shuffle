@@ -18,6 +18,12 @@ recurrence coefficient is now proved sharp within its
 specified cost model. Remaining machine bounds and
 hardness questions are open. No further run is scheduled.
 
+A [small post-release endpoint pilot](research/fifth-endpoints.md)
+adds optional boundary-run scoring to the experimental
+portfolio. On ten fresh targets it saves 2.2 mean moves
+over the previous portfolio at similar host cost. It
+remains research-only; all controller defaults are unchanged.
+
 The research paper is [REPORT.md](REPORT.md). To render it:
 
 ```sh
