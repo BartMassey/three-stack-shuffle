@@ -1,7 +1,9 @@
 # Work status
 
-Updated: 2026-10-04. Third bounded campaign complete;
-integrated and verified; snapshot commit now authorized.
+Updated: 2026-10-04. Fourth closure campaign complete.
+Third-campaign snapshot committed as `e3ffafb`.
+This log accompanies the verified final research release.
+No further campaign is scheduled; no push was performed.
 The first campaign and documentation snapshot were committed
 as `441b201`; the user reports pushing that snapshot.
 The user authorized continued research. Parallel work on
@@ -14,6 +16,8 @@ and speed, increasing-pair checks, and ensemble bounds.
 Root added asymmetric endpoint recursion and reduced
 host work. No push was performed. The full synthesis is
 in `research/third-campaign-summary.md`.
+The final outcomes, release checks, and stopping decision
+are in `research/fourth-campaign-summary.md`.
 
 ## Objective and constraints
 
@@ -53,6 +57,9 @@ cannot currently be measured. Keep experiments bounded.
 
 Try `python3 shuffle.py --n 52 --algorithm oriented --summary`.
 See `README.md` for usage, proofs, and reproduction.
+Use `oriented_window` for fewer moves at more host cost,
+or `ternary` for large decks. The historical CLI default
+named `recommended` is retained for reproducibility.
 
 New optional direct-output merge modes: `oriented` is the
 fast version; `oriented_window` spends more time on splits.
@@ -86,6 +93,22 @@ n=18 search nodes in the ten-second pilot, but the
 45-second follow-up still leaves [64,66]. All 371
 selected increasing-pair cases are feasible. No larger
 blind search was launched after these stopping gates.
+
+Fourth closure: the coefficient 2/log2(3) is now proved
+sharp for the specified additive endpoint recurrence,
+not for machine words. All 20 fresh LP cases have exact
+rational certificates. Higher-cap integer controls
+reverse four of five selected apparent LP wins; one
+retains LP176 versus integer174. The sample's original
+paired lower means are B165.3, integer171.2, LP171.9,
+combined172.3. No population theorem is inferred.
+
+On a separate 20-target pilot, a width-four endpoint
+portfolio saves 1.8 mean moves at about 7.4 times the
+host time, with no sample-maximum gain. It remains a
+research-only library. An explicit nine-card witness
+shows a longer child yielding a shorter composed plan.
+No practical default or 52-card guarantee changed.
 
 Default: exact lookup through eight cards; otherwise
 merge sort with exact leaves, midpoint +/-4 split search,
@@ -137,6 +160,40 @@ No agent push was performed.
 
 ## Research log
 
+- Fourth final verification: all 64 test groups pass
+  in 18.789s. With third-party site packages disabled,
+  the suite passes in 18.449s with two optional SciPy
+  discovery tests skipped. C++ exact-search build is
+  warning-clean. Root independently verifies all 20
+  new rational certificates under Python -S -O, pairs
+  each with a replayed upper plan, and replays all 60
+  stored portfolio words. All 115 result JSON files parse;
+  all 199 local links in 41 documents resolve. Pandoc
+  renders 108 report and four plan MathML nodes without
+  math errors. Existing frozen result files are unchanged;
+  whitespace checks pass. Experiments are stopped.
+- Fourth closure: every-split lower potentials establish
+  the recurrence coefficient, with finite all-split checks
+  through 4096. The two LP phases yield 20 portable
+  proofs; original plus fairness discovery takes about
+  130 seconds. The portfolio pilot completes in 26.6s.
+  Measured tradeoffs support stopping and retaining the
+  current controllers, not promoting a new default.
+- Fourth checkpoint: the recurrence stream has a matching
+  lower-potential proof for every split, scoped to the
+  numeric endpoint recurrence without cross-boundary
+  cancellation. Fresh LP cases already produce verified
+  certificates exceeding the old +6 cap, but this alone
+  is not evidence of superiority over integer search.
+  Add at most five selected equal-budget, higher-cap
+  integer controls within the same total stream budget.
+- Fourth campaign started after commit e3ffafb. Three
+  isolated streams: 20 fresh-target rational-certificate
+  comparisons with fixed budgets; sharpness of the ternary
+  coefficient within the unreduced endpoint recurrence;
+  and a width-two/four endpoint portfolio pilot. Root
+  audits release documentation and integrates verification.
+  No unbounded searches, default changes, or push planned.
 - Third-campaign final verification: all 51 test groups
   pass in 16.359s. The five ensemble tests also pass
   with assertions disabled. The exact-search C++ build
@@ -454,7 +511,12 @@ No agent push was performed.
   for reversal, 104 for tested rotations, and 102 for the
   tested interleaving.
 
-## Open research and useful next steps
+## Open research after this release
+
+These are possible restart directions, not an active
+queue. Four bounded campaigns are complete. Further
+work should begin with new structure rather than longer
+runs of the searches already tested.
 
 1. Locate the actual small-to-large-n change. The n=9 tie
    in hardest targets and counting obstruction at n=212
@@ -471,8 +533,8 @@ No agent push was performed.
    n=18 search. The new bound settled n=14 and n=16, but
    the latter used nearly its full 45-second allowance.
 
-`research/third-campaign-summary.md` records current work and
-narrower next gates. The immediate priority is to constrain
+`research/fourth-campaign-summary.md` records the final work
+and stopping decision. A useful restart would constrain
 executions with few twice-moved cards, beyond the current
 conditional relaxation's 4m−4 ceiling. Ordinary
 fractional size-nine subset patterns have a proved

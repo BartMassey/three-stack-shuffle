@@ -21,6 +21,15 @@ Its 17-row rational certificate matches a previous
 176-move instance bound. The deterministic mean theorem
 and tested n=18 interval remain unchanged. The summary's
 section 5 gives the next bounded experiments.
+Those experiments are now complete in the
+[fourth release campaign](research/fourth-campaign-summary.md).
+It proves sharpness within the additive recurrence,
+tests 20 fresh rational certificates with higher-cap
+integer controls, and measures a small endpoint portfolio.
+The portfolio is not promoted; the certificate methods
+are complementary rather than replacements. This is
+the stopping point for the present study. The proposals
+below remain historical, not an active work queue.
 
 ### Execution outcomes
 

@@ -2,7 +2,7 @@
 
 Completed 4 October 2026. The second campaign was committed
 as `d1f62f3` before this work began. This campaign is a
-separate snapshot, now authorized for commit before the
+separate snapshot committed as `e3ffafb` before the
 fourth campaign. No push occurred.
 
 ## Main results

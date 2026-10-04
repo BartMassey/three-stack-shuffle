@@ -6,6 +6,12 @@ statistical result and an exact population barrier for a
 natural continuous relaxation. It does not close the gap
 to the measured construction mean near 274.
 
+The [fourth certificate study](fourth-certificates.md)
+subsequently tests the compact-proof pipeline on 20 fresh
+targets with higher-cap integer controls. This note
+retains the original single-target pilot and population
+analysis; neither mean theorem changes in the follow-up.
+
 Under independent ideal uniform sampling, the frozen
 100-target holdout gives a 99% lower confidence bound
 172.08938482352943 for the optimal mean. The exact

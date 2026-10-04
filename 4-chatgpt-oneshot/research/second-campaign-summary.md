@@ -1,9 +1,9 @@
 # Second campaign: direct outputs and residual bounds
 
 4 October 2026. This continues the
-[first campaign](campaign-summary.md). The user has now
-requested this completed snapshot's local commit before
-a third campaign. No push is authorized. Frozen
+[first campaign](campaign-summary.md). This completed
+snapshot was committed as `d1f62f3` before the third
+campaign. No agent push was performed. Frozen
 first-campaign artifacts remain unchanged.
 
 ## Main results

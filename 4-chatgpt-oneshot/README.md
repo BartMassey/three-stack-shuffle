@@ -1,5 +1,23 @@
 # Three-stack shuffle
 
+An executable study of permutation routing on the A–D–B
+three-stack machine. For practical use, specify a mode:
+
+- `oriented`: fast planning for 52-card targets.
+- `oriented_window`: spend more host time to save moves.
+- `ternary`: the best proved large-n leading move term.
+
+All three guarantee at most 352 moves at n=52. The
+historical CLI default, named `recommended`, is retained
+for reproducibility; it is not the current best method.
+Runtime requires only Python 3.10+ and the supplied tables.
+
+The [final campaign and release summary](research/fourth-campaign-summary.md)
+records the stopping decision and verification. The
+recurrence coefficient is now proved sharp within its
+specified cost model. Remaining machine bounds and
+hardness questions are open. No further run is scheduled.
+
 The research paper is [REPORT.md](REPORT.md). To render it:
 
 ```sh
@@ -34,7 +52,7 @@ ternary parked macro recursion. It also adds faster
 residual search, disjoint lower-bound cost partitioning,
 and a compact rational instance certificate. The exact
 uniform-mean lower theorem is still 166.87917.
-It can be rendered with the same stylesheet:
+The research plan can be rendered with the same stylesheet:
 
 ```sh
 pandoc RESEARCH_PLAN.md -s --embed-resources --mathml \
@@ -165,7 +183,7 @@ Benchmark means sample uniform targets, including the
 identity when it occurs. There is no random-walk mixing
 assumption or rejection of costly target permutations.
 
-## The recommended construction
+## The historical default construction
 
 Map each card to its position in the desired target.
 For a top segment of at most eight cards, look up a shortest
@@ -249,7 +267,7 @@ B(26) <= 52 + 2*(62-2) = 172
 B(52) <= 104 + 2*(172-2) = 444
 ```
 
-All recommended modes preserve this bound by retaining the
+The original controller modes preserve this bound by retaining the
 balanced candidate. `solver.move_bound(n)` computes it.
 The exact table analysis is reproduced in
 `research/hybrid-bounds.md` and checked by the tests.
@@ -343,6 +361,8 @@ optimal worst and uniform mean costs are Omega(n log n).
 
 ## Research map
 
+- [Third campaign](research/third-campaign-summary.md):
+  ternary recursion, residual partitions, and LP limits.
 - [Executed campaign](research/campaign-summary.md): results,
   certificates, negative experiments, and stopping gates.
 - [Research index](research/README.md): historical notes,

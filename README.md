@@ -30,6 +30,11 @@ The [third campaign](4-chatgpt-oneshot/research/third-campaign-summary.md)
 improves that leading term further to `2n log3(n)` and
 adds lower-bound cost partitioning and compact rational
 certificates. The 52-card universal bound remains 352.
+The [fourth-campaign release](4-chatgpt-oneshot/research/fourth-campaign-summary.md)
+closes this study with a sharp recurrence coefficient,
+fresh certificate comparisons, and a bounded endpoint
+portfolio experiment. The portfolio remains research-only;
+the practical controllers and their guarantees are unchanged.
 
 ## License
 

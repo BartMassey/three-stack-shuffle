@@ -5,6 +5,11 @@ Third campaign, 4 October 2026. This continues
 construction is unchanged; the improvement concerns
 large-n asymptotics and avoiding unused endpoint work.
 
+Follow-up: the [fourth recurrence study](fourth-recurrence.md)
+proves the coefficient sharp for the explicitly defined
+additive recurrence, beyond the trial ansatz used here.
+It still supplies no lower bound on machine executions.
+
 ## A three-way macro-step
 
 Recall the legal endpoint recurrences, for a+b=n:

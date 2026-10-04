@@ -1,6 +1,6 @@
 # Permutation Routing and Uniform Shuffling on Three Stacks
 
-*Working paper, 4 October 2026*
+*Research release, 4 October 2026*
 
 ## Abstract
 
@@ -19,6 +19,8 @@ gives at most 352 moves for every 52-card permutation
 and $2n\log_3 n+O(n)$ moves in general. The latter
 uses an asymmetric split whose two-level expansion is
 a balanced ternary recursion.
+Its leading coefficient is sharp for the specified
+additive endpoint recurrence, not for the machine.
 On 100 fresh held-out targets, the fast version averages
 284.72 moves, with maximum 300 and approximately 8.8 ms
 median planning time. A wider split search averages
@@ -1034,6 +1036,46 @@ ansatz. The [construction note](research/third-ternary.md)
 and [independent review](research/third-ternary-review.md)
 give implementation details and protected-base checks.
 
+The fourth campaign closes the remaining recurrence
+question. Fix the numeric leaf charges U(k),P(k) through
+64 as above. For larger sizes, define the numeric costs
+by minimizing each displayed endpoint recurrence over
+all positive splits. One may also allow P(n) to choose
+U(n)+n−2. No other cancellation credits are included.
+
+**Proposition 14.** Both optimized numeric costs have
+leading term $cn\log_2 n$, where $c=2/\log_2 3$.
+
+*Proof.* Set $\delta=c-1$ and define lower potentials
+
+$$
+ \Phi_U(n)=cn\log_2 n-8n,\qquad
+ \Phi_P(n)=\Phi_U(n)+\delta n,
+$$
+
+with both zero at n=0. Since c<4/3, the finite leaves
+satisfy these bounds using only U(k)>=0 and P(k)>=k.
+For a central split of fraction x, the sum of child
+potentials and toll exceeds $\Phi_U(n)$ by
+$cn[1-H(x)]\ge0$. For a parked split of fraction y,
+the corresponding excess over $\Phi_P(n)$ is
+$n[2-c(H(y)+1-y)]\ge0$. Thus every split preserves
+the lower bounds, not just the thirds construction.
+The optional repark candidate has excess
+$(2-c)n-2>0$ for n>64 and also preserves them.
+Induction proves both numeric lower bounds. The balanced
+ternary construction supplies matching upper bounds with
+an O(n) remainder, proving the leading term. ∎
+
+This is sharpness of a specified cost recurrence, not
+a lower bound on executions. The finite charges are
+upper guarantees, and the model omits cross-boundary
+cancellation. Better algorithms or richer endpoint
+contracts can escape it. Exact all-split minimization
+through 4096 checks the numeric model; the proof is
+inductive for all sizes. See the
+[recurrence study](research/fourth-recurrence.md).
+
 ## 6. Computational experiments
 
 ### 6.1. Method
@@ -1053,7 +1095,8 @@ isolated or portable timing guarantees.
 The principal timing records precede the final
 two-subsequence shortcut. That addition changes none of
 the 1,000 target plans but adds a small amount of host work.
-No new large search was run for this paper.
+These original tables precede the bounded campaigns;
+later subsections report their separate samples.
 
 ### 6.2. Random 52-card targets
 
@@ -1322,6 +1365,79 @@ historical measurements before the root optimization.
 The [third-campaign summary](research/third-campaign-summary.md)
 links the frozen data and all stopping decisions.
 
+### 6.7. Fourth campaign and release decision
+
+A final bounded campaign tested three remaining leads.
+The first gave Proposition 14: a matching lower potential
+settles the coefficient of the numeric recurrence even
+with arbitrary size-dependent splits.
+
+The second tested rational certificates on 20 fresh
+52-card targets, seed 2026100404. The structural mean
+bound on this sample is 165.3. The earlier integer
+method, capped at B+6 with three seconds per target,
+gives mean 171.2; a ten-second chain/group LP pipeline
+gives 171.9. Taking the maximum gives 172.3. All 20
+LP outputs have independently verified rational duals.
+Mean discovery time is approximately 0.18 seconds for
+the capped integer method and 5.76 seconds for the LP.
+These are sample bounds with different budgets, not
+new uniform-mean theorems or an equal-budget comparison.
+
+The LP has nine wins against that capped method. To
+test whether this is chiefly a cap effect, the first
+five winning targets receive integer search with a
+ten-second budget and B+12 cap. Four apparent LP wins
+reverse; one remains at 176 versus 174. This selected
+subset does not estimate population performance. The
+methods are complementary on these cases, but the LP
+does not justify replacing the faster integer method.
+All 20 rational proofs verify without SciPy in about
+0.016 seconds total on this host. See the
+[certificate follow-up](research/fourth-certificates.md).
+
+The third experiment retains two or four endpoint plans
+per interval instead of one. Representatives have distinct
+six-operation prefix/suffix signatures; parents compare
+their combinations after cancellation. The signatures
+are heuristic, not a contextual dominance criterion.
+An explicit complete-plan fallback to oriented_window
+preserves its pointwise performance and 352 guarantee.
+
+On 20 separate fresh targets, seed 2026100405:
+
+| Controller | Mean moves | Sample maximum | Median seconds |
+|---|---:|---:|---:|
+| oriented_window | 274.8 | 284 | 0.102 |
+| Two endpoint representatives | 274.3 | 284 | 0.475 |
+| Four endpoint representatives | 273.0 | 284 | 0.754 |
+
+Every search finishes within its budget, and all 60
+words replay. The small savings do not justify the
+extra host cost as a default. The implementation remains
+an experimental library, not a registered CLI mode.
+
+There is a concrete reason not to retain only shortest
+children. Sort initial order (5,2,4,3,8,6,7,1,0) with
+a four/five split. The left parked child costs eight
+moves and the final merge costs nine. One right parked
+child costs 13; the resulting 30-move concatenation
+cancels one inverse pair, leaving 28. Another right
+child costs 15; its 32-move concatenation cancels three
+pairs, leaving 26. All endpoints and protected bases
+are identical. This is a local composition example,
+not a claim that 26 is the global optimum. The
+[portfolio study](research/fourth-portfolio.md) gives
+the complete words and their independent replay.
+
+These experiments close the planned campaign. Improving
+the recurrence's finite search choices alone cannot
+improve its leading coefficient. The tested portfolios
+buy few moves, and stronger lower-bound discovery remains
+the main mathematical opportunity. The
+[release summary](research/fourth-campaign-summary.md)
+records the stopping decision and reproduction checks.
+
 ## 7. Controller complexity
 
 The decision problem asks whether d(pi)<=K for an
@@ -1348,7 +1464,7 @@ D alone, checking every departure and the final order.
 Form the graph whose vertices are excursions and whose
 edges join intervals with interleaving endpoints.
 
-**Lemma 14.** Such a schedule is realizable if and only
+**Lemma 15.** Such a schedule is realizable if and only
 if its D simulation is legal and its interval-crossing
 graph is bipartite.
 
@@ -1359,7 +1475,7 @@ on either side are nested or disjoint, so every return
 is exposed. The D check supplies the remaining legality
 conditions. ∎
 
-**Theorem 15.** After suffix trimming to m active cards,
+**Theorem 16.** After suffix trimming to m active cards,
 the decision problem is in XP for the parameter
 $r=\lfloor(K-2m)/2\rfloor$, when K>=2m.
 
@@ -1371,7 +1487,7 @@ order; their projected event sequence is fixed.
 
 Enumerate exceptional identities, allocations of extra
 excursions, event orders, and interleavings with the
-ordinary sequence. For each, apply Lemma 14 in quadratic
+ordinary sequence. For each, apply Lemma 15 in quadratic
 time. Every legal plan within budget appears in this
 enumeration, and every accepted schedule supplies a plan.
 A crude time bound is $f(r)(m+1)^{5r+2}$, polynomial for
@@ -1452,10 +1568,12 @@ between lower bounds and constructions is substantial.
 
 A remaining direction is to retain richer sets of plans
 per interval, distinguished by boundary behavior. The
-tested terminal-run tie heuristic gave no gain, but does
-not exhaust this possibility. A sound exact dominance
-rule must account for cancellation exposing interiors;
-short boundary summaries alone do not suffice.
+terminal-run tie heuristic gave no gain; the later
+width-four portfolio gave a modest gain at substantial
+host cost. Neither exhausts this possibility. A sound
+exact dominance rule must account for cancellation
+exposing interiors; short boundary summaries alone do
+not suffice.
 
 Other approaches were less effective in the experiments.
 Natural merging and patience-style distribution supplied
@@ -1484,6 +1602,9 @@ moves on 100 fresh targets; wider split search gives
 Conditional excursion constraints improve certified
 instance bounds, though not the exact uniform-mean
 bound of 166.87917.
+The leading coefficient is optimal for the stated
+additive recurrence, and the final bounded experiments
+support retaining the current practical controllers.
 
 The asymptotic order is settled by a matching counting
 lower bound. The constants, optimal 52-card costs, and
@@ -1500,11 +1621,14 @@ exact tables or run target-specific exact search.
 Matplotlib is used only
 to regenerate the paper's figures.
 
-The test suite has 51 test groups, including replay of
+The test suite has 64 test groups, including replay of
 all 46,233 stored exact plans, optimal-distance checks,
 protected-base cases, recursive composition, arbitrary
 initial orders, and enumeration of the small
 Fisher–Yates choice space.
+With third-party site packages disabled, all tests still
+pass except two optional SciPy discovery tests, which
+are skipped. Exact rational verification needs no SciPy.
 The campaign adds parked endpoint and protected-base
 checks, an independent distance-DAG check, and conditional
 bound tests against complete small-instance tables.
@@ -1574,6 +1698,10 @@ The [third campaign](research/third-campaign-summary.md)
 adds ternary recursion, residual cost partitioning,
 increasing-pair witnesses, statistical coverage, and
 portable rational lower-bound certificates.
+The [fourth campaign](research/fourth-campaign-summary.md)
+completes the recurrence analysis, tests certificates
+on fresh targets, and records the endpoint-portfolio
+experiment and final release checks.
 
 ## Bibliography
 

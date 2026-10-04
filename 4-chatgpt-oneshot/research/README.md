@@ -1,12 +1,15 @@
 # Research notes and reproduction
 
-Updated 4 October 2026, after the third bounded campaign.
+Final research release, 4 October 2026, after four
+bounded campaigns. No further experiment is scheduled.
 Run commands from the `4-chatgpt-oneshot` directory.
 
 ## Read these first
 
 - [Paper](../REPORT.md): model, constructions, proofs,
   performance, limitations, and bibliography.
+- [Release summary](fourth-campaign-summary.md): final
+  results, stopping decision, and verification commands.
 - [Campaign summary](campaign-summary.md): completed
   experiments, negative results, and next priorities.
 - [Second campaign](second-campaign-summary.md): stronger
@@ -26,6 +29,9 @@ historical investigations; this index covers this project.
 
 | Topic | Detailed note |
 |---|---|
+| Sharpness of the numeric recurrence coefficient | [Recurrence closure](fourth-recurrence.md) |
+| Fresh rational proofs and capped-search controls | [Certificate pilot](fourth-certificates.md) |
+| Small endpoint portfolios and cancellation witness | [Portfolio pilot](fourth-portfolio.md) |
 | Ternary recursion and lower host cost | [Ternary merge](third-ternary.md) |
 | Residual consistency and cost partitioning | [Residual follow-up](third-residual.md) |
 | Selected increasing-pair feasibility | [Pair follow-up](third-pairs.md) |
@@ -60,6 +66,14 @@ chain/group LP supplies a portable certificate of 176
 on one target, matching its prior integer certificate.
 The tested n=18 exact interval remains [64,66].
 
+The fourth campaign proves the leading coefficient sharp
+for the specified additive recurrence, not the machine.
+All 20 fresh LP targets yield portable rational proofs;
+higher-cap integer controls reverse most apparent LP
+wins. A width-four endpoint portfolio saves 1.8 mean
+moves on a separate 20-target pilot but costs about
+7.4 times the host time. It remains research-only.
+
 ## Earlier studies
 
 These retain their original proofs and measurements:
@@ -89,6 +103,9 @@ consolidated bibliography for its citations.
 
 Runtime and ordinary tests use Python 3.10+ and the
 standard library; measurements used Python 3.13.5.
+Two optional discovery tests use SciPy when available
+and skip otherwise. `python3 -S -m unittest -q` verifies
+the suite with third-party site packages disabled.
 C++20 is needed for table generation and the exact-search
 tool. NumPy and SciPy are optional dependencies of LP/MILP
 experiments, not the controller or integer conditional
